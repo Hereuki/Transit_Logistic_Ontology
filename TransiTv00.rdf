@@ -1,0 +1,1385 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="https://www.cranfield.ac.uk/transit/202501/"
+     xml:base="https://www.cranfield.ac.uk/transit/202501/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:data="http://data.sparxsystems.com#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+     xmlns:terms="http://purl.org/dc/terms/"
+     xmlns:transit="https://www.cranfield.ac.uk/transit/202501#"
+     xmlns:AnnotationVocabulary="https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/">
+    <owl:Ontology rdf:about="https://www.cranfield.ac.uk/transit/202501">
+        <owl:imports rdf:resource="http://ies.data.gov.uk/ontology/ies4"/>
+        <owl:imports rdf:resource="https://spec.industrialontologies.org/ontology/202401/core/Core/"/>
+        <dc:license xml:lang="en">http://opensource.org/licenses/MIT</dc:license>
+        <terms:abstract xml:lang="en">The transit Ontology contains terms and concepts found to be common across transportation domain. The ontology itself utilizes BFO as Top-level ontology and IOF-Core as mid-level ontology.  It imports also some existing terms and properties from IES 4. The purpose of the ontology is to represent the diverse processes and entities involved in transpoartation scenario for consistent semantics, paving the way for further development, analysis and optimization on a higher level.</terms:abstract>
+        <terms:contributor>Bernadin Namoano, Cranfield University</terms:contributor>
+        <terms:creator>Zhengyu Liu, Université de Technologie Tarbes Occitanie Pyrénées - UTTOP</terms:creator>
+        <rdfs:label xml:lang="en">Tranit Ontology</rdfs:label>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#minQualifiedCardinality -->
+
+    <owl:AnnotationProperty rdf:about="http://www.w3.org/2002/07/owl#minQualifiedCardinality"/>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#qualifiedCardinality -->
+
+    <owl:AnnotationProperty rdf:about="http://www.w3.org/2002/07/owl#qualifiedCardinality"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#_tempPropertyObjectIES4 -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#_tempPropertyObjectIES4">
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Journey"/>
+        <rdfs:comment xml:lang="en">This is a tempory placeholder to highlight the added object properties in the developed ontology</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#appliesEnergy -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#appliesEnergy">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#_tempPropertyObjectIES4"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Device"/>
+        <rdfs:range rdf:resource="https://www.cranfield.ac.uk/transit/202501#Energy"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#chargesEnergy -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#chargesEnergy">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#appliesEnergy"/>
+        <rdfs:domain rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyCharger"/>
+        <rdfs:range rdf:resource="https://www.cranfield.ac.uk/transit/202501#Energy"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#drivenBy -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#drivenBy">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#_tempPropertyObjectIES4"/>
+        <owl:inverseOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#drives"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#drives -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#drives">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#_tempPropertyObjectIES4"/>
+        <rdfs:range rdf:resource="https://www.cranfield.ac.uk/transit/202501#HumanDrivenVehicle"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#endsAtLocation -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#endsAtLocation">
+        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000066"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Journey"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+        <rdfs:range rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+        <owl:propertyDisjointWith rdf:resource="https://www.cranfield.ac.uk/transit/202501#startsAtLocation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasMeasuredCostValueAtSomeTime -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasMeasuredCostValueAtSomeTime">
+        <rdfs:subPropertyOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasMeasuredValueAtSomeTime"/>
+        <rdfs:range rdf:resource="https://www.cranfield.ac.uk/transit/202501#MeasuredCostValueExpression"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasMeasuredDimensionValueAtSomeTime -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasMeasuredDimensionValueAtSomeTime">
+        <rdfs:subPropertyOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasMeasuredValueAtSomeTime"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasMeasuredTemporalValueAtSomeTime -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasMeasuredTemporalValueAtSomeTime">
+        <rdfs:subPropertyOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasMeasuredValueAtSomeTime"/>
+        <rdfs:range rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/TemporalDurationValueExpression"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasMeasuredWeightValueAtSomeTime -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasMeasuredWeightValueAtSomeTime">
+        <rdfs:subPropertyOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasMeasuredValueAtSomeTime"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasParticipantsInMovement -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasParticipantsInMovement">
+        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000057"/>
+        <owl:inverseOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#participatesInMovement"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
+        <rdfs:range rdf:resource="http://purl.obolibrary.org/obo/BFO_0000040"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasPayLoad -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasPayLoad">
+        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000057"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
+        <rdfs:comment>put under is carrier of</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#operatedByVehicle -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#operatedByVehicle">
+        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000057"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Journey"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+        <rdfs:domain rdf:resource="https://www.cranfield.ac.uk/transit/202501#TravelLeg"/>
+        <rdfs:range rdf:resource="http://ies.data.gov.uk/ontology/ies4#Vehicle"/>
+        <rdfs:comment>put under hasParticipant</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#participatesInMovement -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#participatesInMovement">
+        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000056"/>
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/BFO_0000040"/>
+        <rdfs:range rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#passesBy -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#passesBy">
+        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000066"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
+        <rdfs:domain rdf:resource="https://www.cranfield.ac.uk/transit/202501#route"/>
+        <rdfs:range rdf:resource="http://purl.obolibrary.org/obo/BFO_0000029"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#startsAtLocation -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#startsAtLocation">
+        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000066"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Journey"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+        <rdfs:range rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#usesEnergy -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#usesEnergy">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#appliesEnergy"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#endsAtTimeInstance -->
+
+    <owl:DatatypeProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#endsAtTimeInstance">
+        <rdfs:subPropertyOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasSimpleExpressionValue"/>
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/BFO_0000015"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTimeStamp"/>
+        <rdfs:comment>This is to provide a shortcut to the IOF time expression. May add equivalent to that later</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasName -->
+
+    <owl:DatatypeProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasName">
+        <rdfs:subPropertyOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasSimpleExpressionValue"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasNumericalValue -->
+
+    <owl:DatatypeProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasNumericalValue">
+        <rdfs:subPropertyOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasSimpleExpressionValue"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasUnit -->
+
+    <owl:DatatypeProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasUnit">
+        <rdfs:subPropertyOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasSimpleExpressionValue"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#isBooleanProperty -->
+
+    <owl:DatatypeProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#isBooleanProperty">
+        <rdfs:subPropertyOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasSimpleExpressionValue"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#isCarbonNeutral -->
+
+    <owl:DatatypeProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#isCarbonNeutral">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#isBooleanProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#isConducted -->
+
+    <owl:DatatypeProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#isConducted">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#isBooleanProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#isFinished -->
+
+    <owl:DatatypeProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#isFinished">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#isBooleanProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#isInUse -->
+
+    <owl:DatatypeProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#isInUse">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#isBooleanProperty"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#isOnTime -->
+
+    <owl:DatatypeProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#isOnTime">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#isBooleanProperty"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#isPlanned -->
+
+    <owl:DatatypeProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#isPlanned">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#isBooleanProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#startsAtTimeInstance -->
+
+    <owl:DatatypeProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#startsAtTimeInstance">
+        <rdfs:subPropertyOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasSimpleExpressionValue"/>
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/BFO_0000015"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTimeStamp"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Airport -->
+
+    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Airport">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#CorrespondencePort"/>
+        <owl:disjointWith rdf:resource="https://www.cranfield.ac.uk/transit/202501#HarborPort"/>
+        <rdfs:comment>Land-to-Air</rdfs:comment>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">An Airport is a correspondence port where aircraft take off, land, and are serviced. Airports connect land travel and air travel.</AnnotationVocabulary:naturalLanguageDefinition>
+    </rdf:Description>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#CarTravel -->
+
+    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#CarTravel">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#operatedByVehicle"/>
+                        <owl:someValuesFrom rdf:resource="http://ies.data.gov.uk/ontology/ies4#RoadVehicle"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </rdf:Description>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Flight -->
+
+    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Flight">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#operatedByVehicle"/>
+                        <owl:someValuesFrom rdf:resource="http://ies.data.gov.uk/ontology/ies4#Aircraft"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </rdf:Description>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Journey -->
+
+    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Journey">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://purl.obolibrary.org/obo/BFO_0000199"/>
+                <owl:someValuesFrom rdf:resource="http://purl.obolibrary.org/obo/BFO_0000202"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#endsAtLocation"/>
+                <owl:someValuesFrom rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#startsAtLocation"/>
+                <owl:someValuesFrom rdf:resource="http://purl.obolibrary.org/obo/BFO_0000029"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </rdf:Description>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Movement -->
+
+    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Movement">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#endsAtLocation"/>
+                <owl:someValuesFrom rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasParticipantsInMovement"/>
+                <owl:someValuesFrom rdf:resource="http://purl.obolibrary.org/obo/BFO_0000040"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#startsAtLocation"/>
+                <owl:someValuesFrom rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </rdf:Description>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#RoadVehicle -->
+
+    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#RoadVehicle">
+        <rdfs:comment xml:lang="en">Better be &quot;Land Vehicle&quot;?</rdfs:comment>
+    </rdf:Description>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Sailing -->
+
+    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Sailing">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#operatedByVehicle"/>
+                        <owl:someValuesFrom rdf:resource="http://ies.data.gov.uk/ontology/ies4#Ship"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </rdf:Description>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#TrainTravel -->
+
+    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#TrainTravel">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#operatedByVehicle"/>
+                        <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#HDV_Train"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </rdf:Description>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Transit -->
+
+    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Transit">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#operatedByVehicle"/>
+                <owl:someValuesFrom rdf:resource="http://ies.data.gov.uk/ontology/ies4#Vehicle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </rdf:Description>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Vehicle -->
+
+    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Vehicle">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/prescribedBy"/>
+                <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#TransportDesignSpecification"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#appliesEnergy"/>
+                <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#Energy"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </rdf:Description>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#AutonomousVehicle -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#AutonomousVehicle">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#RoadVehicle"/>
+        <owl:disjointWith rdf:resource="https://www.cranfield.ac.uk/transit/202501#HumanDrivenVehicle"/>
+        <rdfs:label xml:lang="en">Autonomous Vehicle</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A road vehicle operating autonomously without real-time human control or a human driver.</AnnotationVocabulary:naturalLanguageDefinition>
+        <AnnotationVocabulary:synonym>AVs</AnnotationVocabulary:synonym>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#ChargingStation -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#ChargingStation">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#LandStation"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasComponentPartAtSomeTime"/>
+                <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyCharger"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="en">Charging Station</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A ChargingStation is a land station dedicated to recharging electric vehicles..</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#Charging_Point -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Charging_Point">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000029"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasComponentPartAtSomeTime"/>
+                <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                <owl:onClass rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyCharger"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment>A charging station can have one or multilpe charging point, and a charging point have 1+charger.
+Each charging point belongs to a specific energy provider, e.g. tesla, total</rdfs:comment>
+        <rdfs:label>Charging Point</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>A site that serves as a designated location where one or more chargers are installed to provide energy to electric or fuel-powered vehicles or devices.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#ConsolidationStation -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#ConsolidationStation">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#LandStation"/>
+        <rdfs:comment xml:lang="en">Previously named switch station</rdfs:comment>
+        <rdfs:label xml:lang="en">Consolidaion Station</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A SwitchStation is a land station designed for switching passengers or cargo from one vehicle to another or from one transport mode to another.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#Correspondence -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Correspondence">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000029"/>
+        <rdfs:comment xml:lang="en">A Correspondence is a site that functions as a break point or pause location in a journey. Example: bus stop, highway rest zone, charging station</rdfs:comment>
+        <rdfs:label xml:lang="en">Correspondence</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#CorrespondencePort -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#CorrespondencePort">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#Correspondence"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://purl.obolibrary.org/obo/BFO_0000171"/>
+                <owl:someValuesFrom rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="en">Correspondence Port</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A CorrespondencePort is a specialized correspondence site equipped with facilities for mode transitions, cargo handling, or passenger services, typically hosting more complex operations than a simple rest stop.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#DesignedChargerFunction -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#DesignedChargerFunction">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://spec.industrialontologies.org/ontology/core/Core/DesignedFunction"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/functionOf"/>
+                        <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyCharger"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/DesignedFunction"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasValueExpressionAtSomeTime"/>
+                <owl:someValuesFrom rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/ValueExpression"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label>Designed Charger Function</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>A function specifically designed to manage the charging process of an energy charger system..</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#DesignedComProtocol -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#DesignedComProtocol">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#DesignedChargerFunction"/>
+        <rdfs:label xml:lang="en">Charging Communication Protocol</rdfs:label>
+        <skos:example>ISO 15118 (Plug &amp; Charge), OCPP (Open Charge Point Protocol), CHAdeMO communication standard.</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition>A communication protocol that governs communication between a charger and a device or vehicle being charged, ensuring proper energy transfer and safety.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#DesignedConnectorType -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#DesignedConnectorType">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#DesignedChargerFunction"/>
+        <rdfs:label>Designed Connector Type</rdfs:label>
+        <skos:example>Type 2 (Mennekes), CCS (Combined Charging System), CHAdeMO, Tesla Supercharger connector.</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition>predefined type of connector designed for a specific charging interface, ensuring compatibility between chargers and energy receivers.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#DesignedCurrent -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#DesignedCurrent">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#DesignedChargerFunction"/>
+        <rdfs:label>Designed Current</rdfs:label>
+        <skos:example>16A, 32A, 350A (for ultra-fast charging).</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition>The predefined electrical current (in amperes) for which a charging system or component is designed to operate.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#DesignedFrequency -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#DesignedFrequency">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#DesignedChargerFunction"/>
+        <rdfs:label>Designed Frequency</rdfs:label>
+        <skos:example>50 Hz (Europe), 60 Hz (North America), 400 Hz (aviation applications).</skos:example>
+        <skos:example>The pre-defiend frequency (in hertz) at which the electrical system is designed to operate during energy transfer.</skos:example>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#DesignedPhase -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#DesignedPhase">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#DesignedChargerFunction"/>
+        <rdfs:label>Designed Phase</rdfs:label>
+        <skos:example>Single-phase (AC home charging), Three-phase (AC commercial charging).</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition>The predefined phase configuration of the electrical system for which the charging function is designed.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#DesignedPin -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#DesignedPin">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#DesignedChargerFunction"/>
+        <rdfs:label>Designed Pin</rdfs:label>
+        <skos:example xml:lang="en">Type 2 connector (AC) with 7 pins, CCS2 connector with additional DC power pins.</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition>A predefined pin configuration in a charging connector, designed to accommodate specific power, communication, or grounding functions.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#DesignedPower -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#DesignedPower">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#DesignedChargerFunction"/>
+        <rdfs:label>Designed Power</rdfs:label>
+        <skos:example>22 kW (AC fast charging), 150 kW (DC fast charging), 350 kW (ultra-fast charging).</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition>The maximum power (in watts or kilowatts) that a charging system or component is designed to deliver.</AnnotationVocabulary:naturalLanguageDefinition>
+        <AnnotationVocabulary:synonym xml:lang="en">Wattage</AnnotationVocabulary:synonym>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#DesignedTension -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#DesignedTension">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#DesignedChargerFunction"/>
+        <rdfs:label>Designed Tension</rdfs:label>
+        <skos:example>230V (single-phase AC), 400V (three-phase AC), 800V (high-voltage DC fast charging).</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition>The designed electrical voltage (in volts) for which a charging system is intended to operate.</AnnotationVocabulary:naturalLanguageDefinition>
+        <AnnotationVocabulary:synonym xml:lang="en">Voltage</AnnotationVocabulary:synonym>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#Distance -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Distance">
+        <rdfs:subClassOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/MeasuredValueExpression"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/isMeasuredValueOfAtSomeTime"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Movement"/>
+                            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#route"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#DriverRole -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#DriverRole">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#TransportRole"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/roleOf"/>
+                <owl:someValuesFrom rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/Person"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="https://www.cranfield.ac.uk/transit/202501#PassengerRole"/>
+        <rdfs:label xml:lang="en">Driver Role</rdfs:label>
+        <skos:example>A car driver, a train conductor, a pilot.</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A role assigned to an person responsible for controlling and operating a transport vehicle.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EV_charger -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EV_charger">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#ElectricityCharger"/>
+        <rdfs:label>Electric vehicle charger</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>A specialized electricity charger that delivers electrical energy to a electric vehicle</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#Electricity -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Electricity">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#Energy"/>
+        <rdfs:label>Electricity</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">Electricity is a form of energy resulting from the presence and flow of electric charge, used to power electric devices, vehicles, systems.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#ElectricityCharger -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#ElectricityCharger">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyCharger"/>
+        <owl:disjointWith rdf:resource="https://www.cranfield.ac.uk/transit/202501#FuelAdder"/>
+        <rdfs:label>Electricity Charger</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>A specialized energy charger that delivers electrical energy to a receiving device or storage unit.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#ElectricityChargerRole -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#ElectricityChargerRole">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyChargerRole"/>
+        <owl:disjointWith rdf:resource="https://www.cranfield.ac.uk/transit/202501#FuleChargerRole"/>
+        <rdfs:label xml:lang="en">Electricity Charger eRole</rdfs:label>
+        <skos:example>an electric vehicle (EV) charger in charging station.</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A specialized energy charger role where the supplied energy is in the form of electricity.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#Energy -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Energy">
+        <rdfs:subClassOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/MaterialResource"/>
+        <rdfs:label>Energy</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">An Energy is a material resource that can be harnessed to produce work, heat, or other forms of power necessary for a process, device or system.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EnergyChargedRole -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyChargedRole">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyTransRole"/>
+        <owl:disjointWith rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyChargerRole"/>
+        <rdfs:label xml:lang="en">Energy Charged Role</rdfs:label>
+        <skos:example xml:lang="en">A battery being charged in a power system,  a vehicle whose tank is being fueled in a gaz station, a capacitor in an electronic circuit</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition>A role assumed by an entity that receives energy.</AnnotationVocabulary:naturalLanguageDefinition>
+        <AnnotationVocabulary:synonym>Powered Device Role
+Receiving device role</AnnotationVocabulary:synonym>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EnergyCharger -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyCharger">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Device"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasFunction"/>
+                        <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#DesignedChargerFunction"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Device"/>
+        <rdfs:comment xml:lang="en">Energy charger is a device that provides energy to another devices, and charge them if they have a chargable battery</rdfs:comment>
+        <rdfs:label>Energy Charger</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A device designed to transfer energy from a power source to an energy storage system or consumer device.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EnergyChargerRole -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyChargerRole">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyTransRole"/>
+        <rdfs:label xml:lang="en">Energy Charger Role</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>A role assigned to an entity responsible for supplying energy to another entity.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EnergyChargingProcess -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyChargingProcess">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyProcess"/>
+        <rdfs:label>Energy Charging Process</rdfs:label>
+        <skos:example>Charging an electric vehicle at a charging station, refueling a hydrogen-powered vehicle, recharging a battery storage system from a renewable energy source.</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition>An energy process that involves the controlled transfer of energy into an energy storage system or directly into a consuming device.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EnergyProcess -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyProcess">
+        <rdfs:subClassOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/PlannedProcess"/>
+        <rdfs:label>Energy Process</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>A planned process related to the generation, conversion, transfer, storage, or utilization of energy according to a predefined protocol.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EnergyProvider -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyProvider">
+        <rdfs:subClassOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/Supplier"/>
+        <rdfs:label xml:lang="en">Energy Provider</rdfs:label>
+        <skos:example xml:lang="en">Entreprice such as Total, EDF</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">person or organization which offers to sell or provide energy, e.g., fuel, electricity</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EnergyProviderRole -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyProviderRole">
+        <rdfs:subClassOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/SupplierRole"/>
+        <rdfs:label>Energy Provider Role</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">supplier role held by a person (less likely) or organization when it offers to sell or provide a energy service</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EnergyStorageProcess -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyStorageProcess">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyProcess"/>
+        <rdfs:label>Energy Storage Process</rdfs:label>
+        <skos:example>Storing electrical energy in a lithium-ion battery, compressing hydrogen for later fuel cell usage, pumping water into a reservoir for pumped hydro storage.</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition>An energy process where energy is stored in a medium for later retrieval and use, following a specified protocol.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EnergyTransRole -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyTransRole">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000023"/>
+        <rdfs:label xml:lang="en">Energy Transmission Role</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A role associated with the transfer, storage, or conversion of energy within a system or between systems.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EnergyTransmissionProcess -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyTransmissionProcess">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyProcess"/>
+        <rdfs:label>Energy Transmission Process</rdfs:label>
+        <skos:example>The transmission of electricity through high-voltage power lines, the transportation of natural gas through pipelines, the wireless transfer of energy via inductive charging systems.</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition>An energy process where energy is transported from one location to another through an infrastructure designed for energy transfer.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#Fuel -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Fuel">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#Energy"/>
+        <rdfs:label>Fuel</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A Fuel is a material substance that releases energy through combustion or another chemical/physical reaction to power a  device or vehicle.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#FuelAdder -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#FuelAdder">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyCharger"/>
+        <rdfs:comment>I know it is not good, but how do you call these things that add fuel to the tank?</rdfs:comment>
+        <rdfs:label>Fuel Adder</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>A specialized energy charger that transfers chemical fuel from a storage source to a fuel-consuming device.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#FuleChargerRole -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#FuleChargerRole">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyChargerRole"/>
+        <rdfs:label>Fuel Charger Role</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A gas station fuel pump</AnnotationVocabulary:naturalLanguageDefinition>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A specialized energy charger role where the supplied energy is in the form of  fuel.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#HDV_Bus -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#HDV_Bus">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#HumanDrivenVehicle"/>
+        <rdfs:label>Human-Driven Bus</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A large human-driven road vehicle designed to carry numerous passengers,  operating along a fixed route or a planned travel.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#HDV_Car -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#HDV_Car">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#HumanDrivenVehicle"/>
+        <rdfs:label>Human-Driven Car</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A human-driven road vehicle with four wheels, typically powered by an internal combustion engine or electric motor, designed to carry a small number of passengers.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#HDV_Train -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#HDV_Train">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#HumanDrivenVehicle"/>
+        <rdfs:comment>Here railway can be considered a type of &quot;road&quot;</rdfs:comment>
+        <rdfs:label xml:lang="en">Human-Driven Train</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A series of connected vehicles that run on railway tracks and are used to transport passengers or goods.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#HDV_Truck -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#HDV_Truck">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#HumanDrivenVehicle"/>
+        <rdfs:label xml:lang="en">Human-Driven Truck</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A human-driven road vehicle designed for transporting cargo, usually equipped with a separate cabin and cargo area.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#HDV_Van -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#HDV_Van">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#HDV_Truck"/>
+        <rdfs:label xml:lang="en">Human-Driven Van</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">Reduced-size truck that carries small amount of cargo (usually under 5?? tons)</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#HarborPort -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#HarborPort">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#CorrespondencePort"/>
+        <rdfs:comment>Connection Land-Sea</rdfs:comment>
+        <rdfs:label>Harbor Port</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A HarborPort is a correspondence port located along a body of water, enabling maritime transport. It connects land travel to water/sea travel.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#HumanDrivenVehicle -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#HumanDrivenVehicle">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#RoadVehicle"/>
+        <rdfs:label>Human-Driven Vehicle</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A road vehicle requiring a human operator to navigate and control its movement.</AnnotationVocabulary:naturalLanguageDefinition>
+        <AnnotationVocabulary:synonym>HDVs</AnnotationVocabulary:synonym>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#LandStation -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#LandStation">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#CorrespondencePort"/>
+        <rdfs:comment xml:lang="en">Land-to-Land Station</rdfs:comment>
+        <rdfs:label xml:lang="en">Land Station</rdfs:label>
+        <skos:example xml:lang="en">Railway stations, major bus depots</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A LandStation is a correspondence port on terrestrial routes, supporting ground transport modes (e.g., buses, trains, trucks). It connects land travels or land travel legs</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#MeasuredCarbonEmission -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#MeasuredCarbonEmission">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#MeasuredCostValueExpression"/>
+        <rdfs:label>Measured Carbon Emission Cost</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">Measured Carbon Emission Cost is the actual carbon emission measured of a movement or an operation</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#MeasuredCostValueExpression -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#MeasuredCostValueExpression">
+        <rdfs:subClassOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/MeasuredValueExpression"/>
+        <rdfs:label xml:lang="en">Measured Cost Value Expression</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">value expression that contains the cost value of a service or a good, etc</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#MeasuredFuelCost -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#MeasuredFuelCost">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#MeasuredCostValueExpression"/>
+        <rdfs:label>Measured Fuel Cost</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">Measured Carbon Emission Cost is the actual carbon emission measured of a movement or an operation</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#MeasuredMoneytaryCost -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#MeasuredMoneytaryCost">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#MeasuredCostValueExpression"/>
+        <rdfs:label xml:lang="en">Measured MoneytaryCost</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">The actual money cost measured for a movement or an operation. Sometimes, it is not directly measured but calculated.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#PassengerRole -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#PassengerRole">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#TransportRole"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/roleOf"/>
+                <owl:someValuesFrom rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/Person"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="en">Passenger Role</rdfs:label>
+        <skos:example>A bus passenger, an airline traveler.</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A role assumed by an person that is transported by a vehicle but does not contribute to its operation.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#PayloadRole -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#PayloadRole">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#TransportRole"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/roleOf"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://purl.obolibrary.org/obo/BFO_0000040"/>
+                            <owl:Class>
+                                <owl:complementOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/Person"/>
+                            </owl:Class>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label>Payload Role</rdfs:label>
+        <skos:example>A shipping container on a cargo ship, a package in a delivery truck, bulk goods in a freight train.</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A role associated with non-human cargo being transported.e</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#SAF_Fuel -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#SAF_Fuel">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#Fuel"/>
+        <rdfs:label>Sustainable Aviation Fuel</rdfs:label>
+        <AnnotationVocabulary:abbreviation>SAF</AnnotationVocabulary:abbreviation>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#ServiceStation -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#ServiceStation">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#LandStation"/>
+        <rdfs:comment xml:lang="en">Previously named Pause Station</rdfs:comment>
+        <rdfs:label xml:lang="en">Service Station</rdfs:label>
+        <skos:example xml:lang="en">Rest Zone on highway</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A PauseStation is a land station used primarily for short-duration stops, rest breaks, or minimal maintenance tasks.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#TransportCapacityDesignSpecification -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportCapacityDesignSpecification">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#TransportDesignSpecification"/>
+        <AnnotationVocabulary:synonym xml:lang="en">Payload specification</AnnotationVocabulary:synonym>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#TransportDesignSpecification -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportDesignSpecification">
+        <rdfs:subClassOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/DesignSpecification"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasValueExpressionAtSomeTime"/>
+                <owl:someValuesFrom rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/ValueExpression"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label>Transport Design Specification</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A TransportDesignSpecification is a design specification that prescribes transport systems or vehicles.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#TransportEmissionDesignSpecification -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportEmissionDesignSpecification">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#TransportDesignSpecification"/>
+        <rdfs:label>TransportEmissionDesignSpecification</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A TransportEmissionDesignSpecification is a transport design specification that prescribes emission amounts and limits for a transport system or vehicle, potentially contains also control measure, or related environmental impact  .</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#TransportFuelDesignSpecification -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportFuelDesignSpecification">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#TransportDesignSpecification"/>
+        <rdfs:comment xml:lang="en">It could specify fuel types (e.g., diesel, electric, hydrogen), fuel efficiency, average consumption.</rdfs:comment>
+        <rdfs:label>TransportFuelDesignSpecification</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A TransportFuelDesignSpecification is a transport design specification that prescribes the type, characteristics, or usage parameters of fuel in a transport system or vehicle.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#TransportMoneytaryCostSpecification -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportMoneytaryCostSpecification">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#TransportDesignSpecification"/>
+        <rdfs:label>MoneytaryCostSpecification</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A MonetaryCostSpecification is an information content entity prescribing the financial cost, expressed in a specific currency or range of currencies, for a process, item, or service.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#TransportPowerSpecification -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportPowerSpecification">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#TransportDesignSpecification"/>
+        <rdfs:label xml:lang="en">Transport Power Specification</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>Transport design specification that describes the power used, e.g., Watt</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#TransportRole -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportRole">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000023"/>
+        <rdfs:comment xml:lang="en">This is created to annotate person and goods in transit</rdfs:comment>
+        <rdfs:label xml:lang="en">Transport Role</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>A role associated with entities participating in the movement of goods, people, or other materials.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#TransportSpeedDesignSpecification -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportSpeedDesignSpecification">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#TransportDesignSpecification"/>
+        <rdfs:label>TransportSpeedDesignSpecification</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>A TransportSpeedDesignSpecification is a transport design specification that prescribes speed constraints, performance envelopes, or operational velocity guidelines for a transport system or vehicle.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#TravelLeg -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#TravelLeg">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#operatedByVehicle"/>
+                <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">0</owl:minQualifiedCardinality>
+                <owl:onClass rdf:resource="http://ies.data.gov.uk/ontology/ies4#Vehicle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment xml:lang="en">A Journey/Transit can consist of multiple travel legs. 
+E.g., you go from home to departure airport by car, then take the plane, then from arrival airport to the hotel by taxi. It is one journey with three legs of travel.
+
+TravelLeg is also considered the minimum travel &quot;unit&quot; that is not dividable. Inside a optimal  travelLeg it is a point-to-point relation, there is no pause or switch or change of payload or passenger.
+This one originates from IES4 TravelLeg</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#ValueCostExpression -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#ValueCostExpression">
+        <rdfs:subClassOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/ValueExpression"/>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#ValueCostExpression_PerUnit -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#ValueCostExpression_PerUnit">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#ValueCostExpression"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasNumericalValue"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#Weight -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Weight">
+        <rdfs:subClassOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/MeasuredValueExpression"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/isMeasuredValueOfAtSomeTime"/>
+                <owl:someValuesFrom rdf:resource="http://purl.obolibrary.org/obo/BFO_0000040"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#route -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#route">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000016"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#endsAtLocation"/>
+                <owl:someValuesFrom rdf:resource="http://purl.obolibrary.org/obo/BFO_0000029"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#startsAtLocation"/>
+                <owl:someValuesFrom rdf:resource="http://purl.obolibrary.org/obo/BFO_0000029"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://purl.obolibrary.org/obo/BFO_0000178"/>
+                <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                <owl:onClass rdf:resource="https://www.cranfield.ac.uk/transit/202501#TravelLeg"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment xml:lang="en">Route is to describe a possible solution from starting point a to end point b. There can be multiple routes from a to b, each one of them has different travel legs.</rdfs:comment>
+        <rdfs:label>Route</rdfs:label>
+        <skos:example xml:lang="en">Adam goes from home to school by foot, he can also go to school by bike or car. Each of them is one route with a single travel leg.</skos:example>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A realizable entity describing a possible solution for traveling from a starting point (A) to an endpoint (B). The realization of a route occurs when a traveler follows a specific sequence of movements (or travel legs), which is influenced by the physical environment and available transport options.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    <rdf:Description>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </rdf:Description>
+    <rdf:Description>
+        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+    </rdf:Description>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyChargingProcess"/>
+            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyStorageProcess"/>
+            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyTransmissionProcess"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#HDV_Bus"/>
+            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#HDV_Car"/>
+            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#HDV_Train"/>
+            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#HDV_Truck"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportEmissionDesignSpecification"/>
+            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportFuelDesignSpecification"/>
+            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportSpeedDesignSpecification"/>
+        </owl:members>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->
+

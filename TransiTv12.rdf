@@ -1,0 +1,433 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://ies.data.gov.uk/ontology/ies4#"
+     xml:base="http://ies.data.gov.uk/ontology/ies4"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:sh="http://www.w3.org/ns/shacl#"
+     xmlns:ies="http://ies.data.gov.uk/ontology/ies4#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:sparx="http://data.sparxsystems.com#">
+    <owl:Ontology rdf:about="http://ies.data.gov.uk/ontology/ies4"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://data.sparxsystems.com#guid -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparxsystems.com#guid"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Aircraft -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#Aircraft">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Vehicle"/>
+        <sparx:guid>{01A64A84-7A14-45a5-AAF2-F1AA614D5F30}</sparx:guid>
+        <rdfs:comment>A Vehicle that travels by air</rdfs:comment>
+        <rdfs:label>Aircraft</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Airport -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#Airport">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#CorrespondencePort"/>
+        <sparx:guid>{82E3793F-D0D1-40ca-927C-7A6FEF913503}</sparx:guid>
+        <rdfs:comment>A Port used for air travel</rdfs:comment>
+        <rdfs:label>Airport</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#CBRadioHandset -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#CBRadioHandset">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#CommunicationsDevice"/>
+        <sparx:guid>{18EB7B22-5927-4b0e-98A8-638D28BDCF87}</sparx:guid>
+        <rdfs:comment>A CommunicationsDevice used to hold radio conversations on frequencies allocated as &quot;Citizen Band&quot;</rdfs:comment>
+        <rdfs:label>CBRadio Handset</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#CarTravel -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#CarTravel">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+        <sparx:guid>{F5E2BCD3-4529-42f2-9ED9-95801B42ED3F}</sparx:guid>
+        <rdfs:comment>A TravelService by car</rdfs:comment>
+        <rdfs:label>Car Travel</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#CommunicationsDevice -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#CommunicationsDevice">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Device"/>
+        <sparx:guid>{32EB46A5-0FA4-44e9-A9E9-9424E80BDE91}</sparx:guid>
+        <rdfs:comment>A Device that provides an endpoint for communications – e.g. mobile telephone, landline, satellite phone, CB Radio, etc.</rdfs:comment>
+        <rdfs:label>Communications Device</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Country -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#Country">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+        <sparx:guid>{92EBA9B9-48C2-4082-9FE5-603977BD6846}</sparx:guid>
+        <rdfs:comment>A Location whose land extent / borders are recognised as a Country by the International Standards Organisation (ISO)
+
+Note: this is simply the land, any buildings on it, and the airspace and ground beneath as recognised by the ISO definition. It does not include the nationals of the Country, its Government, etc. </rdfs:comment>
+        <rdfs:label>Country</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Device -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#Device">
+        <rdfs:subClassOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/Assembly"/>
+        <sparx:guid>{115F2F9B-21F3-4903-8EAA-AB3AEFE97461}</sparx:guid>
+        <rdfs:comment>An Asset that is man-made and performs one or more functions - i.e. it is also an Actor</rdfs:comment>
+        <rdfs:label>Device</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Flight -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#Flight">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+        <sparx:guid>{375B0887-712F-43f0-BBF4-5C544D75AC39}</sparx:guid>
+        <rdfs:comment>A TravelService by air</rdfs:comment>
+        <rdfs:label>Flight</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#GeoPoint -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#GeoPoint">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+        <sparx:guid>{9A9467C3-D5FC-4964-8943-FE63ADF38914}</sparx:guid>
+        <rdfs:comment>A Location that is a point (mathematically speaking, of vanishing volume) on, below or above the surface of the WGS84 spheroid. The distance from the spheroid surface is given by the altitudeInMetres attribute.</rdfs:comment>
+        <rdfs:label>Geo Point</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#GeographicFeature -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#GeographicFeature">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+        <sparx:guid>{7EEE1EF7-C814-4eee-85B3-F48698FD52B6}</sparx:guid>
+        <rdfs:comment>A Location that is a naturally occurring feature on the earth.</rdfs:comment>
+        <rdfs:label>Geographic Feature</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#IPPhoneHandset -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#IPPhoneHandset">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#CommunicationsDevice"/>
+        <sparx:guid>{0B494F4A-9E82-4667-89AD-3D22FC9B5742}</sparx:guid>
+        <rdfs:comment>A CommunicationsDevice that is a telephone using internet protocols</rdfs:comment>
+        <rdfs:label>IPPhone Handset</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Journey -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#Journey">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
+        <sparx:guid>{8B571665-0AA1-40be-A7A0-A35BE86B7192}</sparx:guid>
+        <rdfs:comment>A Movement which is made up of two or more TravelLegs
+
+Note:  this may include a number of legs to the journey (i.e. instances of TravelLeg that are part of the Journey)</rdfs:comment>
+        <rdfs:label>Journey</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#LandlineHandset -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#LandlineHandset">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#CommunicationsDevice"/>
+        <sparx:guid>{57C9F8DF-AFE6-4374-9403-ACACAC26FCE4}</sparx:guid>
+        <rdfs:comment>A CommunicationsDevice that connects using fixed line telecommunications</rdfs:comment>
+        <rdfs:label>Landline Handset</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Location -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#Location">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000029"/>
+        <sparx:guid>{E1A494ED-D493-44ab-8BF9-ABC6889D4D9A}</sparx:guid>
+        <rdfs:comment>An Entity that is a geographic place which specifies a point or an area on the Earth&apos;s surface or elsewhere.</rdfs:comment>
+        <rdfs:label>Location</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#MapGridArea -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#MapGridArea">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+        <sparx:guid>{18A66904-823F-471d-A465-65ECD2D69867}</sparx:guid>
+        <rdfs:comment>A Location whose area is specified by a grid on a map.
+
+Note this is the actual area, not the map grid. </rdfs:comment>
+        <rdfs:label>Map Grid Area</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#MobileHandset -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#MobileHandset">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#CommunicationsDevice"/>
+        <sparx:guid>{3BF8FC71-64BD-4fb5-BEFD-D7FCB936FA12}</sparx:guid>
+        <rdfs:comment>A CommunicationsDevice that is a portable telephone using cellular networks</rdfs:comment>
+        <rdfs:label>Mobile Handset</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Movement -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#Movement">
+        <rdfs:subClassOf rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/PlannedProcess"/>
+        <sparx:guid>{95B5ACC4-956A-4b29-AB9E-BDCD12EF319F}</sparx:guid>
+        <rdfs:comment>An Event where an Entity moves from one place to another.</rdfs:comment>
+        <rdfs:label>Movement</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#PersonalRadioHandset -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#PersonalRadioHandset">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#CommunicationsDevice"/>
+        <sparx:guid>{9D84921F-87A3-4ee9-8A3D-A88F564295FA}</sparx:guid>
+        <rdfs:comment>A CommunicationsDevice for portable radio communications - e.g. a walkie-talkie</rdfs:comment>
+        <rdfs:label>Personal Radio Handset</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#PointOnEarthSurface -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#PointOnEarthSurface">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#GeoPoint"/>
+        <sparx:guid>{A11A426E-ED15-4aaf-B9A5-02A4060533AA}</sparx:guid>
+        <rdfs:comment>A Location that is a point (mathematically speaking, of vanishing area) on the surface of the WGS84 spheroid</rdfs:comment>
+        <rdfs:label>Point On Earth Surface</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#RadioCoverageArea -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#RadioCoverageArea">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+        <sparx:guid>{7A2CC7C7-6B82-4751-BDBE-A770B3AFBBEB}</sparx:guid>
+        <rdfs:comment>A Location whose area is that in which a RadioMast hast viable communications coverage.
+
+Note: The RadioMast itself may not be part of this area, as often the immediate area around the base of a RadioMast is a deadspot. 
+
+Note: Most radio area coverage is complex in shape, and the preferred representation in IES4 is GeoJSON. No attempt is made here to differentiate between signal strength zones. To do this, create multople RadioCoverAreas for the same RadioMast and label them appropriately. </rdfs:comment>
+        <rdfs:label>Radio Coverage Area</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#RegionOfCountry -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#RegionOfCountry">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+        <sparx:guid>{65D869DB-19EE-4886-98BA-E579C39C4A68}</sparx:guid>
+        <rdfs:comment>A Location that is a general subdivision of a Country
+
+e.g. cities, towns, counties, states, etc.</rdfs:comment>
+        <rdfs:label>Region Of Country</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#RegionOfWorld -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#RegionOfWorld">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
+        <sparx:guid>{18C405CE-CC09-4e02-A44D-0FB00C6F6B37}</sparx:guid>
+        <rdfs:comment>A Location that is a general subdivision of the world - e.g. continents, sub-continents, economic areas, etc.
+
+Regions of the world may sometimes be spatially separated (e.g. economic areas)</rdfs:comment>
+        <rdfs:label>Region Of World</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#RoadVehicle -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#RoadVehicle">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Vehicle"/>
+        <sparx:guid>{830B2164-E880-4bef-A62C-B38CEB6A824D}</sparx:guid>
+        <rdfs:comment>A Vehicle that travels by road (surprisingly enough)</rdfs:comment>
+        <rdfs:label>Road Vehicle</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#SIMCard -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#SIMCard">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#CommunicationsDevice"/>
+        <sparx:guid>{3244F6B1-8636-4895-B3B1-283CF057F826}</sparx:guid>
+        <rdfs:comment>A CommunicationsDevice that holds data about a IMSI</rdfs:comment>
+        <rdfs:label>SIMCard</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Sailing -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#Sailing">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+        <sparx:guid>{803AF0E7-01EC-4123-B888-3FB6369C840F}</sparx:guid>
+        <rdfs:comment>A TravelService by sea</rdfs:comment>
+        <rdfs:label>Sailing</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#SatellitePhoneHandset -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#SatellitePhoneHandset">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#CommunicationsDevice"/>
+        <sparx:guid>{3634DBF3-AA3A-402e-9D08-906C06FAFEDB}</sparx:guid>
+        <rdfs:comment>A CommunicationsDevice that communicates via satellite. </rdfs:comment>
+        <rdfs:label>Satellite Phone Handset</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Ship -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#Ship">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Vehicle"/>
+        <sparx:guid>{14098560-1FF3-4599-B9A5-41167861538B}</sparx:guid>
+        <rdfs:comment>A Vehicle that travels on water</rdfs:comment>
+        <rdfs:label>Ship</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#TrainTravel -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#TrainTravel">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+        <sparx:guid>{F2D6CFE4-BCE9-4bce-ADB0-075656038A55}</sparx:guid>
+        <rdfs:comment>A TravelService by rail</rdfs:comment>
+        <rdfs:label>Train Travel</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Transit -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#Transit">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
+        <sparx:guid>{7693D2C9-0F06-4005-BB8D-B5B572B2281A}</sparx:guid>
+        <rdfs:comment>A Movement that is an individual transportation - e.g. an individual flight, sailing, etc.</rdfs:comment>
+        <rdfs:label>Transit</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ies.data.gov.uk/ontology/ies4#Vehicle -->
+
+    <owl:Class rdf:about="http://ies.data.gov.uk/ontology/ies4#Vehicle">
+        <rdfs:subClassOf rdf:resource="http://ies.data.gov.uk/ontology/ies4#Device"/>
+        <sparx:guid>{3B916F09-F3F4-43e9-9C84-99009C685396}</sparx:guid>
+        <rdfs:comment>An Asset that is a means of transportation – e.g. car, aircraft, ship.</rdfs:comment>
+        <rdfs:label>Vehicle</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/BFO_0000015 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/BFO_0000015"/>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/BFO_0000029 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/BFO_0000029"/>
+    
+
+
+    <!-- https://spec.industrialontologies.org/ontology/core/Core/Assembly -->
+
+    <owl:Class rdf:about="https://spec.industrialontologies.org/ontology/core/Core/Assembly"/>
+    
+
+
+    <!-- https://spec.industrialontologies.org/ontology/core/Core/MaterialArtifact -->
+
+    <owl:Class rdf:about="https://spec.industrialontologies.org/ontology/core/Core/MaterialArtifact"/>
+    
+
+
+    <!-- https://spec.industrialontologies.org/ontology/core/Core/Person -->
+
+    <owl:Class rdf:about="https://spec.industrialontologies.org/ontology/core/Core/Person"/>
+    
+
+
+    <!-- https://spec.industrialontologies.org/ontology/core/Core/PlannedProcess -->
+
+    <owl:Class rdf:about="https://spec.industrialontologies.org/ontology/core/Core/PlannedProcess"/>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#CorrespondencePort -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#CorrespondencePort"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->
+
