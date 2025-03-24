@@ -61,6 +61,7 @@
     <!-- https://www.cranfield.ac.uk/transit/202501#_tempPropertyObjectIES4 -->
 
     <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#_tempPropertyObjectIES4">
+        <owl:inverseOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#owns"/>
         <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Journey"/>
         <rdfs:comment xml:lang="en">This is a tempory placeholder to highlight the added object properties in the developed ontology</rdfs:comment>
     </owl:ObjectProperty>
@@ -108,11 +109,45 @@
     <!-- https://www.cranfield.ac.uk/transit/202501#endsAtLocation -->
 
     <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#endsAtLocation">
-        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000066"/>
-        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Journey"/>
-        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#_tempPropertyObjectIES4"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
+        <rdfs:domain rdf:resource="https://www.cranfield.ac.uk/transit/202501#route"/>
         <rdfs:range rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
         <owl:propertyDisjointWith rdf:resource="https://www.cranfield.ac.uk/transit/202501#startsAtLocation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasConsumer -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasConsumer">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasParticipantsInIndustry"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasEmission -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasEmission">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasParticipantInEmission"/>
+        <rdfs:range rdf:resource="https://www.cranfield.ac.uk/transit/202501#GreenhouseGasEmission"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasEmissionSource -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasEmissionSource">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasParticipantInEmission"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasEmitter -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasEmitter">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasParticipantInEmission"/>
+        <rdfs:range rdf:resource="http://purl.obolibrary.org/obo/BFO_0000040"/>
     </owl:ObjectProperty>
     
 
@@ -151,6 +186,24 @@
     
 
 
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasParticipantInEmission -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasParticipantInEmission">
+        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000057"/>
+        <rdfs:domain rdf:resource="https://www.cranfield.ac.uk/transit/202501#EmissionProcess"/>
+        <rdfs:range rdf:resource="http://purl.obolibrary.org/obo/BFO_0000040"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasParticipantsInIndustry -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasParticipantsInIndustry">
+        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000057"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- https://www.cranfield.ac.uk/transit/202501#hasParticipantsInMovement -->
 
     <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasParticipantsInMovement">
@@ -165,9 +218,34 @@
     <!-- https://www.cranfield.ac.uk/transit/202501#hasPayLoad -->
 
     <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasPayLoad">
-        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000057"/>
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasParticipantsInMovement"/>
         <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
         <rdfs:comment>put under is carrier of</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasProducer -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasProducer">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasParticipantsInIndustry"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#hasSubstance -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#hasSubstance">
+        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000178"/>
+        <owl:inverseOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#isSubstanceOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#isSubstanceOf -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#isSubstanceOf">
+        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000176"/>
     </owl:ObjectProperty>
     
 
@@ -175,12 +253,32 @@
     <!-- https://www.cranfield.ac.uk/transit/202501#operatedByVehicle -->
 
     <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#operatedByVehicle">
-        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000057"/>
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasParticipantsInMovement"/>
         <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Journey"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
         <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Transit"/>
         <rdfs:domain rdf:resource="https://www.cranfield.ac.uk/transit/202501#TravelLeg"/>
         <rdfs:range rdf:resource="http://ies.data.gov.uk/ontology/ies4#Vehicle"/>
         <rdfs:comment>put under hasParticipant</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#ownedBy -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#ownedBy">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#_tempPropertyObjectIES4"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#owns -->
+
+    <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#owns">
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#_tempPropertyObjectIES4"/>
+        <rdfs:domain rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/Organization"/>
+        <rdfs:domain rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/Person"/>
+        <rdfs:range rdf:resource="http://purl.obolibrary.org/obo/BFO_0000040"/>
     </owl:ObjectProperty>
     
 
@@ -198,7 +296,7 @@
     <!-- https://www.cranfield.ac.uk/transit/202501#passesBy -->
 
     <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#passesBy">
-        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000066"/>
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#_tempPropertyObjectIES4"/>
         <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
         <rdfs:domain rdf:resource="https://www.cranfield.ac.uk/transit/202501#route"/>
         <rdfs:range rdf:resource="http://purl.obolibrary.org/obo/BFO_0000029"/>
@@ -209,9 +307,9 @@
     <!-- https://www.cranfield.ac.uk/transit/202501#startsAtLocation -->
 
     <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#startsAtLocation">
-        <rdfs:subPropertyOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000066"/>
-        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Journey"/>
-        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Transit"/>
+        <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#_tempPropertyObjectIES4"/>
+        <rdfs:domain rdf:resource="http://ies.data.gov.uk/ontology/ies4#Movement"/>
+        <rdfs:domain rdf:resource="https://www.cranfield.ac.uk/transit/202501#route"/>
         <rdfs:range rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
     </owl:ObjectProperty>
     
@@ -221,6 +319,7 @@
 
     <owl:ObjectProperty rdf:about="https://www.cranfield.ac.uk/transit/202501#usesEnergy">
         <rdfs:subPropertyOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#appliesEnergy"/>
+        <rdfs:range rdf:resource="https://www.cranfield.ac.uk/transit/202501#Energy"/>
     </owl:ObjectProperty>
     
 
@@ -408,12 +507,6 @@
     <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Journey">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://purl.obolibrary.org/obo/BFO_0000199"/>
-                <owl:someValuesFrom rdf:resource="http://purl.obolibrary.org/obo/BFO_0000202"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
                 <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#endsAtLocation"/>
                 <owl:someValuesFrom rdf:resource="http://ies.data.gov.uk/ontology/ies4#Location"/>
             </owl:Restriction>
@@ -431,6 +524,12 @@
     <!-- http://ies.data.gov.uk/ontology/ies4#Movement -->
 
     <rdf:Description rdf:about="http://ies.data.gov.uk/ontology/ies4#Movement">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://purl.obolibrary.org/obo/BFO_0000199"/>
+                <owl:someValuesFrom rdf:resource="http://purl.obolibrary.org/obo/BFO_0000202"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#endsAtLocation"/>
@@ -541,6 +640,61 @@
     
 
 
+    <!-- https://www.cranfield.ac.uk/transit/202501#Byproduct -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Byproduct">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#MaterialResidual"/>
+        <rdfs:label>Byproduct</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A secondary material or substance that is produced during the manufacturing or chemical process, which is not the primary product but may have commercial value or potential reuse.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#CarbonDioxideEmission -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#CarbonDioxideEmission">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#GreenhouseGasEmission"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasSubstance"/>
+                        <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#Carbon_Dioxide"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#GreenhouseGasEmission"/>
+        <rdfs:label>Carbon Dioxide Emission</rdfs:label>
+        <AnnotationVocabulary:synonym xml:lang="en">Carbon Emission</AnnotationVocabulary:synonym>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#CarbonFootprint -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#CarbonFootprint">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#GHG_entity"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasValueExpressionAtSomeTime"/>
+                <owl:someValuesFrom rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/ValueExpression"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <AnnotationVocabulary:naturalLanguageDefinition>The net amount of greenhouse gas emissions associated with an entity, process, or product, expressed in terms of carbon dioxide equivalent (CO₂). It is calculated as the total GHG emissions minus the total GHG removals over a defined period or system boundary.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#Carbon_Dioxide -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Carbon_Dioxide">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#Greenhouse_Gas"/>
+        <owl:disjointWith rdf:resource="https://www.cranfield.ac.uk/transit/202501#Methane"/>
+    </owl:Class>
+    
+
+
     <!-- https://www.cranfield.ac.uk/transit/202501#ChargingStation -->
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#ChargingStation">
@@ -560,7 +714,6 @@
     <!-- https://www.cranfield.ac.uk/transit/202501#Charging_Point -->
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Charging_Point">
-        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000029"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasComponentPartAtSomeTime"/>
@@ -590,7 +743,7 @@ Each charging point belongs to a specific energy provider, e.g. tesla, total</rd
     <!-- https://www.cranfield.ac.uk/transit/202501#Correspondence -->
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Correspondence">
-        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000029"/>
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000030"/>
         <rdfs:comment xml:lang="en">A Correspondence is a site that functions as a break point or pause location in a journey. Example: bus stop, highway rest zone, charging station</rdfs:comment>
         <rdfs:label xml:lang="en">Correspondence</rdfs:label>
     </owl:Class>
@@ -609,6 +762,14 @@ Each charging point belongs to a specific energy provider, e.g. tesla, total</rd
         </rdfs:subClassOf>
         <rdfs:label xml:lang="en">Correspondence Port</rdfs:label>
         <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A CorrespondencePort is a specialized correspondence site equipped with facilities for mode transitions, cargo handling, or passenger services, typically hosting more complex operations than a simple rest stop.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#CorrosionProcess -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#CorrosionProcess">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#InherentProcess"/>
     </owl:Class>
     
 
@@ -812,6 +973,97 @@ Each charging point belongs to a specific energy provider, e.g. tesla, total</rd
     
 
 
+    <!-- https://www.cranfield.ac.uk/transit/202501#Emission -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Emission">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#Waste"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasValueExpressionAtSomeTime"/>
+                <owl:someValuesFrom rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/ValueExpression"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EmissionProcess -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EmissionProcess">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#InherentProcess"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasEmission"/>
+                <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#GreenhouseGasEmission"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasEmitter"/>
+                <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#GHG_Source"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EmissionProcessScopeOne -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EmissionProcessScopeOne">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#EmissionProcess"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasEmissionSource"/>
+                        <owl:someValuesFrom>
+                            <owl:Class>
+                                <owl:intersectionOf rdf:parseType="Collection">
+                                    <rdf:Description rdf:about="https://spec.industrialontologies.org/ontology/core/Core/Organization"/>
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#owns"/>
+                                        <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#GHG_Source"/>
+                                    </owl:Restriction>
+                                </owl:intersectionOf>
+                            </owl:Class>
+                        </owl:someValuesFrom>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EmissionProcess"/>
+        <rdfs:label>Scope 1 Emission</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>Scope 1 includes all direct emissions that are generated from sources that are directly owned or controlled by an organisation. These include the use of natural gas at local or international sites, using liquid fuels to run a fleet of owned vehicles, or gases leaking from air-conditioning and refrigeration units.  
+
+Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EmissionProcessScopeThree -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EmissionProcessScopeThree">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EmissionProcess"/>
+        <rdfs:label>Scope 3 Emission</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>Scope 3 includes all indirect emissions that occur in an organisation’s value chain – so activities that they do not own or control. These are usually the greatest share of an organisation’s carbon footprint, covering emissions associated with the following 15 categories. There are also additional categories you can measure, such as home working emissions.  
+
+Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#EmissionProcessScopeTwo -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EmissionProcessScopeTwo">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EmissionProcess"/>
+        <rdfs:label>Scope 2 Emission</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition>Scope 2 includes all indirect emissions from the generation of the electricity purchased and used by an organisation at local or international sites. These emissions can be measured as location-based or market-based. 
+
+Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
     <!-- https://www.cranfield.ac.uk/transit/202501#Energy -->
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Energy">
@@ -879,6 +1131,14 @@ Receiving device role</AnnotationVocabulary:synonym>
     
 
 
+    <!-- https://www.cranfield.ac.uk/transit/202501#EnergyGenerationProcess -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyGenerationProcess">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyProcess"/>
+    </owl:Class>
+    
+
+
     <!-- https://www.cranfield.ac.uk/transit/202501#EnergyProcess -->
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyProcess">
@@ -925,8 +1185,8 @@ Receiving device role</AnnotationVocabulary:synonym>
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#EnergyTransRole">
         <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000023"/>
-        <rdfs:label xml:lang="en">Energy Transmission Role</rdfs:label>
-        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A role associated with the transfer, storage, or conversion of energy within a system or between systems.</AnnotationVocabulary:naturalLanguageDefinition>
+        <rdfs:label xml:lang="en">Energy Role</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A role associated with the transfer, storage, or emission, conversion of energy within a system or between systems.</AnnotationVocabulary:naturalLanguageDefinition>
     </owl:Class>
     
 
@@ -970,6 +1230,110 @@ Receiving device role</AnnotationVocabulary:synonym>
         <rdfs:label>Fuel Charger Role</rdfs:label>
         <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A gas station fuel pump</AnnotationVocabulary:naturalLanguageDefinition>
         <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A specialized energy charger role where the supplied energy is in the form of  fuel.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#GHG_Sink -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#GHG_Sink">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#GHG_entity"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasRole"/>
+                        <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#GHG_SinkRole"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#GHG_entity"/>
+        <AnnotationVocabulary:synonym>GHG remover</AnnotationVocabulary:synonym>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#GHG_SinkRole -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#GHG_SinkRole">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyTransRole"/>
+        <AnnotationVocabulary:naturalLanguageDefinition>Energy Role held by a material entity or an organization that removes a greenhouse gas into the atmosphere</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#GHG_Source -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#GHG_Source">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#GHG_entity"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://spec.industrialontologies.org/ontology/core/Core/hasRole"/>
+                        <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#GHG_SourceRole"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#GHG_entity"/>
+        <AnnotationVocabulary:synonym>GHG emitter</AnnotationVocabulary:synonym>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#GHG_SourceRole -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#GHG_SourceRole">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#EnergyTransRole"/>
+        <AnnotationVocabulary:naturalLanguageDefinition>Energy Role held by a material entity or an organization that releases a greenhouse gas into the atmosphere</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#GHG_entity -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#GHG_entity">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000040"/>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#Gas -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Gas">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000040"/>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#GreenhouseGasEmission -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#GreenhouseGasEmission">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#Emission"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasSubstance"/>
+                        <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#Greenhouse_Gas"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#Emission"/>
+        <rdfs:label>Greenhouse Gas Emission</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A gaseous residual emitted as a result of industrial or biological processes, which contributes to the greenhouse effect and global warming. Common examples include carbon dioxide, methane, and nitrous oxide.</AnnotationVocabulary:naturalLanguageDefinition>
+        <AnnotationVocabulary:synonym>GHG</AnnotationVocabulary:synonym>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#Greenhouse_Gas -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Greenhouse_Gas">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#Gas"/>
     </owl:Class>
     
 
@@ -1047,6 +1411,17 @@ Receiving device role</AnnotationVocabulary:synonym>
     
 
 
+    <!-- https://www.cranfield.ac.uk/transit/202501#InherentProcess -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#InherentProcess">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000015"/>
+        <rdfs:comment xml:lang="en">This is a complementary notion to the &quot;planned process&quot;. An inherent process is a process that happens along with the planned process, however the process itself is not planned/instructed. E.g., the gaz emission during energy consumption, the corrosion of gear during production. In many cases, it is accompnied with a main planned process.</rdfs:comment>
+        <rdfs:label xml:lang="en">Inherent Process</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">An inherent process is a process which is accompnied with a main planned process.  It  happens along with the planned process, however the process itself is not planned/instructed. E.g., the gaz emission during energy consumption, the corrosion of gear during production.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
     <!-- https://www.cranfield.ac.uk/transit/202501#LandStation -->
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#LandStation">
@@ -1059,11 +1434,21 @@ Receiving device role</AnnotationVocabulary:synonym>
     
 
 
+    <!-- https://www.cranfield.ac.uk/transit/202501#MaterialResidual -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#MaterialResidual">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000040"/>
+        <rdfs:label xml:lang="en">Material Residual</rdfs:label>
+        <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A general term for any residuals, emissions or unintended outputs from a production or delivery process. Applicable in industrial, manufacturing, supply chain and other modelling contexts.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
     <!-- https://www.cranfield.ac.uk/transit/202501#MeasuredCarbonEmission -->
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#MeasuredCarbonEmission">
-        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#MeasuredCostValueExpression"/>
-        <rdfs:label>Measured Carbon Emission Cost</rdfs:label>
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#MeasuredGHGEmission"/>
+        <rdfs:label>Measured Carbon Emission</rdfs:label>
         <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">Measured Carbon Emission Cost is the actual carbon emission measured of a movement or an operation</AnnotationVocabulary:naturalLanguageDefinition>
     </owl:Class>
     
@@ -1089,12 +1474,56 @@ Receiving device role</AnnotationVocabulary:synonym>
     
 
 
+    <!-- https://www.cranfield.ac.uk/transit/202501#MeasuredGHGEmission -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#MeasuredGHGEmission">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#MeasuredCostValueExpression"/>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#MeasuredMethaneEmission -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#MeasuredMethaneEmission">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#MeasuredGHGEmission"/>
+    </owl:Class>
+    
+
+
     <!-- https://www.cranfield.ac.uk/transit/202501#MeasuredMoneytaryCost -->
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#MeasuredMoneytaryCost">
         <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#MeasuredCostValueExpression"/>
         <rdfs:label xml:lang="en">Measured MoneytaryCost</rdfs:label>
         <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">The actual money cost measured for a movement or an operation. Sometimes, it is not directly measured but calculated.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#Methane -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Methane">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#Greenhouse_Gas"/>
+    </owl:Class>
+    
+
+
+    <!-- https://www.cranfield.ac.uk/transit/202501#MethaneEmission -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#MethaneEmission">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#GreenhouseGasEmission"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://www.cranfield.ac.uk/transit/202501#hasSubstance"/>
+                        <owl:someValuesFrom rdf:resource="https://www.cranfield.ac.uk/transit/202501#Methane"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#GreenhouseGasEmission"/>
+        <rdfs:label>Methane Emission</rdfs:label>
     </owl:Class>
     
 
@@ -1293,6 +1722,15 @@ This one originates from IES4 TravelLeg</rdfs:comment>
     
 
 
+    <!-- https://www.cranfield.ac.uk/transit/202501#Waste -->
+
+    <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Waste">
+        <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#MaterialResidual"/>
+        <AnnotationVocabulary:naturalLanguageDefinition>A material or substance resulting from a process that has no intended value or use and is typically discarded, requiring treatment or disposal to minimize environmental impact.</AnnotationVocabulary:naturalLanguageDefinition>
+    </owl:Class>
+    
+
+
     <!-- https://www.cranfield.ac.uk/transit/202501#Weight -->
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#Weight">
@@ -1352,6 +1790,16 @@ This one originates from IES4 TravelLeg</rdfs:comment>
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://purl.obolibrary.org/obo/BFO_0000024"/>
+            <rdf:Description rdf:about="http://purl.obolibrary.org/obo/BFO_0000027"/>
+            <rdf:Description rdf:about="http://purl.obolibrary.org/obo/BFO_0000030"/>
+            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#Gas"/>
+            <rdf:Description rdf:about="https://www.cranfield.ac.uk/transit/202501#MaterialResidual"/>
+        </owl:members>
+    </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
         <owl:members rdf:parseType="Collection">
