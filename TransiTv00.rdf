@@ -1093,7 +1093,7 @@ Receiving device role</AnnotationVocabulary:synonym>
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#MeasuredMoneytaryCost">
         <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#MeasuredCostValueExpression"/>
-        <rdfs:label xml:lang="en">Measured MoneytaryCost</rdfs:label>
+        <rdfs:label xml:lang="en">Measured MonetaryCost</rdfs:label>
         <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">The actual money cost measured for a movement or an operation. Sometimes, it is not directly measured but calculated.</AnnotationVocabulary:naturalLanguageDefinition>
     </owl:Class>
     
@@ -1214,7 +1214,7 @@ Receiving device role</AnnotationVocabulary:synonym>
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportMoneytaryCostSpecification">
         <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#TransportDesignSpecification"/>
-        <rdfs:label>MoneytaryCostSpecification</rdfs:label>
+        <rdfs:label>MonetaryCostSpecification</rdfs:label>
         <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A MonetaryCostSpecification is an information content entity prescribing the financial cost, expressed in a specific currency or range of currencies, for a process, item, or service.</AnnotationVocabulary:naturalLanguageDefinition>
     </owl:Class>
     
@@ -1224,7 +1224,7 @@ Receiving device role</AnnotationVocabulary:synonym>
 
     <owl:Class rdf:about="https://www.cranfield.ac.uk/transit/202501#TransportPowerSpecification">
         <rdfs:subClassOf rdf:resource="https://www.cranfield.ac.uk/transit/202501#TransportDesignSpecification"/>
-        <rdfs:label xml:lang="en">Transport Power Specification</rdfs:label>
+        <rdfs:label xml:lang="en">TransportPowerSpecification</rdfs:label>
         <AnnotationVocabulary:naturalLanguageDefinition>Transport design specification that describes the power used, e.g., Watt</AnnotationVocabulary:naturalLanguageDefinition>
     </owl:Class>
     
@@ -1336,10 +1336,10 @@ This one originates from IES4 TravelLeg</rdfs:comment>
         <AnnotationVocabulary:naturalLanguageDefinition xml:lang="en">A realizable entity describing a possible solution for traveling from a starting point (A) to an endpoint (B). The realization of a route occurs when a traveler follows a specific sequence of movements (or travel legs), which is influenced by the physical environment and available transport options.</AnnotationVocabulary:naturalLanguageDefinition>
     </owl:Class>
     <rdf:Description>
-        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
     </rdf:Description>
     <rdf:Description>
-        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
     </rdf:Description>
     
 
