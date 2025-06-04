@@ -1120,10 +1120,10 @@ Receiving device role""" .
                                   <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/naturalLanguageDefinition> "A TransportFuelDesignSpecification is a transport design specification that prescribes the type, characteristics, or usage parameters of fuel in a transport system or vehicle."@en .
 
 
-###  https://www.cranfield.ac.uk/transit/202501#TransportMoneytaryCostSpecification
-:TransportMoneytaryCostSpecification rdf:type owl:Class ;
+###  https://www.cranfield.ac.uk/transit/202501#TransportMonetaryCostSpecification
+:TransportMonetaryCostSpecification rdf:type owl:Class ;
                                      rdfs:subClassOf :TransportDesignSpecification ;
-                                     rdfs:label "MoneytaryCostSpecification" ;
+                                     rdfs:label "MonetaryCostSpecification" ;
                                      <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/naturalLanguageDefinition> "A MonetaryCostSpecification is an information content entity prescribing the financial cost, expressed in a specific currency or range of currencies, for a process, item, or service."@en .
 
 
