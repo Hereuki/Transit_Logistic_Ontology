@@ -54,6 +54,21 @@ owl:qualifiedCardinality rdf:type owl:AnnotationProperty .
                rdfs:range :Energy .
 
 
+###  https://www.cranfield.ac.uk/transit/202501#departsAtOrigin
+:departsAtOrigin rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf :_tempPropertyObjectIES4 ;
+                 rdfs:domain [ rdf:type owl:Class ;
+                               owl:unionOf ( <http://purl.obolibrary.org/obo/BFO_0000015>
+                                             :route
+                                           )
+                             ] ;
+                 rdfs:range [ rdf:type owl:Class ;
+                              owl:unionOf ( <http://ies.data.gov.uk/ontology/ies4#Location>
+                                            <http://purl.obolibrary.org/obo/BFO_0000030>
+                                          )
+                            ] .
+
+
 ###  https://www.cranfield.ac.uk/transit/202501#drivenBy
 :drivenBy rdf:type owl:ObjectProperty ;
           rdfs:subPropertyOf :_tempPropertyObjectIES4 ;
@@ -66,15 +81,19 @@ owl:qualifiedCardinality rdf:type owl:AnnotationProperty .
         rdfs:range :HumanDrivenVehicle .
 
 
-###  https://www.cranfield.ac.uk/transit/202501#endsAtLocation
-:endsAtLocation rdf:type owl:ObjectProperty ;
-                rdfs:subPropertyOf :_tempPropertyObjectIES4 ;
-                rdfs:domain [ rdf:type owl:Class ;
-                              owl:unionOf ( <http://ies.data.gov.uk/ontology/ies4#Movement>
-                                            :route
-                                          )
-                            ] ;
-                rdfs:range <http://ies.data.gov.uk/ontology/ies4#Location> .
+###  https://www.cranfield.ac.uk/transit/202501#endsAtDestination
+:endsAtDestination rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf :_tempPropertyObjectIES4 ;
+                   rdfs:domain [ rdf:type owl:Class ;
+                                 owl:unionOf ( <http://purl.obolibrary.org/obo/BFO_0000015>
+                                               :route
+                                             )
+                               ] ;
+                   rdfs:range [ rdf:type owl:Class ;
+                                owl:unionOf ( <http://ies.data.gov.uk/ontology/ies4#Location>
+                                              <http://purl.obolibrary.org/obo/BFO_0000030>
+                                            )
+                              ] .
 
 
 ###  https://www.cranfield.ac.uk/transit/202501#hasConsumer
@@ -126,8 +145,7 @@ owl:qualifiedCardinality rdf:type owl:AnnotationProperty .
 :hasParticipantsInMovement rdf:type owl:ObjectProperty ;
                            rdfs:subPropertyOf <http://purl.obolibrary.org/obo/BFO_0000057> ;
                            owl:inverseOf :participatesInMovement ;
-                           rdfs:domain <http://ies.data.gov.uk/ontology/ies4#Movement> ;
-                           rdfs:range <http://purl.obolibrary.org/obo/BFO_0000040> .
+                           rdfs:domain <http://ies.data.gov.uk/ontology/ies4#Movement> .
 
 
 ###  https://www.cranfield.ac.uk/transit/202501#hasPayLoad
@@ -151,6 +169,13 @@ owl:qualifiedCardinality rdf:type owl:AnnotationProperty .
 ###  https://www.cranfield.ac.uk/transit/202501#isSubstanceOf
 :isSubstanceOf rdf:type owl:ObjectProperty ;
                rdfs:subPropertyOf <http://purl.obolibrary.org/obo/BFO_0000176> .
+
+
+###  https://www.cranfield.ac.uk/transit/202501#isVehicleInMovement
+:isVehicleInMovement rdf:type owl:ObjectProperty ;
+                     rdfs:subPropertyOf :participatesInMovement ;
+                     rdfs:domain <http://ies.data.gov.uk/ontology/ies4#Vehicle> ;
+                     rdfs:range <http://ies.data.gov.uk/ontology/ies4#Movement> .
 
 
 ###  https://www.cranfield.ac.uk/transit/202501#operatedByVehicle
@@ -180,7 +205,6 @@ owl:qualifiedCardinality rdf:type owl:AnnotationProperty .
 ###  https://www.cranfield.ac.uk/transit/202501#participatesInMovement
 :participatesInMovement rdf:type owl:ObjectProperty ;
                         rdfs:subPropertyOf <http://purl.obolibrary.org/obo/BFO_0000056> ;
-                        rdfs:domain <http://purl.obolibrary.org/obo/BFO_0000040> ;
                         rdfs:range <http://ies.data.gov.uk/ontology/ies4#Movement> .
 
 
@@ -193,17 +217,6 @@ owl:qualifiedCardinality rdf:type owl:AnnotationProperty .
                                     )
                       ] ;
           rdfs:range <http://purl.obolibrary.org/obo/BFO_0000029> .
-
-
-###  https://www.cranfield.ac.uk/transit/202501#startsAtLocation
-:startsAtLocation rdf:type owl:ObjectProperty ;
-                  rdfs:subPropertyOf :_tempPropertyObjectIES4 ;
-                  rdfs:domain [ rdf:type owl:Class ;
-                                owl:unionOf ( <http://ies.data.gov.uk/ontology/ies4#Movement>
-                                              :route
-                                            )
-                              ] ;
-                  rdfs:range <http://ies.data.gov.uk/ontology/ies4#Location> .
 
 
 ###  https://www.cranfield.ac.uk/transit/202501#usesEnergy
@@ -336,16 +349,16 @@ owl:qualifiedCardinality rdf:type owl:AnnotationProperty .
                                                                   owl:someValuesFrom <http://purl.obolibrary.org/obo/BFO_0000008>
                                                                 ] ,
                                                                 [ rdf:type owl:Restriction ;
-                                                                  owl:onProperty :endsAtLocation ;
+                                                                  owl:onProperty :departsAtOrigin ;
+                                                                  owl:someValuesFrom <http://ies.data.gov.uk/ontology/ies4#Location>
+                                                                ] ,
+                                                                [ rdf:type owl:Restriction ;
+                                                                  owl:onProperty :endsAtDestination ;
                                                                   owl:someValuesFrom <http://ies.data.gov.uk/ontology/ies4#Location>
                                                                 ] ,
                                                                 [ rdf:type owl:Restriction ;
                                                                   owl:onProperty :hasParticipantsInMovement ;
                                                                   owl:someValuesFrom <http://purl.obolibrary.org/obo/BFO_0000040>
-                                                                ] ,
-                                                                [ rdf:type owl:Restriction ;
-                                                                  owl:onProperty :startsAtLocation ;
-                                                                  owl:someValuesFrom <http://ies.data.gov.uk/ontology/ies4#Location>
                                                                 ] .
 
 
@@ -379,7 +392,13 @@ owl:qualifiedCardinality rdf:type owl:AnnotationProperty .
 <http://ies.data.gov.uk/ontology/ies4#Transit> rdfs:subClassOf [ rdf:type owl:Restriction ;
                                                                  owl:onProperty :operatedByVehicle ;
                                                                  owl:someValuesFrom <http://ies.data.gov.uk/ontology/ies4#Vehicle>
-                                                               ] .
+                                                               ] ,
+                                                               [ rdf:type owl:Restriction ;
+                                                                 owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000117> ;
+                                                                 owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                                 owl:onClass :TravelLegProcess
+                                                               ] ;
+                                               rdfs:comment "Unlike Journet defined in IES 4, I think a tranit (or journey) can have just one travel leg. Like a list (array) can have just one instance, but it is still type list (array)."@en .
 
 
 ###  http://ies.data.gov.uk/ontology/ies4#Vehicle
@@ -391,6 +410,32 @@ owl:qualifiedCardinality rdf:type owl:AnnotationProperty .
                                                                  owl:onProperty :appliesEnergy ;
                                                                  owl:someValuesFrom :Energy
                                                                ] .
+
+
+###  https://www.cranfield.ac.uk/transit/202501#AircraftIdentifier
+:AircraftIdentifier rdf:type owl:Class ;
+                    owl:equivalentClass [ owl:intersectionOf ( :VehicleIdentifier
+                                                               [ rdf:type owl:Restriction ;
+                                                                 owl:onProperty <https://spec.industrialontologies.org/ontology/core/Core/designates> ;
+                                                                 owl:someValuesFrom <http://ies.data.gov.uk/ontology/ies4#Aircraft>
+                                                               ]
+                                                             ) ;
+                                          rdf:type owl:Class
+                                        ] ;
+                    rdfs:subClassOf :VehicleIdentifier .
+
+
+###  https://www.cranfield.ac.uk/transit/202501#ArtifactIdentifier
+:ArtifactIdentifier rdf:type owl:Class ;
+                    owl:equivalentClass [ owl:intersectionOf ( <https://spec.industrialontologies.org/ontology/core/Core/Identifier>
+                                                               [ rdf:type owl:Restriction ;
+                                                                 owl:onProperty <https://spec.industrialontologies.org/ontology/core/Core/designates> ;
+                                                                 owl:someValuesFrom <https://spec.industrialontologies.org/ontology/core/Core/MaterialArtifact>
+                                                               ]
+                                                             ) ;
+                                          rdf:type owl:Class
+                                        ] ;
+                    rdfs:subClassOf <https://spec.industrialontologies.org/ontology/core/Core/Identifier> .
 
 
 ###  https://www.cranfield.ac.uk/transit/202501#AutonomousVehicle
@@ -457,7 +502,7 @@ owl:qualifiedCardinality rdf:type owl:AnnotationProperty .
 
 ###  https://www.cranfield.ac.uk/transit/202501#Charging_Point
 :Charging_Point rdf:type owl:Class ;
-                rdfs:subClassOf :LandStation ,
+                rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000030> ,
                                 [ rdf:type owl:Restriction ;
                                   owl:onProperty <https://spec.industrialontologies.org/ontology/core/Core/hasComponentPartAtSomeTime> ;
                                   owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
@@ -474,6 +519,7 @@ Each charging point belongs to a specific energy provider, e.g. tesla, total""" 
                       rdfs:subClassOf :LandStation ;
                       rdfs:comment "Previously named switch station"@en ;
                       rdfs:label "Consolidaion Station"@en ;
+                      <http://www.w3.org/2004/02/skos/core#example> "A distribution center"@en ;
                       <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/naturalLanguageDefinition> "A SwitchStation is a land station designed for switching passengers or cargo from one vehicle to another or from one transport mode to another."@en ;
                       <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/synonym> "Consolidation Hub" .
 
@@ -835,6 +881,11 @@ Receiving device role""" .
            <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/naturalLanguageDefinition> "A specialized energy charger that transfers chemical fuel from a storage source to a fuel-consuming device." .
 
 
+###  https://www.cranfield.ac.uk/transit/202501#FuelStation
+:FuelStation rdf:type owl:Class ;
+             rdfs:subClassOf :LandStation .
+
+
 ###  https://www.cranfield.ac.uk/transit/202501#FuleChargerRole
 :FuleChargerRole rdf:type owl:Class ;
                  rdfs:subClassOf :EnergyChargerRole ;
@@ -934,6 +985,23 @@ Receiving device role""" .
                 <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/synonym> "Greenhouse Gas" .
 
 
+###  https://www.cranfield.ac.uk/transit/202501#GroupOfArtifacts
+:GroupOfArtifacts rdf:type owl:Class ;
+                  owl:equivalentClass [ owl:intersectionOf ( <http://purl.obolibrary.org/obo/BFO_0000027>
+                                                             [ rdf:type owl:Restriction ;
+                                                               owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000115> ;
+                                                               owl:someValuesFrom <https://spec.industrialontologies.org/ontology/core/Core/MaterialArtifact>
+                                                             ]
+                                                             [ rdf:type owl:Restriction ;
+                                                               owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000115> ;
+                                                               owl:allValuesFrom <https://spec.industrialontologies.org/ontology/core/Core/MaterialArtifact>
+                                                             ]
+                                                           ) ;
+                                        rdf:type owl:Class
+                                      ] ;
+                  rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000027> .
+
+
 ###  https://www.cranfield.ac.uk/transit/202501#HDV_Bus
 :HDV_Bus rdf:type owl:Class ;
          rdfs:subClassOf :HumanDrivenVehicle ;
@@ -1031,6 +1099,26 @@ Receiving device role""" .
                  rdfs:label "Methane Emission" .
 
 
+###  https://www.cranfield.ac.uk/transit/202501#Order
+:Order rdf:type owl:Class ;
+       rdfs:subClassOf <https://spec.industrialontologies.org/ontology/core/Core/Agreement> ;
+       rdfs:comment "need to confirm that order some king of agreement?" .
+
+
+###  https://www.cranfield.ac.uk/transit/202501#OrderContent
+:OrderContent rdf:type owl:Class ;
+              rdfs:subClassOf :GroupOfArtifacts ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty <https://spec.industrialontologies.org/ontology/core/Core/prescribedBy> ;
+                                owl:someValuesFrom :Order
+                              ] .
+
+
+###  https://www.cranfield.ac.uk/transit/202501#OrderIdentifier
+:OrderIdentifier rdf:type owl:Class ;
+                 rdfs:subClassOf <https://spec.industrialontologies.org/ontology/core/Core/Identifier> .
+
+
 ###  https://www.cranfield.ac.uk/transit/202501#PassengerRole
 :PassengerRole rdf:type owl:Class ;
                rdfs:subClassOf :TransportRole ,
@@ -1066,6 +1154,20 @@ Receiving device role""" .
                  rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000019> .
 
 
+###  https://www.cranfield.ac.uk/transit/202501#RoadVehicleIdentifier
+:RoadVehicleIdentifier rdf:type owl:Class ;
+                       owl:equivalentClass [ owl:intersectionOf ( :VehicleIdentifier
+                                                                  [ rdf:type owl:Restriction ;
+                                                                    owl:onProperty <https://spec.industrialontologies.org/ontology/core/Core/designates> ;
+                                                                    owl:someValuesFrom <http://ies.data.gov.uk/ontology/ies4#RoadVehicle>
+                                                                  ]
+                                                                ) ;
+                                             rdf:type owl:Class
+                                           ] ;
+                       rdfs:subClassOf :VehicleIdentifier ;
+                       rdfs:comment "This includes car identifer, truck identifier and van identifier"@en .
+
+
 ###  https://www.cranfield.ac.uk/transit/202501#RouteLeg
 :RouteLeg rdf:type owl:Class ;
           rdfs:subClassOf :route .
@@ -1085,6 +1187,19 @@ Receiving device role""" .
                 rdfs:label "Service Station"@en ;
                 <http://www.w3.org/2004/02/skos/core#example> "Rest Zone on highway"@en ;
                 <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/naturalLanguageDefinition> "A PauseStation is a land station used primarily for short-duration stops, rest breaks, or minimal maintenance tasks."@en .
+
+
+###  https://www.cranfield.ac.uk/transit/202501#ShipIdentifier
+:ShipIdentifier rdf:type owl:Class ;
+                owl:equivalentClass [ owl:intersectionOf ( :VehicleIdentifier
+                                                           [ rdf:type owl:Restriction ;
+                                                             owl:onProperty <https://spec.industrialontologies.org/ontology/core/Core/designates> ;
+                                                             owl:someValuesFrom <http://ies.data.gov.uk/ontology/ies4#Ship>
+                                                           ]
+                                                         ) ;
+                                      rdf:type owl:Class
+                                    ] ;
+                rdfs:subClassOf :VehicleIdentifier .
 
 
 ###  https://www.cranfield.ac.uk/transit/202501#TransportCapacityDesignSpecification
@@ -1120,10 +1235,10 @@ Receiving device role""" .
                                   <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/naturalLanguageDefinition> "A TransportFuelDesignSpecification is a transport design specification that prescribes the type, characteristics, or usage parameters of fuel in a transport system or vehicle."@en .
 
 
-###  https://www.cranfield.ac.uk/transit/202501#TransportMonetaryCostSpecification
-:TransportMonetaryCostSpecification rdf:type owl:Class ;
+###  https://www.cranfield.ac.uk/transit/202501#TransportMoneytaryCostSpecification
+:TransportMoneytaryCostSpecification rdf:type owl:Class ;
                                      rdfs:subClassOf :TransportDesignSpecification ;
-                                     rdfs:label "MonetaryCostSpecification" ;
+                                     rdfs:label "MoneytaryCostSpecification" ;
                                      <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/naturalLanguageDefinition> "A MonetaryCostSpecification is an information content entity prescribing the financial cost, expressed in a specific currency or range of currencies, for a process, item, or service."@en .
 
 
@@ -1156,6 +1271,34 @@ Receiving device role""" .
                                     owl:onProperty :operatedByVehicle ;
                                     owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
                                     owl:onClass <http://ies.data.gov.uk/ontology/ies4#Vehicle>
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :departsAtOrigin ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                    owl:onClass [ rdf:type owl:Class ;
+                                                  owl:unionOf ( <http://purl.obolibrary.org/obo/BFO_0000029>
+                                                                <http://purl.obolibrary.org/obo/BFO_0000030>
+                                                              )
+                                                ]
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :endsAtDestination ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                    owl:onClass [ rdf:type owl:Class ;
+                                                  owl:unionOf ( <http://purl.obolibrary.org/obo/BFO_0000029>
+                                                                <http://purl.obolibrary.org/obo/BFO_0000030>
+                                                              )
+                                                ]
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :endsAtTimeInstance ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                    owl:onDataRange xsd:dateTimeStamp
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :startsAtTimeInstance ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                    owl:onDataRange xsd:dateTimeStamp
                                   ] ;
                   rdfs:comment """A Journey/Transit can consist of multiple travel legs. 
 E.g., you go from home to departure airport by car, then take the plane, then from arrival airport to the hotel by taxi. It is one journey with three legs of travel.
@@ -1164,6 +1307,19 @@ TravelLeg is also considered the minimum travel \"unit\" that is not dividable. 
 This one originates from IES4 TravelLeg"""@en ;
                   rdfs:label "Travel leg" ;
                   <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/synonym> "Jouney leg" .
+
+
+###  https://www.cranfield.ac.uk/transit/202501#VehicleIdentifier
+:VehicleIdentifier rdf:type owl:Class ;
+                   owl:equivalentClass [ owl:intersectionOf ( :ArtifactIdentifier
+                                                              [ rdf:type owl:Restriction ;
+                                                                owl:onProperty <https://spec.industrialontologies.org/ontology/core/Core/designates> ;
+                                                                owl:someValuesFrom <http://ies.data.gov.uk/ontology/ies4#Vehicle>
+                                                              ]
+                                                            ) ;
+                                         rdf:type owl:Class
+                                       ] ;
+                   rdfs:subClassOf :ArtifactIdentifier .
 
 
 ###  https://www.cranfield.ac.uk/transit/202501#Waste
@@ -1181,17 +1337,27 @@ This one originates from IES4 TravelLeg"""@en ;
 :route rdf:type owl:Class ;
        rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000016> ,
                        [ rdf:type owl:Restriction ;
-                         owl:onProperty :endsAtLocation ;
-                         owl:someValuesFrom <http://purl.obolibrary.org/obo/BFO_0000029>
-                       ] ,
-                       [ rdf:type owl:Restriction ;
-                         owl:onProperty :startsAtLocation ;
-                         owl:someValuesFrom <http://purl.obolibrary.org/obo/BFO_0000029>
-                       ] ,
-                       [ rdf:type owl:Restriction ;
                          owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000178> ;
                          owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                          owl:onClass :RouteLeg
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :departsAtOrigin ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onClass [ rdf:type owl:Class ;
+                                       owl:unionOf ( <http://purl.obolibrary.org/obo/BFO_0000029>
+                                                     <http://purl.obolibrary.org/obo/BFO_0000030>
+                                                   )
+                                     ]
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :endsAtDestination ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onClass [ rdf:type owl:Class ;
+                                       owl:unionOf ( <http://purl.obolibrary.org/obo/BFO_0000029>
+                                                     <http://purl.obolibrary.org/obo/BFO_0000030>
+                                                   )
+                                     ]
                        ] ;
        rdfs:comment "Route is to describe a possible solution from starting point a to end point b. There can be multiple routes from a to b, each one of them has different travel legs."@en ;
        rdfs:label "Route" ;
@@ -1217,6 +1383,14 @@ This one originates from IES4 TravelLeg"""@en ;
                  :MaterialResidual
                )
  ] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :AircraftIdentifier
+                :RoadVehicleIdentifier
+                :ShipIdentifier
+              )
+] .
 
 
 [ rdf:type owl:AllDisjointClasses ;
