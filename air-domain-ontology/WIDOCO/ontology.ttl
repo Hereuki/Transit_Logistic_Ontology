@@ -1,0 +1,3178 @@
+@prefix : <http://www.cranfield.ac.uk/ontology/air-domain#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.cranfield.ac.uk/ontology/air-domain#> .
+
+<http://www.cranfield.ac.uk/ontology/air-domain> rdf:type owl:Ontology ;
+                                                  owl:versionIRI <http://www.cranfield.ac.uk/ontology/air-domain/0.2.0> ;
+                                                  <http://purl.org/dc/elements/1.1/title> "Air Domain Ontology"@en ;
+                                                  <http://purl.org/dc/terms/abstract> "An OWL 2 DL ontology of the civil air transport domain: passenger and cargo operations, airports, aircraft and airworthiness, flight operations and crew, air traffic management, ground handling, regulation, safety and security, and environmental sustainability."@en ;
+                                                  <http://purl.org/dc/terms/title> "Air Domain Ontology"@en ;
+                                                  <http://purl.org/vocab/vann/preferredNamespacePrefix> "air" ;
+                                                  <http://purl.org/vocab/vann/preferredNamespaceUri> "http://www.cranfield.ac.uk/ontology/air-domain#" ;
+                                                  rdfs:comment "A comprehensive ontology of the civil air transport domain, covering air passenger and cargo/freight operations, airport infrastructure and operations, aircraft and airworthiness, flight operations and crew, air traffic management, ground handling, regulatory/certification instruments, safety and security, and environmental sustainability. Consolidated from the project's existing class/relationship tables (Air_Freight_and_Passenger_Ontology, Sheet3 organisational/regulatory layers, the cargo-handling 'Category' breakdown, and the Airport Operations Plan / APOC concepts) and extended with generally-recognised air-domain concepts not yet captured there. No upper ontology (e.g. BFO) is imported; a small set of pragmatic top-level classes (Agent, PhysicalObject, InformationObject, Process, Location, PolicyOrRegulation, Measurement, Service, Category) organises the hierarchy instead."@en ;
+                                                  rdfs:label "Air Domain Ontology"@en ;
+                                                  owl:versionInfo "0.2.0" ;
+                                                  <http://www.w3.org/2004/02/skos/core#changeNote> "0.2.0: fixed inverted/part-of subclass links (Aerodrome/Airport, AerodromeOperatingSite, ChargingPoint, Consignment); converted EASA, FAA, ICAO, IATA, CORSIA from classes to individuals; moved classifications out of Measurement into a new Category branch; added Identifier, Certificate, Licence, Occurrence, TradeAssociation, GroundVehicle; fixed IATAcode/ICAOcode range typos and over-narrow domains/ranges; added part-of, property hierarchy, inverses, functional properties, existential and cardinality restrictions, defined classes and disjointness axioms."@en .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/elements/1.1/title
+<http://purl.org/dc/elements/1.1/title> rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/abstract
+<http://purl.org/dc/terms/abstract> rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/title
+<http://purl.org/dc/terms/title> rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespacePrefix
+<http://purl.org/vocab/vann/preferredNamespacePrefix> rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespaceUri
+<http://purl.org/vocab/vann/preferredNamespaceUri> rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2004/02/skos/core#altLabel
+<http://www.w3.org/2004/02/skos/core#altLabel> rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2004/02/skos/core#changeNote
+<http://www.w3.org/2004/02/skos/core#changeNote> rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2004/02/skos/core#editorialNote
+<http://www.w3.org/2004/02/skos/core#editorialNote> rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#affectedByOperationalEvent
+:affectedByOperationalEvent rdf:type owl:ObjectProperty ;
+                            rdfs:domain :AirportOperationsCentre ;
+                            rdfs:range :OperationalDisruption ;
+                            rdfs:comment "Relates airport operations to an operational event affecting them."@en ;
+                            rdfs:label "affected by operational event"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#affectedByWeather
+:affectedByWeather rdf:type owl:ObjectProperty ;
+                   rdfs:domain :Flight ;
+                   rdfs:range :METAR ;
+                   rdfs:comment "Relates a flight to a weather observation relevant to its conduct."@en ;
+                   rdfs:label "affected by weather"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#allocatedSlot
+:allocatedSlot rdf:type owl:ObjectProperty ;
+               rdfs:domain :Flight ;
+               rdfs:range :Slot ;
+               rdfs:comment "Relates a flight to the airport slot allocated to it."@en ;
+               rdfs:label "allocated slot"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#arrivedAt
+:arrivedAt rdf:type owl:ObjectProperty ,
+                    owl:FunctionalProperty ;
+           rdfs:domain :Flight ;
+           rdfs:range :Aerodrome ;
+           rdfs:comment "Relates a flight to the airport it arrived at."@en ;
+           rdfs:label "arrived at"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#arrivesAtGate
+:arrivesAtGate rdf:type owl:ObjectProperty ;
+               rdfs:domain :Flight ;
+               rdfs:range :ArrivalGate ;
+               rdfs:comment "Relates a flight to the arrival gate it uses."@en ;
+               rdfs:label "arrives at gate"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#arrivesViaTransitFlight
+:arrivesViaTransitFlight rdf:type owl:ObjectProperty ;
+                         rdfs:domain :Consignment ;
+                         rdfs:range :TransitFlight ;
+                         rdfs:comment "Shows that the shipment travels via a flight with layovers."@en ;
+                         rdfs:label "arrives via transit flight"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#assignedRoute
+:assignedRoute rdf:type owl:ObjectProperty ;
+               rdfs:domain :Flight ;
+               rdfs:range :Route ;
+               rdfs:comment "Relates a flight to its assigned route."@en ;
+               rdfs:label "assigned route"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#assignedToCargoHold
+:assignedToCargoHold rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Cargo ;
+                     rdfs:range :CargoHold ;
+                     rdfs:comment "Relates cargo to the cargo hold it is assigned to."@en ;
+                     rdfs:label "assigned to cargo hold"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#carriesCargo
+:carriesCargo rdf:type owl:ObjectProperty ;
+              rdfs:domain :Flight ;
+              rdfs:range :Cargo ;
+              rdfs:comment "Relates a flight to cargo it carries."@en ;
+              rdfs:label "carries cargo"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#carriesPassenger
+:carriesPassenger rdf:type owl:ObjectProperty ;
+                  rdfs:domain :Flight ;
+                  rdfs:range :Passenger ;
+                  rdfs:comment "Relates a flight to a passenger it carries."@en ;
+                  rdfs:label "carries passenger"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#certifiedBy
+:certifiedBy rdf:type owl:ObjectProperty ;
+             rdfs:domain :Airline ;
+             rdfs:range :RegulatoryAuthority ;
+             rdfs:comment "Relates an airline to the regulatory authority that certifies it."@en ;
+             rdfs:label "certified by"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#checkedInAt
+:checkedInAt rdf:type owl:ObjectProperty ;
+             rdfs:domain :Passenger ;
+             rdfs:range :CheckInCounter ;
+             rdfs:comment "Relates a passenger to the check-in counter where they checked in."@en ;
+             rdfs:label "checked in at"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#classifiedAs
+:classifiedAs rdf:type owl:ObjectProperty ;
+              rdfs:domain :Cargo ;
+              rdfs:range :CargoType ;
+              rdfs:comment "Relates cargo to its cargo type classification."@en ;
+              rdfs:label "classified as"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#clearedThroughCustomsWarehouse
+:clearedThroughCustomsWarehouse rdf:type owl:ObjectProperty ;
+                                rdfs:domain :Cargo ;
+                                rdfs:range :CustomsWarehouse ;
+                                rdfs:comment "Links the cargo to the location where customs clearance is conducted."@en ;
+                                rdfs:label "cleared through customs warehouse"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#constrainedByCapacity
+:constrainedByCapacity rdf:type owl:ObjectProperty ;
+                       rdfs:domain :AirportOperationsCentre ;
+                       rdfs:range :Capacity ;
+                       rdfs:comment "Relates airport operations to a capacity constraint that affects them."@en ;
+                       rdfs:label "constrained by capacity"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#consumesEnergy
+:consumesEnergy rdf:type owl:ObjectProperty ;
+                rdfs:domain :Flight ;
+                rdfs:range :EnergyUnit ;
+                rdfs:comment "Relates a flight to the quantity of energy it consumes."@en ;
+                rdfs:label "consumes energy"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#containsOperationalData
+:containsOperationalData rdf:type owl:ObjectProperty ;
+                         rdfs:domain :AirportOperationsCentre ;
+                         rdfs:range :OperationalData ;
+                         rdfs:comment "Relates an airport operations centre to the operational data it holds."@en ;
+                         rdfs:label "contains operational data"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#contributesTo
+:contributesTo rdf:type owl:ObjectProperty ;
+               rdfs:domain :Stakeholder ;
+               rdfs:range :AirportOperationsCentre ;
+               rdfs:comment "Relates a stakeholder to the airport operations centre they contribute to."@en ;
+               rdfs:label "contributes to"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#controlsFlight
+:controlsFlight rdf:type owl:ObjectProperty ;
+                rdfs:domain :AirTrafficControl ;
+                rdfs:range :Flight ;
+                rdfs:comment "Relates air traffic control to a flight it controls."@en ;
+                rdfs:label "controls flight"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#crewedBy
+:crewedBy rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf :hasCrewMember ;
+          rdfs:domain :Flight ;
+          rdfs:range :FlightCrew ;
+          rdfs:comment "Relates a flight to its flight crew."@en ;
+          rdfs:label "crewed by"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#declaredByFreightForwarder
+:declaredByFreightForwarder rdf:type owl:ObjectProperty ;
+                            rdfs:domain :CustomsDeclaration ;
+                            rdfs:range :FreightForwarder ;
+                            rdfs:comment "Indicates the freight forwarder submitted the customs documentation."@en ;
+                            rdfs:label "declared by freight forwarder"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#declaredThroughEDI
+:declaredThroughEDI rdf:type owl:ObjectProperty ;
+                    rdfs:domain :CustomsDeclaration ;
+                    rdfs:range :EDISystem ;
+                    rdfs:comment "Indicates the submission of shipment documents through an EDI system."@en ;
+                    rdfs:label "declared through EDI"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#deliveredToImporter
+:deliveredToImporter rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Cargo ;
+                     rdfs:range :Importer ;
+                     rdfs:comment "Indicates that cargo is transported to the importer's location."@en ;
+                     rdfs:label "delivered to importer"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#departedFrom
+:departedFrom rdf:type owl:ObjectProperty ,
+                       owl:FunctionalProperty ;
+              rdfs:domain :Flight ;
+              rdfs:range :Aerodrome ;
+              rdfs:comment "Relates a flight to the airport it departed from."@en ;
+              rdfs:label "departed from"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#departsFromGate
+:departsFromGate rdf:type owl:ObjectProperty ;
+                 rdfs:domain :Flight ;
+                 rdfs:range :DepartureGate ;
+                 rdfs:comment "Relates a flight to the departure gate it uses."@en ;
+                 rdfs:label "departs from gate"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#documentedIn
+:documentedIn rdf:type owl:ObjectProperty ;
+              rdfs:domain :SafetyIncident ;
+              rdfs:range :SafetyReport ;
+              rdfs:comment "Relates a safety incident to the safety report documenting it."@en ;
+              rdfs:label "documented in"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#emitsCarbon
+:emitsCarbon rdf:type owl:ObjectProperty ;
+             rdfs:domain :Flight ;
+             rdfs:range :CarbonEmission ;
+             rdfs:comment "Relates a flight to the carbon emissions it produces."@en ;
+             rdfs:label "emits carbon"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#employedBy
+:employedBy rdf:type owl:ObjectProperty ;
+            rdfs:domain :Person ;
+            rdfs:range :Organization ;
+            rdfs:comment "Relates a person to the organization that employs them."@en ;
+            rdfs:label "employed by"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#flightOperatedBy
+:flightOperatedBy rdf:type owl:ObjectProperty ;
+                  owl:inverseOf :operatesFlight ;
+                  rdfs:comment "Relates a flight to the airline that operates it (inverse of operatesFlight)."@en ;
+                  rdfs:label "flight operated by"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#forecastBy
+:forecastBy rdf:type owl:ObjectProperty ;
+            rdfs:domain :Flight ;
+            rdfs:range :TAF ;
+            rdfs:comment "Relates a flight to a terminal aerodrome forecast relevant to its conduct."@en ;
+            rdfs:label "forecast by"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#goesThroughScreening
+:goesThroughScreening rdf:type owl:ObjectProperty ;
+                      rdfs:domain :Passenger ;
+                      rdfs:range :SecurityScreening ;
+                      rdfs:comment "Relates a passenger to a security screening they go through."@en ;
+                      rdfs:label "goes through screening"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#handledByFreightForwarder
+:handledByFreightForwarder rdf:type owl:ObjectProperty ;
+                           rdfs:subPropertyOf :hasParty ;
+                           rdfs:domain :Consignment ;
+                           rdfs:range :FreightForwarder ;
+                           rdfs:comment "Indicates that a freight forwarder is managing the shipment."@en ;
+                           rdfs:label "handled by freight forwarder"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasAirOperatorCertificate
+:hasAirOperatorCertificate rdf:type owl:ObjectProperty ;
+                           rdfs:domain :Airline ;
+                           rdfs:range :AirOperatorCertificate ;
+                           rdfs:comment "Relates an airline to its air operator certificate."@en ;
+                           rdfs:label "has air operator certificate"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasArrivalNotice
+:hasArrivalNotice rdf:type owl:ObjectProperty ;
+                  rdfs:domain :Consignment ;
+                  rdfs:range :ArrivalNotice ;
+                  rdfs:comment "Links the cargo to the document confirming its arrival."@en ;
+                  rdfs:label "has arrival notice"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasBoardingPass
+:hasBoardingPass rdf:type owl:ObjectProperty ;
+                 rdfs:domain :Passenger ;
+                 rdfs:range :BoardingPass ;
+                 rdfs:comment "Relates a passenger to their boarding pass."@en ;
+                 rdfs:label "has boarding pass"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasCertificateOfAirworthiness
+:hasCertificateOfAirworthiness rdf:type owl:ObjectProperty ;
+                               rdfs:domain :Aircraft ;
+                               rdfs:range :CertificateOfAirworthiness ;
+                               rdfs:comment "Relates an aircraft to its certificate of airworthiness."@en ;
+                               rdfs:label "has certificate of airworthiness"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasChargingPoint
+:hasChargingPoint rdf:type owl:ObjectProperty ;
+                  rdfs:domain :AirDepot ;
+                  rdfs:range :ChargingPoint ;
+                  rdfs:comment "Relates a depot to a charging point it hosts."@en ;
+                  rdfs:label "has charging point"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasConsignee
+:hasConsignee rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf :hasParty ;
+              rdfs:domain :Consignment ;
+              rdfs:range :Consignee ;
+              rdfs:comment "Relates a consignment to its consignee."@en ;
+              rdfs:label "has consignee"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasCrewMember
+:hasCrewMember rdf:type owl:ObjectProperty ;
+               rdfs:domain :Flight ;
+               rdfs:range :CrewMember ;
+               rdfs:comment "Relates a flight to any member of its crew. Super-property of crewedBy (flight crew) and servedBy (cabin crew)."@en ;
+               rdfs:label "has crew member"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasDestination
+:hasDestination rdf:type owl:ObjectProperty ;
+                rdfs:domain :Consignment ;
+                rdfs:comment "Connects a shipment to its delivery location."@en ;
+                rdfs:label "has destination"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasDispatchSchedule
+:hasDispatchSchedule rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Consignment ;
+                     rdfs:range :DispatchSchedule ;
+                     rdfs:comment "Associates a shipment with its planned dispatch date and time."@en ;
+                     rdfs:label "has dispatch schedule"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasExporter
+:hasExporter rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf :hasParty ;
+             rdfs:domain :Consignment ;
+             rdfs:range :Exporter ;
+             rdfs:comment "Relates a shipment to the exporter responsible for dispatching it."@en ;
+             rdfs:label "has exporter"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasFlightSchedule
+:hasFlightSchedule rdf:type owl:ObjectProperty ;
+                   rdfs:domain :Airline ;
+                   rdfs:range :FlightSchedule ;
+                   rdfs:comment "Relates an airline to its flight schedule."@en ;
+                   rdfs:label "has flight schedule"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasImporter
+:hasImporter rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf :hasParty ;
+             rdfs:domain :Consignment ;
+             rdfs:range :Importer ;
+             rdfs:comment "Relates a shipment to the importer receiving the goods."@en ;
+             rdfs:label "has importer"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasIntermediateStop
+:hasIntermediateStop rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Flight ;
+                     rdfs:range :Aerodrome ;
+                     rdfs:comment "Relates a flight to an aerodrome at which it stops between departure and final arrival."@en ;
+                     rdfs:label "has intermediate stop"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasInvoice
+:hasInvoice rdf:type owl:ObjectProperty ;
+            rdfs:domain :Consignment ;
+            rdfs:range :Invoice ;
+            rdfs:comment "Connects a shipment to its invoice for value declaration."@en ;
+            rdfs:label "has invoice"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasLabel
+:hasLabel rdf:type owl:ObjectProperty ;
+          rdfs:domain :Cargo ;
+          rdfs:range :Label ;
+          rdfs:comment "Connects cargo to a label containing flight and safety information."@en ;
+          rdfs:label "has label"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasMedicalCertificate
+:hasMedicalCertificate rdf:type owl:ObjectProperty ;
+                       rdfs:domain :CrewMember ;
+                       rdfs:range :MedicalCertificate ;
+                       rdfs:comment "Relates a crew member to their medical certificate."@en ;
+                       rdfs:label "has medical certificate"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasOrigin
+:hasOrigin rdf:type owl:ObjectProperty ;
+           rdfs:domain :Consignment ;
+           rdfs:comment "Connects a shipment to its starting point."@en ;
+           rdfs:label "has origin"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasPackingCompany
+:hasPackingCompany rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf :hasParty ;
+                   rdfs:domain :Consignment ;
+                   rdfs:range :PackingCompany ;
+                   rdfs:comment "Associates the cargo with the company responsible for packing."@en ;
+                   rdfs:label "has packing company"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasPackingList
+:hasPackingList rdf:type owl:ObjectProperty ;
+                rdfs:domain :Consignment ;
+                rdfs:range :PackingList ;
+                rdfs:comment "Links a shipment to the packing list outlining its contents."@en ;
+                rdfs:label "has packing list"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasPart
+:hasPart rdf:type owl:ObjectProperty ;
+         owl:inverseOf :partOf ;
+         rdf:type owl:TransitiveProperty ;
+         rdfs:comment "Relates a whole to one of its parts. Transitive: a part of a part is a part of the whole."@en ;
+         rdfs:label "has part"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasParty
+:hasParty rdf:type owl:ObjectProperty ;
+          rdfs:domain :Consignment ;
+          rdfs:range :Agent ;
+          rdfs:comment "Relates a consignment to any agent involved in it. Super-property of shipper, consignee, exporter, importer, forwarder, packer and carrier relations, so 'who is involved in this shipment?' is one query."@en ;
+          rdfs:label "has party"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasShipper
+:hasShipper rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf :hasParty ;
+            rdfs:domain :Consignment ;
+            rdfs:range :Shipper ;
+            rdfs:comment "Relates a consignment to its shipper."@en ;
+            rdfs:label "has shipper"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasShippingInstruction
+:hasShippingInstruction rdf:type owl:ObjectProperty ;
+                        rdfs:domain :Consignment ;
+                        rdfs:range :ShippingInstruction ;
+                        rdfs:comment "Connects the export request to the shipping instructions."@en ;
+                        rdfs:label "has shipping instruction"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasTypeCertificate
+:hasTypeCertificate rdf:type owl:ObjectProperty ;
+                    rdfs:domain :AircraftType ;
+                    rdfs:range :TypeCertificate ;
+                    rdfs:comment "Relates an aircraft type to its type certificate."@en ;
+                    rdfs:label "has type certificate"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasTypeRating
+:hasTypeRating rdf:type owl:ObjectProperty ;
+               rdfs:domain :FlightCrew ;
+               rdfs:range :TypeRating ;
+               rdfs:comment "Relates a pilot to a type rating they hold."@en ;
+               rdfs:label "has type rating"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasWarehouse
+:hasWarehouse rdf:type owl:ObjectProperty ;
+              rdfs:domain :Consignment ;
+              rdfs:range :Warehouse ;
+              rdfs:comment "Indicates the warehouse where the cargo is stored."@en ;
+              rdfs:label "has warehouse"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#holdsLicense
+:holdsLicense rdf:type owl:ObjectProperty ;
+              rdfs:domain :Person ;
+              rdfs:range :Licence ;
+              rdfs:comment "Relates a person to a licence they hold."@en ;
+              rdfs:label "holds license"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#holdsRoleOf
+:holdsRoleOf rdf:type owl:ObjectProperty ;
+             rdfs:domain :Person ;
+             rdfs:range :Stakeholder ;
+             rdfs:comment "Relates a person to a stakeholder role they hold in an operation."@en ;
+             rdfs:label "holds role of"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#includesCargoItem
+:includesCargoItem rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf :hasPart ;
+                   rdfs:domain :Consignment ;
+                   rdfs:range :Cargo ;
+                   rdfs:comment "Associates a shipment with its individual cargo items."@en ;
+                   rdfs:label "includes cargo item"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#includesULD
+:includesULD rdf:type owl:ObjectProperty ;
+             rdfs:domain :Consignment ;
+             rdfs:range :ULD ;
+             rdfs:comment "Connects a shipment to the ULD in which it is consolidated."@en ;
+             rdfs:label "includes ULD"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#insuredBy
+:insuredBy rdf:type owl:ObjectProperty ;
+           rdfs:domain :Aircraft ;
+           rdfs:range :InsuranceProvider ;
+           rdfs:comment "Relates an aircraft to the organization providing its insurance cover."@en ;
+           rdfs:label "insured by"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#interlinkedWithRoad
+:interlinkedWithRoad rdf:type owl:ObjectProperty ;
+                     rdfs:domain :AirNetwork ;
+                     rdfs:range :RoadNetwork ;
+                     rdfs:comment "Relates an air network to an interlinked road network."@en ;
+                     rdfs:label "interlinked with road"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#issuesAirwayBill
+:issuesAirwayBill rdf:type owl:ObjectProperty ;
+                  rdfs:domain :FreightForwarder ;
+                  rdfs:range :AirwayBill ;
+                  rdfs:comment "Relates a freight forwarder to an airway bill it issues."@en ;
+                  rdfs:label "issues airway bill"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#issuesNOTAM
+:issuesNOTAM rdf:type owl:ObjectProperty ;
+             rdfs:domain :AirNavigationServiceProvider ;
+             rdfs:range :NOTAM ;
+             rdfs:comment "Relates an ANSP or authority to a NOTAM it issues."@en ;
+             rdfs:label "issues NOTAM"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#leasedUnder
+:leasedUnder rdf:type owl:ObjectProperty ;
+             rdfs:domain :Aircraft ;
+             rdfs:range :LeaseAgreement ;
+             rdfs:comment "Relates an aircraft to the lease agreement under which it is operated."@en ;
+             rdfs:label "leased under"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#listedInManifest
+:listedInManifest rdf:type owl:ObjectProperty ;
+                  rdfs:domain :Cargo ;
+                  rdfs:range :FlightManifest ;
+                  rdfs:comment "Relates cargo to the flight manifest it is listed in."@en ;
+                  rdfs:label "listed in manifest"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#loadedIn
+:loadedIn rdf:type owl:ObjectProperty ;
+          rdfs:domain :Baggage ;
+          rdfs:range :CargoHold ;
+          rdfs:comment "Relates baggage to the cargo hold it is loaded in."@en ;
+          rdfs:label "loaded in"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#loadedOnFlight
+:loadedOnFlight rdf:type owl:ObjectProperty ;
+                owl:inverseOf :carriesCargo ;
+                rdfs:domain :Cargo ;
+                rdfs:range :Flight ;
+                rdfs:comment "Indicates the specific flight carrying the cargo."@en ;
+                rdfs:label "loaded on flight"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#loadedOnTruckForDelivery
+:loadedOnTruckForDelivery rdf:type owl:ObjectProperty ;
+                          rdfs:domain :Cargo ;
+                          rdfs:range :GroundVehicle ;
+                          rdfs:comment "Shows that cargo is moved to truck transport after import clearance."@en ;
+                          rdfs:label "loaded on truck for delivery"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#locatedAt
+:locatedAt rdf:type owl:ObjectProperty ;
+           rdfs:domain :PhysicalObject ;
+           rdfs:range :Airport ;
+           rdfs:comment "Relates a facility or item of equipment to the airport where it is located."@en ;
+           rdfs:label "located at"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#maintainedBy
+:maintainedBy rdf:type owl:ObjectProperty ;
+              rdfs:domain :Aircraft ;
+              rdfs:range :MROOrganization ;
+              rdfs:comment "Relates an aircraft to the organization that maintains it."@en ;
+              rdfs:label "maintained by"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#managesAirport
+:managesAirport rdf:type owl:ObjectProperty ;
+                rdfs:domain :AirportOperator ;
+                rdfs:range :Airport ;
+                rdfs:comment "Relates an airport operator to the airport it manages."@en ;
+                rdfs:label "manages airport"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#managesCargo
+:managesCargo rdf:type owl:ObjectProperty ;
+              rdfs:domain :AirWarehouse ;
+              rdfs:range :Cargo ;
+              rdfs:comment "Relates an air warehouse to cargo it manages."@en ;
+              rdfs:label "manages cargo"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#manufacturedBy
+:manufacturedBy rdf:type owl:ObjectProperty ;
+                rdfs:domain :Aircraft ;
+                rdfs:range :AircraftManufacturer ;
+                rdfs:comment "Relates an aircraft to the manufacturer that produced it."@en ;
+                rdfs:label "manufactured by"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#monitoredByCustomsAgency
+:monitoredByCustomsAgency rdf:type owl:ObjectProperty ;
+                          rdfs:domain :Cargo ;
+                          rdfs:range :CustomsClearanceAgency ;
+                          rdfs:comment "Connects the cargo to the agency managing customs compliance."@en ;
+                          rdfs:label "monitored by customs agency"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#monitorsAirportOperations
+:monitorsAirportOperations rdf:type owl:ObjectProperty ;
+                           rdfs:domain :MonitorService ;
+                           rdfs:range :Airport ;
+                           rdfs:comment "Relates a monitoring service to the airport operations it monitors."@en ;
+                           rdfs:label "monitors airport operations"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#occupiesPassengerClass
+:occupiesPassengerClass rdf:type owl:ObjectProperty ;
+                        rdfs:domain :Passenger ;
+                        rdfs:range :PassengerClass ;
+                        rdfs:comment "Relates a passenger to the class of service they occupy."@en ;
+                        rdfs:label "occupies passenger class"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#occursInAirspace
+:occursInAirspace rdf:type owl:ObjectProperty ;
+                  rdfs:domain :Flight ;
+                  rdfs:range :Airspace ;
+                  rdfs:comment "Relates a flight to the airspace in which it takes place."@en ;
+                  rdfs:label "occurs in airspace"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ofAircraftType
+:ofAircraftType rdf:type owl:ObjectProperty ,
+                         owl:FunctionalProperty ;
+                rdfs:domain :Aircraft ;
+                rdfs:range :AircraftType ;
+                rdfs:comment "Relates an individual aircraft to its certificated aircraft type."@en ;
+                rdfs:label "of aircraft type"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#offsetUnderScheme
+:offsetUnderScheme rdf:type owl:ObjectProperty ;
+                   rdfs:domain :CarbonEmission ;
+                   rdfs:range :EnvironmentalRegulation ;
+                   rdfs:comment "Relates carbon emissions to the offsetting scheme under which they are addressed."@en ;
+                   rdfs:label "offset under scheme"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#operatedBy
+:operatedBy rdf:type owl:ObjectProperty ;
+            rdfs:domain :Aircraft ;
+            rdfs:range :Airline ;
+            rdfs:comment "Relates an aircraft to the airline that operates it."@en ;
+            rdfs:label "operated by"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#operatesFlight
+:operatesFlight rdf:type owl:ObjectProperty ;
+                rdfs:domain :Airline ;
+                rdfs:range :Flight ;
+                rdfs:comment "Relates an airline to a flight it operates."@en ;
+                rdfs:label "operates flight"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#packedIntoULD
+:packedIntoULD rdf:type owl:ObjectProperty ;
+               rdfs:domain :Cargo ;
+               rdfs:range :ULD ;
+               rdfs:comment "Connects individual cargo units to the ULD they are consolidated into."@en ;
+               rdfs:label "packed into ULD"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#partOf
+:partOf rdf:type owl:ObjectProperty ,
+                 owl:TransitiveProperty ;
+        rdfs:comment "Relates a part to the whole it belongs to (e.g. runway to aerodrome, flight phase to flight, cargo hold to aircraft)."@en ;
+        rdfs:label "part of"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#partOfAirNetwork
+:partOfAirNetwork rdf:type owl:ObjectProperty ;
+                  rdfs:domain :Airport ;
+                  rdfs:range :AirNetwork ;
+                  rdfs:comment "Relates an airport to the air network it is part of."@en ;
+                  rdfs:label "part of air network"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#performsMaintenanceActivity
+:performsMaintenanceActivity rdf:type owl:ObjectProperty ;
+                             rdfs:domain :MROOrganization ;
+                             rdfs:range :MaintenanceActivity ;
+                             rdfs:comment "Relates an MRO organization to a maintenance activity it performs."@en ;
+                             rdfs:label "performs maintenance activity"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#poweredBy
+:poweredBy rdf:type owl:ObjectProperty ;
+           rdfs:domain :Aircraft ;
+           rdfs:range :EnergySource ;
+           rdfs:comment "Relates an aircraft to the type of energy source that powers it."@en ;
+           rdfs:label "powered by"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#providesAirNavigationService
+:providesAirNavigationService rdf:type owl:ObjectProperty ;
+                              rdfs:domain :AirNavigationServiceProvider ;
+                              rdfs:range :AirTrafficService ;
+                              rdfs:comment "Relates an ANSP to an air traffic service it provides."@en ;
+                              rdfs:label "provides air navigation service"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#providesGroundHandlingService
+:providesGroundHandlingService rdf:type owl:ObjectProperty ;
+                               rdfs:domain :GroundHandlingAgent ;
+                               rdfs:range :GroundHandlingService ;
+                               rdfs:comment "Relates a ground handling agent to a service it provides."@en ;
+                               rdfs:label "provides ground handling service"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#receivesGroundHandlingService
+:receivesGroundHandlingService rdf:type owl:ObjectProperty ;
+                               rdfs:domain :Flight ;
+                               rdfs:range :GroundHandlingService ;
+                               rdfs:comment "Relates a flight to a ground handling service it receives during turnaround."@en ;
+                               rdfs:label "receives ground handling service"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#regulatedBy
+:regulatedBy rdf:type owl:ObjectProperty ;
+             rdfs:range :PolicyOrRegulation ;
+             rdfs:comment "Relates an entity (e.g. a flight, operation or organisation) to a policy or regulation that applies to it."@en ;
+             rdfs:label "regulated by"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#regulatedByAuthority
+:regulatedByAuthority rdf:type owl:ObjectProperty ;
+                      rdfs:domain :Airport ;
+                      rdfs:range :RegulatoryAuthority ;
+                      rdfs:comment "Relates an airport to the regulatory authority overseeing it."@en ;
+                      rdfs:label "regulated by authority"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#reportsSafetyIncident
+:reportsSafetyIncident rdf:type owl:ObjectProperty ;
+                       rdfs:domain :CrewMember ;
+                       rdfs:range :SafetyIncident ;
+                       rdfs:comment "Relates a crew member to a safety incident they report."@en ;
+                       rdfs:label "reports safety incident"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#requiresCustomsClearance
+:requiresCustomsClearance rdf:type owl:ObjectProperty ;
+                          rdfs:domain :Consignment ;
+                          rdfs:range :CustomsClearance ;
+                          rdfs:comment "Marks that a shipment needs clearance for export or import."@en ;
+                          rdfs:label "requires customs clearance"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#requiresDeclaration
+:requiresDeclaration rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Consignment ;
+                     rdfs:range :CustomsDeclaration ;
+                     rdfs:comment "Relates a consignment to a required customs declaration."@en ;
+                     rdfs:label "requires declaration"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#requiresHazardLabel
+:requiresHazardLabel rdf:type owl:ObjectProperty ;
+                     rdfs:domain :DangerousGoods ;
+                     rdfs:range :Label ;
+                     rdfs:comment "Indicates the need for a hazard label based on cargo classification."@en ;
+                     rdfs:label "requires hazard label"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#scheduledBeforeCutTime
+:scheduledBeforeCutTime rdf:type owl:ObjectProperty ;
+                        rdfs:domain :Consignment ;
+                        rdfs:range :CutTime ;
+                        rdfs:comment "Ensures cargo is processed before the airline's cut-off time."@en ;
+                        rdfs:label "scheduled before cut time"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#servedBy
+:servedBy rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf :hasCrewMember ;
+          rdfs:domain :Flight ;
+          rdfs:range :CabinCrew ;
+          rdfs:comment "Relates a flight to its cabin crew."@en ;
+          rdfs:label "served by"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#splitByBreakBulkProcess
+:splitByBreakBulkProcess rdf:type owl:ObjectProperty ;
+                         rdfs:domain :ULD ;
+                         rdfs:range :BreakBulk ;
+                         rdfs:comment "Links a ULD to the break-bulk process that decomposes it."@en ;
+                         rdfs:label "split by break bulk process"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#storedInStorageShed
+:storedInStorageShed rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Cargo ;
+                     rdfs:range :StorageShed ;
+                     rdfs:comment "Shows where the cargo is held before or after aircraft loading."@en ;
+                     rdfs:label "stored in storage shed"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#subjectToAirworthinessDirective
+:subjectToAirworthinessDirective rdf:type owl:ObjectProperty ;
+                                 rdfs:domain :AircraftType ;
+                                 rdfs:range :AirworthinessDirective ;
+                                 rdfs:comment "Relates an aircraft type to an airworthiness directive that applies to it."@en ;
+                                 rdfs:label "subject to airworthiness directive"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#suppliesCatering
+:suppliesCatering rdf:type owl:ObjectProperty ;
+                  rdfs:domain :CateringCompany ;
+                  rdfs:range :CateringService ;
+                  rdfs:comment "Relates a catering company to a catering service it supplies."@en ;
+                  rdfs:label "supplies catering"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#travelsOn
+:travelsOn rdf:type owl:ObjectProperty ;
+           owl:inverseOf :carriesPassenger ;
+           rdfs:domain :Passenger ;
+           rdfs:range :Flight ;
+           rdfs:comment "Relates a passenger to the flight they travel on."@en ;
+           rdfs:label "travels on"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#undergoesExplosiveInspection
+:undergoesExplosiveInspection rdf:type owl:ObjectProperty ;
+                              rdfs:domain :Cargo ;
+                              rdfs:range :ExplosiveInspection ;
+                              rdfs:comment "Indicates that cargo has passed through an explosive security check."@en ;
+                              rdfs:label "undergoes explosive inspection"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#updatesOperationsCentre
+:updatesOperationsCentre rdf:type owl:ObjectProperty ;
+                         rdfs:domain :PerformanceService ;
+                         rdfs:range :AirportOperationsCentre ;
+                         rdfs:comment "Relates a performance service to the operations centre it updates."@en ;
+                         rdfs:label "updates operations centre"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#usesAircraft
+:usesAircraft rdf:type owl:ObjectProperty ;
+              rdfs:domain :Flight ;
+              rdfs:range :Aircraft ;
+              rdfs:comment "Relates a flight to the aircraft that performs it."@en ;
+              rdfs:label "uses aircraft"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#usesAirline
+:usesAirline rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf :hasParty ;
+             rdfs:domain :Consignment ;
+             rdfs:range :Airline ;
+             rdfs:comment "Links a shipment to the airline responsible for its transport."@en ;
+             rdfs:label "uses airline"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#usesAirwayBill
+:usesAirwayBill rdf:type owl:ObjectProperty ;
+                rdfs:domain :Consignment ;
+                rdfs:range :AirwayBill ;
+                rdfs:comment "Indicates that an airway bill is associated with the shipment."@en ;
+                rdfs:label "uses airway bill"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#usesIATACode
+:usesIATACode rdf:type owl:ObjectProperty ;
+              rdfs:range :IATACode ;
+              rdfs:comment "Relates an airport or airline to its IATA code."@en ;
+              rdfs:label "uses IATA code"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#usesICAOCode
+:usesICAOCode rdf:type owl:ObjectProperty ;
+              rdfs:range :ICAOCode ;
+              rdfs:comment "Relates an airport, airline, or aircraft to its ICAO code."@en ;
+              rdfs:label "uses ICAO code"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#usesKPI
+:usesKPI rdf:type owl:ObjectProperty ;
+         rdfs:domain :AirportOperationsCentre ;
+         rdfs:range :KPI ;
+         rdfs:comment "Relates an airport operations centre to a KPI it uses to measure performance."@en ;
+         rdfs:label "uses KPI"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#usesRunway
+:usesRunway rdf:type owl:ObjectProperty ;
+            rdfs:domain :Flight ;
+            rdfs:range :Runway ;
+            rdfs:comment "Relates a flight to the runway it uses."@en ;
+            rdfs:label "uses runway"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#usesSustainableAviationFuel
+:usesSustainableAviationFuel rdf:type owl:ObjectProperty ;
+                             rdfs:domain :Flight ;
+                             rdfs:range :SustainableAviationFuel ;
+                             rdfs:comment "Relates a flight to sustainable aviation fuel used in its operation."@en ;
+                             rdfs:label "uses sustainable aviation fuel"@en .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasCO2Kg
+:hasCO2Kg rdf:type owl:DatatypeProperty ,
+                   owl:FunctionalProperty ;
+          rdfs:domain :CarbonEmission ;
+          rdfs:range xsd:decimal ;
+          rdfs:comment "The mass of carbon dioxide emitted, in kilograms."@en ;
+          rdfs:label "has CO2 kg"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasCapacityValue
+:hasCapacityValue rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain :Capacity ;
+                  rdfs:range xsd:decimal ;
+                  rdfs:comment "The numeric value of a capacity measurement."@en ;
+                  rdfs:label "has capacity value"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasCostGBP
+:hasCostGBP rdf:type owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;
+            rdfs:domain :FlightCost ;
+            rdfs:range xsd:decimal ;
+            rdfs:comment "A cost value expressed in GBP."@en ;
+            rdfs:label "has cost GBP"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasCutTimeValue
+:hasCutTimeValue rdf:type owl:DatatypeProperty ,
+                          owl:FunctionalProperty ;
+                 rdfs:domain :CutTime ;
+                 rdfs:range xsd:dateTime ;
+                 rdfs:comment "The date and time of a cargo cut-off."@en ;
+                 rdfs:label "has cut time value"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasFlightNumber
+:hasFlightNumber rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :Flight ;
+                 rdfs:range xsd:string ;
+                 rdfs:comment "The designator/flight number assigned to a flight."@en ;
+                 rdfs:label "has flight number"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasIATACodeValue
+:hasIATACodeValue rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain :IATACode ;
+                  rdfs:range xsd:string ;
+                  rdfs:comment "The literal 3-letter IATA code value."@en ;
+                  rdfs:label "has IATA code value"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasICAOCodeValue
+:hasICAOCodeValue rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain :ICAOCode ;
+                  rdfs:range xsd:string ;
+                  rdfs:comment "The literal 4-character ICAO code value."@en ;
+                  rdfs:label "has ICAO code value"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasName
+:hasName rdf:type owl:DatatypeProperty ;
+         rdfs:domain :Agent ;
+         rdfs:range xsd:string ;
+         rdfs:comment "The name of a person or organization."@en ;
+         rdfs:label "has name"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasScheduledArrivalTime
+:hasScheduledArrivalTime rdf:type owl:DatatypeProperty ;
+                         rdfs:subPropertyOf :hasScheduledDateTime ;
+                         rdf:type owl:FunctionalProperty ;
+                         rdfs:domain :Flight ;
+                         rdfs:range xsd:dateTime ;
+                         rdfs:comment "The scheduled on-block/arrival date and time of a flight."@en ;
+                         rdfs:label "has scheduled arrival time"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasScheduledDateTime
+:hasScheduledDateTime rdf:type owl:DatatypeProperty ;
+                      rdfs:domain :Flight ;
+                      rdfs:range xsd:dateTime ;
+                      rdfs:comment "The scheduled date and time of a flight event."@en ;
+                      rdfs:label "has scheduled date time"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasScheduledDepartureTime
+:hasScheduledDepartureTime rdf:type owl:DatatypeProperty ;
+                           rdfs:subPropertyOf :hasScheduledDateTime ;
+                           rdf:type owl:FunctionalProperty ;
+                           rdfs:domain :Flight ;
+                           rdfs:range xsd:dateTime ;
+                           rdfs:comment "The scheduled off-block/departure date and time of a flight."@en ;
+                           rdfs:label "has scheduled departure time"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#hasWeightKg
+:hasWeightKg rdf:type owl:DatatypeProperty ,
+                      owl:FunctionalProperty ;
+             rdfs:domain :Cargo ;
+             rdfs:range xsd:decimal ;
+             rdfs:comment "The weight of an item of cargo in kilograms."@en ;
+             rdfs:label "has weight kg"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#requiresPacking
+:requiresPacking rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :Cargo ;
+                 rdfs:range xsd:boolean ;
+                 rdfs:comment "Marks that the cargo needs packaging before transport."@en ;
+                 rdfs:label "requires packing"@en .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Accident
+:Accident rdf:type owl:Class ;
+          rdfs:subClassOf :SafetyIncident ;
+          owl:disjointWith :SeriousIncident ;
+          rdfs:comment "An occurrence involving an aircraft resulting in death, serious injury, or significant aircraft damage."@en ;
+          rdfs:label "Accident"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Aerodrome
+:Aerodrome rdf:type owl:Class ;
+           rdfs:subClassOf :Infrastructure ;
+           rdfs:comment "A defined area on land or water (including any buildings, installations and equipment) intended to be used wholly or in part for the arrival, departure and surface movement of aircraft (ICAO Annex 14). Airport is a kind of aerodrome."@en ;
+           rdfs:label "Aerodrome"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AerodromeOperatingSite
+:AerodromeOperatingSite rdf:type owl:Class ;
+                        rdfs:subClassOf :Infrastructure ,
+                                        [ rdf:type owl:Restriction ;
+                                          owl:onProperty :partOf ;
+                                          owl:someValuesFrom :Aerodrome
+                                        ] ;
+                        rdfs:comment "A specific site within or associated with an aerodrome from which operations are conducted."@en ;
+                        rdfs:label "Aerodrome Operating Site"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AerodromeService
+:AerodromeService rdf:type owl:Class ;
+                  rdfs:subClassOf :Service ;
+                  rdfs:comment "A service provided at an aerodrome to support aircraft operations."@en ;
+                  rdfs:label "Aerodrome Service"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Agent
+:Agent rdf:type owl:Class ;
+       rdfs:comment "An entity capable of acting within the air transport domain, either an organization or a person."@en ;
+       rdfs:label "Agent"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirDepot
+:AirDepot rdf:type owl:Class ;
+          rdfs:subClassOf :Infrastructure ;
+          rdfs:comment "A ground logistics depot facility associated with air cargo operations, such as a charging or staging depot."@en ;
+          rdfs:label "Air Depot"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirNavigationFacility
+:AirNavigationFacility rdf:type owl:Class ;
+                       rdfs:subClassOf :Infrastructure ;
+                       rdfs:comment "A facility that provides navigation aids or communication services in support of air navigation."@en ;
+                       rdfs:label "Air Navigation Facility"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirNavigationServiceProvider
+:AirNavigationServiceProvider rdf:type owl:Class ;
+                              rdfs:subClassOf :Organization ;
+                              rdfs:comment "An organization that provides air traffic management and air navigation services within a defined airspace."@en ;
+                              rdfs:label "Air Navigation Service Provider"@en ;
+                              <http://www.w3.org/2004/02/skos/core#altLabel> "ANSP"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirNetwork
+:AirNetwork rdf:type owl:Class ;
+            rdfs:subClassOf :Location ;
+            rdfs:comment "The interconnected system of air routes, flights, and airports."@en ;
+            rdfs:label "Air Network"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirOperatorCertificate
+:AirOperatorCertificate rdf:type owl:Class ;
+                        rdfs:subClassOf :Certificate ;
+                        rdfs:comment "A certificate issued by a competent authority confirming an operator's capability to conduct specified aircraft operations."@en ;
+                        rdfs:label "Air Operator Certificate"@en ;
+                        <http://www.w3.org/2004/02/skos/core#altLabel> "AOC"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirShipment
+:AirShipment rdf:type owl:Class ;
+             rdfs:subClassOf :TransportMode ;
+             rdfs:comment "A mode of cargo transportation using aircraft, known for speed and suitability for high-value or time-sensitive goods."@en ;
+             rdfs:label "Air Shipment"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirTrafficControl
+:AirTrafficControl rdf:type owl:Class ;
+                   rdfs:subClassOf :Process ;
+                   rdfs:comment "The service provided to manage aircraft movement in airspace and on the ground at an airport, in order to prevent collisions and expedite traffic."@en ;
+                   rdfs:label "Air Traffic Control"@en ;
+                   <http://www.w3.org/2004/02/skos/core#altLabel> "ATC"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirTrafficController
+:AirTrafficController rdf:type owl:Class ;
+                      rdfs:subClassOf :Person ,
+                                      [ rdf:type owl:Restriction ;
+                                        owl:onProperty :holdsLicense ;
+                                        owl:someValuesFrom :Licence
+                                      ] ;
+                      rdfs:comment "A licensed person who provides air traffic control services to manage aircraft movement in the air and on the ground."@en ;
+                      rdfs:label "Air Traffic Controller"@en ;
+                      <http://www.w3.org/2004/02/skos/core#altLabel> "ATCO"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirTrafficFlowManagement
+:AirTrafficFlowManagement rdf:type owl:Class ;
+                          rdfs:subClassOf :Process ;
+                          rdfs:comment "A service that manages air traffic flow to optimise the use of available airspace and airport capacity."@en ;
+                          rdfs:label "Air Traffic Flow Management"@en ;
+                          <http://www.w3.org/2004/02/skos/core#altLabel> "ATFM"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirTrafficService
+:AirTrafficService rdf:type owl:Class ;
+                   rdfs:subClassOf :Service ;
+                   rdfs:comment "A service provided to promote the safe, orderly, and expeditious flow of air traffic."@en ;
+                   rdfs:label "Air Traffic Service"@en ;
+                   <http://www.w3.org/2004/02/skos/core#altLabel> "ATS"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirWarehouse
+:AirWarehouse rdf:type owl:Class ;
+              rdfs:subClassOf :Warehouse ;
+              rdfs:comment "A storage facility at or near an airport for freight or goods."@en ;
+              rdfs:label "Air Warehouse"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Aircraft
+:Aircraft rdf:type owl:Class ;
+          rdfs:subClassOf :PhysicalObject ;
+          rdfs:comment "A vehicle capable of atmospheric flight used to transport passengers or goods."@en ;
+          rdfs:label "Aircraft"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AircraftComponent
+:AircraftComponent rdf:type owl:Class ;
+                   rdfs:subClassOf :PhysicalObject ;
+                   rdfs:comment "A part or subsystem fitted to or carried aboard an aircraft."@en ;
+                   rdfs:label "Aircraft Component"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AircraftConfiguration
+:AircraftConfiguration rdf:type owl:Class ;
+                       rdfs:subClassOf :InformationObject ;
+                       rdfs:comment "The specific approved configuration of an aircraft, including seating layout and fitted equipment."@en ;
+                       rdfs:label "Aircraft Configuration"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AircraftEquipment
+:AircraftEquipment rdf:type owl:Class ;
+                   rdfs:subClassOf :AircraftComponent ;
+                   rdfs:comment "Equipment fitted to an aircraft in accordance with its approved configuration."@en ;
+                   rdfs:label "Aircraft Equipment"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AircraftMaintenanceCheck
+:AircraftMaintenanceCheck rdf:type owl:Class ;
+                          rdfs:subClassOf :MaintenanceActivity ;
+                          rdfs:comment "A scheduled inspection of an aircraft carried out at defined intervals (e.g. A, B, C, or D check)."@en ;
+                          rdfs:label "Aircraft Maintenance Check"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AircraftManufacturer
+:AircraftManufacturer rdf:type owl:Class ;
+                      rdfs:subClassOf :Organization ;
+                      rdfs:comment "An organization that designs and manufactures aircraft or aircraft components."@en ;
+                      rdfs:label "Aircraft Manufacturer"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AircraftType
+:AircraftType rdf:type owl:Class ;
+              rdfs:subClassOf :Category ;
+              rdfs:comment "The certificated type/model classification of an aircraft (e.g. Boeing 777, Airbus A320)."@en ;
+              rdfs:label "Aircraft Type"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Airline
+:Airline rdf:type owl:Class ;
+         rdfs:subClassOf :Organization ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasAirOperatorCertificate ;
+                           owl:someValuesFrom :AirOperatorCertificate
+                         ] ;
+         rdfs:comment "An organization providing air transport services for passengers or goods."@en ;
+         rdfs:label "Airline"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Airport
+:Airport rdf:type owl:Class ;
+         rdfs:subClassOf :Aerodrome ;
+         rdfs:comment "An aerodrome equipped with facilities for commercial air transport, such as passenger terminals and cargo handling."@en ;
+         rdfs:label "Airport"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirportApron
+:AirportApron rdf:type owl:Class ;
+              rdfs:subClassOf :Infrastructure ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :partOf ;
+                                owl:someValuesFrom :Aerodrome
+                              ] ;
+              rdfs:comment "The area of an airport where aircraft are parked, unloaded or loaded, refuelled, boarded, or maintained."@en ;
+              rdfs:label "Airport Apron"@en ;
+              <http://www.w3.org/2004/02/skos/core#altLabel> "Ramp"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirportOperationsCentre
+:AirportOperationsCentre rdf:type owl:Class ;
+                         rdfs:subClassOf :Infrastructure ;
+                         rdfs:comment "A centralised facility from which airport stakeholders jointly monitor and manage day-to-day airport operations."@en ;
+                         rdfs:label "Airport Operations Centre"@en ;
+                         <http://www.w3.org/2004/02/skos/core#altLabel> "APOC"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirportOperator
+:AirportOperator rdf:type owl:Class ;
+                 rdfs:subClassOf :Organization ;
+                 rdfs:comment "The organization responsible for managing and operating an airport."@en ;
+                 rdfs:label "Airport Operator"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirportPolicy
+:AirportPolicy rdf:type owl:Class ;
+               rdfs:subClassOf :PolicyOrRegulation ;
+               rdfs:comment "Rules and regulations governing operations at an airport."@en ;
+               rdfs:label "Airport Policy"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Airspace
+:Airspace rdf:type owl:Class ;
+          rdfs:subClassOf :Location ;
+          rdfs:comment "A defined three-dimensional portion of the atmosphere within which specific rules or air traffic services apply."@en ;
+          rdfs:label "Airspace"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirwayBill
+:AirwayBill rdf:type owl:Class ;
+            rdfs:subClassOf :Document ;
+            rdfs:comment "A document that acts as a contract of carriage between the shipper and airline."@en ;
+            rdfs:label "Airway Bill"@en ;
+            <http://www.w3.org/2004/02/skos/core#altLabel> "AWB"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AirworthinessDirective
+:AirworthinessDirective rdf:type owl:Class ;
+                        rdfs:subClassOf :PolicyOrRegulation ;
+                        rdfs:comment "A legally enforceable regulation issued by a regulatory authority to correct an unsafe condition in an aircraft product."@en ;
+                        rdfs:label "Airworthiness Directive"@en ;
+                        <http://www.w3.org/2004/02/skos/core#altLabel> "AD"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Approach
+:Approach rdf:type owl:Class ;
+          rdfs:subClassOf :FlightPhase ;
+          rdfs:comment "The phase of flight in which an aircraft descends and manoeuvres to land."@en ;
+          rdfs:label "Approach"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ArrivalGate
+:ArrivalGate rdf:type owl:Class ;
+             rdfs:subClassOf :Infrastructure ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :partOf ;
+                               owl:someValuesFrom :Terminal
+                             ] ;
+             rdfs:comment "An area where passengers disembark from an aircraft."@en ;
+             rdfs:label "Arrival Gate"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ArrivalNotice
+:ArrivalNotice rdf:type owl:Class ;
+               rdfs:subClassOf :Document ;
+               rdfs:comment "Notification issued by the airline or freight forwarder indicating the cargo has arrived."@en ;
+               rdfs:label "Arrival Notice"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AuthorisedEconomicOperator
+:AuthorisedEconomicOperator rdf:type owl:Class ;
+                            rdfs:subClassOf :Organization ;
+                            rdfs:comment "A certified party recognised as having secure and compliant supply chain and customs procedures."@en ;
+                            rdfs:label "Authorised Economic Operator"@en ;
+                            <http://www.w3.org/2004/02/skos/core#altLabel> "AEO"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AutomaticScanning
+:AutomaticScanning rdf:type owl:Class ;
+                   rdfs:subClassOf :SecurityScreening ;
+                   owl:disjointWith :ManualScanning ;
+                   rdfs:comment "Automated barcode or airway bill scanning as part of screening."@en ;
+                   rdfs:label "Automatic Scanning"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#AviationPolicy
+:AviationPolicy rdf:type owl:Class ;
+                rdfs:subClassOf :PolicyOrRegulation ;
+                rdfs:comment "Policies and regulations that govern the safety, security, environmental standards, and operations of the aviation industry at a national or international level."@en ;
+                rdfs:label "Aviation Policy"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Baggage
+:Baggage rdf:type owl:Class ;
+         rdfs:subClassOf :PhysicalObject ;
+         rdfs:comment "Personal belongings of passengers transported separately."@en ;
+         rdfs:label "Baggage"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#BaggageHandling
+:BaggageHandling rdf:type owl:Class ;
+                 rdfs:subClassOf :GroundHandlingService ;
+                 rdfs:comment "The loading, unloading, and sorting of passenger baggage."@en ;
+                 rdfs:label "Baggage Handling"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Bagging
+:Bagging rdf:type owl:Class ;
+         rdfs:subClassOf :CargoHandlingOperation ;
+         rdfs:comment "The loading of small parcels into transport bags."@en ;
+         rdfs:label "Bagging"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#BaseMaintenance
+:BaseMaintenance rdf:type owl:Class ;
+                 rdfs:subClassOf :MaintenanceActivity ;
+                 owl:disjointWith :LineMaintenance ;
+                 rdfs:comment "More extensive scheduled maintenance performed at a maintenance base, typically involving hangar time."@en ;
+                 rdfs:label "Base Maintenance"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#BirdStrike
+:BirdStrike rdf:type owl:Class ;
+            rdfs:subClassOf :SafetyIncident ;
+            rdfs:comment "A collision between an aircraft and a bird or wildlife."@en ;
+            rdfs:label "Bird Strike"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#BoardingPass
+:BoardingPass rdf:type owl:Class ;
+              rdfs:subClassOf :Document ;
+              rdfs:comment "A document provided to a passenger to access the aircraft."@en ;
+              rdfs:label "Boarding Pass"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#BondedArea
+:BondedArea rdf:type owl:Class ;
+            rdfs:subClassOf :CustomsWarehouse ;
+            rdfs:comment "A secure zone authorised for storing cargo without paying duties until customs clearance."@en ;
+            rdfs:label "Bonded Area"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#BreakBulk
+:BreakBulk rdf:type owl:Class ;
+           rdfs:subClassOf :CargoHandlingOperation ;
+           rdfs:comment "The process of deconsolidating cargo from a ULD into individual shipments at the destination."@en ;
+           rdfs:label "Break Bulk"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CabinCrew
+:CabinCrew rdf:type owl:Class ;
+           rdfs:subClassOf :CrewMember ;
+           owl:disjointWith :FlightCrew ;
+           rdfs:comment "Personnel responsible for passenger safety and service during a flight."@en ;
+           rdfs:label "Cabin Crew"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Capacity
+:Capacity rdf:type owl:Class ;
+          rdfs:subClassOf :Measurement ;
+          rdfs:comment "The maximum throughput of an airport resource (e.g. runway, terminal, apron) in a given period."@en ;
+          rdfs:label "Capacity"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CarbonEmission
+:CarbonEmission rdf:type owl:Class ;
+                rdfs:subClassOf :Measurement ;
+                rdfs:comment "The amount of carbon dioxide released during a flight or logistics operation."@en ;
+                rdfs:label "Carbon Emission"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Cargo
+:Cargo rdf:type owl:Class ;
+       rdfs:subClassOf :PhysicalObject ;
+       rdfs:comment "Goods or merchandise transported in an aircraft."@en ;
+       rdfs:label "Cargo"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CargoContainer
+:CargoContainer rdf:type owl:Class ;
+                rdfs:subClassOf :Equipment ;
+                rdfs:comment "A container used to hold and transport cargo."@en ;
+                rdfs:label "Cargo Container"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CargoHandlingEquipment
+:CargoHandlingEquipment rdf:type owl:Class ;
+                        rdfs:subClassOf :Equipment ;
+                        rdfs:comment "Equipment used to move, sort, or consolidate cargo within a handling facility."@en ;
+                        rdfs:label "Cargo Handling Equipment"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CargoHandlingOperation
+:CargoHandlingOperation rdf:type owl:Class ;
+                        rdfs:subClassOf :Process ;
+                        rdfs:comment "An operational activity performed on cargo within a handling facility."@en ;
+                        rdfs:label "Cargo Handling Operation"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CargoHold
+:CargoHold rdf:type owl:Class ;
+           rdfs:subClassOf :AircraftComponent ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :partOf ;
+                             owl:someValuesFrom :Aircraft
+                           ] ;
+           rdfs:comment "The section of an aircraft designated for carrying cargo."@en ;
+           rdfs:label "Cargo Hold"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CargoTerminal
+:CargoTerminal rdf:type owl:Class ;
+               rdfs:subClassOf :Infrastructure ;
+               rdfs:comment "A dedicated facility at an airport for the handling of air cargo."@en ;
+               rdfs:label "Cargo Terminal"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CargoType
+:CargoType rdf:type owl:Class ;
+           rdfs:subClassOf :Category ;
+           rdfs:comment "The classification of cargo based on content and handling needs."@en ;
+           rdfs:label "Cargo Type"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Category
+:Category rdf:type owl:Class ;
+          rdfs:comment "A classification value or kind used to categorise other entities (e.g. aircraft type, cargo type, passenger class, energy source). Categories are not measurements: they are not quantities and carry no unit."@en ;
+          rdfs:label "Category"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CateringCompany
+:CateringCompany rdf:type owl:Class ;
+                 rdfs:subClassOf :Organization ;
+                 rdfs:comment "A company that prepares and supplies food and beverages for flights."@en ;
+                 rdfs:label "Catering Company"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CateringService
+:CateringService rdf:type owl:Class ;
+                 rdfs:subClassOf :GroundHandlingService ;
+                 rdfs:comment "The provision and loading of food and beverages onto an aircraft."@en ;
+                 rdfs:label "Catering Service"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Certificate
+:Certificate rdf:type owl:Class ;
+             rdfs:subClassOf :Document ;
+             rdfs:comment "A document issued by a competent authority attesting that an entity meets specified requirements."@en ;
+             rdfs:label "Certificate"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CertificateOfAirworthiness
+:CertificateOfAirworthiness rdf:type owl:Class ;
+                            rdfs:subClassOf :Certificate ;
+                            rdfs:comment "A certificate confirming that an aircraft conforms to its approved design and is safe for operation."@en ;
+                            rdfs:label "Certificate of Airworthiness"@en ;
+                            <http://www.w3.org/2004/02/skos/core#altLabel> "CofA"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ChargingPoint
+:ChargingPoint rdf:type owl:Class ;
+               rdfs:subClassOf :Equipment ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty :partOf ;
+                                 owl:someValuesFrom :ChargingStation
+                               ] ;
+               rdfs:comment "An individual connection point at a charging station used to charge a vehicle or aircraft."@en ;
+               rdfs:label "Charging Point"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ChargingStation
+:ChargingStation rdf:type owl:Class ;
+                 rdfs:subClassOf :Infrastructure ;
+                 rdfs:comment "A facility for charging electric ground handling equipment or electric aircraft."@en ;
+                 rdfs:label "Charging Station"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CheckInCounter
+:CheckInCounter rdf:type owl:Class ;
+                rdfs:subClassOf :Infrastructure ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty :partOf ;
+                                  owl:someValuesFrom :Terminal
+                                ] ;
+                rdfs:comment "A location at an airport where passengers confirm their presence for a flight."@en ;
+                rdfs:label "Check-In Counter"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CivilAviationAuthority
+:CivilAviationAuthority rdf:type owl:Class ;
+                        rdfs:subClassOf :RegulatoryAuthority ;
+                        rdfs:comment "A national authority responsible for civil aviation safety oversight and regulation within its state."@en ;
+                        rdfs:label "Civil Aviation Authority"@en ;
+                        <http://www.w3.org/2004/02/skos/core#altLabel> "CAA"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CodeShareAgreement
+:CodeShareAgreement rdf:type owl:Class ;
+                    rdfs:subClassOf :Document ;
+                    rdfs:comment "An agreement under which two or more airlines share the same flight, each marketing it under its own designator code."@en ;
+                    rdfs:label "Code Share Agreement"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Commander
+:Commander rdf:type owl:Class ;
+           rdfs:subClassOf :FlightCrew ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :holdsLicense ;
+                             owl:someValuesFrom :PilotLicense
+                           ] ;
+           rdfs:comment "The crew member vested with command authority and overall responsibility for the safe conduct of the flight."@en ;
+           rdfs:label "Commander"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CommercialAirTransportOperation
+:CommercialAirTransportOperation rdf:type owl:Class ;
+                                 rdfs:subClassOf :FlightOperation ;
+                                 owl:disjointWith :NonCommercialOperation ,
+                                                  :SpecialisedOperation ;
+                                 rdfs:comment "An aircraft operation involving the transport of passengers, cargo, or mail for remuneration or hire."@en ;
+                                 rdfs:label "Commercial Air Transport Operation"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ComponentOverhaul
+:ComponentOverhaul rdf:type owl:Class ;
+                   rdfs:subClassOf :MaintenanceActivity ;
+                   rdfs:comment "The disassembly, inspection, repair, and restoration of an aircraft component to a serviceable condition."@en ;
+                   rdfs:label "Component Overhaul"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Consignee
+:Consignee rdf:type owl:Class ;
+           rdfs:subClassOf :Agent ;
+           rdfs:comment "The person or company to whom the goods are to be delivered."@en ;
+           rdfs:label "Consignee"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Consignment
+:Consignment rdf:type owl:Class ;
+             rdfs:subClassOf :PhysicalObject ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasConsignee ;
+                               owl:someValuesFrom :Consignee
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasShipper ;
+                               owl:someValuesFrom :Shipper
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :includesCargoItem ;
+                               owl:someValuesFrom :Cargo
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :usesAirwayBill ;
+                               owl:someValuesFrom :AirwayBill
+                             ] ;
+             rdfs:comment "A shipment of one or more cargo items tendered by one shipper and transported under one air waybill. A consignment is an aggregate of cargo items, not itself a cargo item."@en ;
+             rdfs:label "Consignment"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ContainerBuildUp
+:ContainerBuildUp rdf:type owl:Class ;
+                  rdfs:subClassOf :CargoHandlingOperation ;
+                  rdfs:comment "The consolidation of shipments into a ULD."@en ;
+                  rdfs:label "Container Build-Up"@en ;
+                  <http://www.w3.org/2004/02/skos/core#altLabel> "ULD Build-Up"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ControlTower
+:ControlTower rdf:type owl:Class ;
+              rdfs:subClassOf :Infrastructure ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :partOf ;
+                                owl:someValuesFrom :Aerodrome
+                              ] ;
+              rdfs:comment "An airport facility from which air traffic controllers direct aircraft movement on the ground and in the air near the airport."@en ;
+              rdfs:label "Control Tower"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ControlledAirspace
+:ControlledAirspace rdf:type owl:Class ;
+                    rdfs:subClassOf :Airspace ;
+                    rdfs:comment "Airspace within which air traffic control service is provided to aircraft."@en ;
+                    rdfs:label "Controlled Airspace"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ConveyorBelt
+:ConveyorBelt rdf:type owl:Class ;
+              rdfs:subClassOf :CargoHandlingEquipment ;
+              rdfs:comment "A conveyor used to transport shipments through a handling facility."@en ;
+              rdfs:label "Conveyor Belt"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CrewMember
+:CrewMember rdf:type owl:Class ;
+            rdfs:subClassOf :Person ;
+            rdfs:comment "A person assigned to operational or service duties aboard an aircraft."@en ;
+            rdfs:label "Crew Member"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Cruise
+:Cruise rdf:type owl:Class ;
+        rdfs:subClassOf :FlightPhase ;
+        rdfs:comment "The phase of flight at a stable altitude and speed between climb and descent."@en ;
+        rdfs:label "Cruise"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CustomsAuthority
+:CustomsAuthority rdf:type owl:Class ;
+                  rdfs:subClassOf :RegulatoryAuthority ;
+                  rdfs:comment "A government agency responsible for controlling the flow of goods, including cargo, into and out of a country."@en ;
+                  rdfs:label "Customs Authority"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CustomsClearance
+:CustomsClearance rdf:type owl:Class ;
+                  rdfs:subClassOf :Process ;
+                  rdfs:comment "A formal process of obtaining government permission to export or import goods."@en ;
+                  rdfs:label "Customs Clearance"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CustomsClearanceAgency
+:CustomsClearanceAgency rdf:type owl:Class ;
+                        rdfs:subClassOf :Organization ;
+                        rdfs:comment "An authorised service provider responsible for processing customs declarations."@en ;
+                        rdfs:label "Customs Clearance Agency"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CustomsDeclaration
+:CustomsDeclaration rdf:type owl:Class ;
+                    rdfs:subClassOf :Document ;
+                    rdfs:comment "A form listing the details of goods being transported across borders."@en ;
+                    rdfs:label "Customs Declaration"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CustomsException
+:CustomsException rdf:type owl:Class ;
+                  rdfs:subClassOf :ShipmentException ;
+                  rdfs:comment "A customs-related exception encountered during shipment handling."@en ;
+                  rdfs:label "Customs Exception"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CustomsPermit
+:CustomsPermit rdf:type owl:Class ;
+               rdfs:subClassOf :Document ;
+               rdfs:comment "Official authorisation granted by customs to allow export or import of cargo."@en ;
+               rdfs:label "Customs Permit"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CustomsWarehouse
+:CustomsWarehouse rdf:type owl:Class ;
+                  rdfs:subClassOf :Warehouse ;
+                  rdfs:comment "An authorised location for storing cargo awaiting customs clearance."@en ;
+                  rdfs:label "Customs Warehouse"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CutTime
+:CutTime rdf:type owl:Class ;
+         rdfs:subClassOf :Measurement ;
+         rdfs:comment "The latest time by which cargo must be delivered to the airline for loading onto a scheduled flight."@en ;
+         rdfs:label "Cut Time"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#DangerousGoods
+:DangerousGoods rdf:type owl:Class ;
+                owl:equivalentClass [ owl:intersectionOf ( :Cargo
+                                                           [ rdf:type owl:Restriction ;
+                                                             owl:onProperty :classifiedAs ;
+                                                             owl:hasValue :DangerousGoodsCargoType
+                                                           ]
+                                                         ) ;
+                                      rdf:type owl:Class
+                                    ] ;
+                rdfs:subClassOf :Cargo ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty :requiresHazardLabel ;
+                                  owl:someValuesFrom :Label
+                                ] ;
+                rdfs:comment "Items classified as hazardous for air transport, requiring special handling and labelling."@en ;
+                rdfs:label "Dangerous Goods"@en ;
+                <http://www.w3.org/2004/02/skos/core#altLabel> "DG"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#DeBagging
+:DeBagging rdf:type owl:Class ;
+           rdfs:subClassOf :CargoHandlingOperation ;
+           rdfs:comment "The removal of parcels from transport bags."@en ;
+           rdfs:label "De-Bagging"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Deicing
+:Deicing rdf:type owl:Class ;
+         rdfs:subClassOf :GroundHandlingService ;
+         rdfs:comment "The removal or prevention of ice and frost accumulation on an aircraft prior to departure."@en ;
+         rdfs:label "Deicing"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#DemonstrationFlight
+:DemonstrationFlight rdf:type owl:Class ;
+                     rdfs:subClassOf :Flight ;
+                     rdfs:comment "A flight conducted to demonstrate an aircraft's capabilities."@en ;
+                     rdfs:label "Demonstration Flight"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#DepartureGate
+:DepartureGate rdf:type owl:Class ;
+               rdfs:subClassOf :Infrastructure ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty :partOf ;
+                                 owl:someValuesFrom :Terminal
+                               ] ;
+               rdfs:comment "An airport terminal section where passengers wait before boarding."@en ;
+               rdfs:label "Departure Gate"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Destination
+:Destination rdf:type owl:Class ;
+             rdfs:subClassOf :Location ;
+             rdfs:comment "The final location where a flight or cargo shipment is to be delivered."@en ;
+             rdfs:label "Destination"@en ;
+             owl:deprecated "true"^^xsd:boolean ;
+             <http://www.w3.org/2004/02/skos/core#editorialNote> "Deprecated in 0.2.0: origin/destination are roles a place plays for a shipment. Use hasOrigin/hasDestination pointing directly at an Aerodrome, Location or premises."@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#DirectFlight
+:DirectFlight rdf:type owl:Class ;
+              owl:equivalentClass [ owl:intersectionOf ( :Flight
+                                                         [ rdf:type owl:Restriction ;
+                                                           owl:onProperty :hasIntermediateStop ;
+                                                           owl:maxQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                                                           owl:onClass :Aerodrome
+                                                         ]
+                                                       ) ;
+                                    rdf:type owl:Class
+                                  ] ;
+              rdfs:subClassOf :Flight ;
+              rdfs:comment "A flight that travels from origin to destination without stopovers."@en ;
+              rdfs:label "Direct Flight"@en ;
+              <http://www.w3.org/2004/02/skos/core#altLabel> "Non-stop Flight"@en ;
+              <http://www.w3.org/2004/02/skos/core#editorialNote> "In airline usage a 'direct' flight may stop en route under one flight number; this class follows the non-stop meaning."@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#DispatchSchedule
+:DispatchSchedule rdf:type owl:Class ;
+                  rdfs:subClassOf :InformationObject ;
+                  rdfs:comment "The planned timing for shipping goods from the origin."@en ;
+                  rdfs:label "Dispatch Schedule"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Document
+:Document rdf:type owl:Class ;
+          rdfs:subClassOf :InformationObject ;
+          owl:disjointWith :Identifier ;
+          rdfs:comment "A record, form, or certificate that carries information for legal, operational, or logistical purposes."@en ;
+          rdfs:label "Document"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#EDISystem
+:EDISystem rdf:type owl:Class ;
+           rdfs:subClassOf :InformationObject ;
+           rdfs:comment "An Electronic Data Interchange system used to submit shipping documents digitally."@en ;
+           rdfs:label "EDI System"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#EmergencyEquipment
+:EmergencyEquipment rdf:type owl:Class ;
+                    rdfs:subClassOf :Equipment ;
+                    rdfs:comment "Equipment carried or provided for use in an aviation emergency, such as fire suppression or evacuation equipment."@en ;
+                    rdfs:label "Emergency Equipment"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#EnergyConsumption
+:EnergyConsumption rdf:type owl:Class ;
+                   rdfs:subClassOf :Measurement ;
+                   rdfs:comment "The amount of energy used by an aircraft or ground equipment during operation."@en ;
+                   rdfs:label "Energy Consumption"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#EnergySource
+:EnergySource rdf:type owl:Class ;
+              rdfs:subClassOf :Category ;
+              rdfs:comment "A classification of the type of energy used to power an aircraft or ground equipment (e.g. jet fuel, electricity, sustainable aviation fuel)."@en ;
+              rdfs:label "Energy Source"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#EnergyUnit
+:EnergyUnit rdf:type owl:Class ;
+            rdfs:subClassOf :Measurement ;
+            rdfs:comment "A quantity of energy consumed, expressed in a defined unit (e.g. litres of fuel, kWh)."@en ;
+            rdfs:label "Energy Unit"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#EnvironmentalRegulation
+:EnvironmentalRegulation rdf:type owl:Class ;
+                         rdfs:subClassOf :PolicyOrRegulation ;
+                         rdfs:comment "A regulation governing the environmental impact of aviation operations."@en ;
+                         rdfs:label "Environmental Regulation"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Equipment
+:Equipment rdf:type owl:Class ;
+           rdfs:subClassOf :PhysicalObject ;
+           rdfs:comment "A physical item of apparatus or machinery used to support air transport operations."@en ;
+           rdfs:label "Equipment"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ExceptionRecord
+:ExceptionRecord rdf:type owl:Class ;
+                 rdfs:subClassOf :Document ;
+                 rdfs:comment "A record of a shipment exception raised during handling."@en ;
+                 rdfs:label "Exception Record"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ExplosiveInspection
+:ExplosiveInspection rdf:type owl:Class ;
+                     rdfs:subClassOf :SecurityScreening ;
+                     rdfs:comment "A security screening process to ensure cargo does not contain explosives."@en ;
+                     rdfs:label "Explosive Inspection"@en ;
+                     <http://www.w3.org/2004/02/skos/core#altLabel> "Explosive Trace Detection"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ExportCustomsClearance
+:ExportCustomsClearance rdf:type owl:Class ;
+                        rdfs:subClassOf :CustomsClearance ;
+                        owl:disjointWith :ImportCustomsClearance ;
+                        rdfs:comment "Customs clearance conducted for goods leaving the country of origin."@en ;
+                        rdfs:label "Export Customs Clearance"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Exporter
+:Exporter rdf:type owl:Class ;
+          rdfs:subClassOf :Agent ;
+          rdfs:comment "The party (person or organisation) that dispatches goods from the country of origin to a foreign country."@en ;
+          rdfs:label "Exporter"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ExtendableConveyor
+:ExtendableConveyor rdf:type owl:Class ;
+                    rdfs:subClassOf :GroundSupportEquipment ;
+                    rdfs:comment "An extending conveyor used to load or unload cargo directly into or from a truck."@en ;
+                    rdfs:label "Extendable Conveyor"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FareClass
+:FareClass rdf:type owl:Class ;
+           rdfs:subClassOf :Category ;
+           rdfs:comment "A booking code representing a specific fare and set of conditions within a passenger class."@en ;
+           rdfs:label "Fare Class"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FerryFlight
+:FerryFlight rdf:type owl:Class ;
+             rdfs:subClassOf :Flight ;
+             rdfs:comment "A non-revenue flight conducted to reposition an aircraft."@en ;
+             rdfs:label "Ferry Flight"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FirstOfficer
+:FirstOfficer rdf:type owl:Class ;
+              rdfs:subClassOf :FlightCrew ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :holdsLicense ;
+                                owl:someValuesFrom :PilotLicense
+                              ] ;
+              rdfs:comment "A qualified pilot who assists the Pilot in Command in operating the aircraft."@en ;
+              rdfs:label "First Officer"@en ;
+              <http://www.w3.org/2004/02/skos/core#altLabel> "Co-pilot"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Flight
+:Flight rdf:type owl:Class ;
+        rdfs:subClassOf :Process ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :usesAircraft ;
+                          owl:someValuesFrom :Aircraft
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :arrivedAt ;
+                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onClass :Aerodrome
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :departedFrom ;
+                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onClass :Aerodrome
+                        ] ;
+        rdfs:comment "A single journey (leg) of an aircraft from a departure aerodrome to an arrival aerodrome, whether scheduled or not."@en ;
+        rdfs:label "Flight"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FlightCost
+:FlightCost rdf:type owl:Class ;
+            rdfs:subClassOf :Measurement ;
+            rdfs:comment "The financial cost associated with operating a flight."@en ;
+            rdfs:label "Flight Cost"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FlightCrew
+:FlightCrew rdf:type owl:Class ;
+            rdfs:subClassOf :CrewMember ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :hasMedicalCertificate ;
+                              owl:someValuesFrom :MedicalCertificate
+                            ] ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :holdsLicense ;
+                              owl:someValuesFrom :Licence
+                            ] ;
+            rdfs:comment "Personnel responsible for operating the aircraft."@en ;
+            rdfs:label "Flight Crew"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FlightDataMonitoring
+:FlightDataMonitoring rdf:type owl:Class ;
+                      rdfs:subClassOf :Process ;
+                      rdfs:comment "The routine analysis of recorded flight data to identify safety trends and improve operations."@en ;
+                      rdfs:label "Flight Data Monitoring"@en ;
+                      <http://www.w3.org/2004/02/skos/core#altLabel> "FDM"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FlightDiversion
+:FlightDiversion rdf:type owl:Class ;
+                 rdfs:subClassOf :OperationalDisruption ;
+                 rdfs:comment "A flight diverted from its planned destination."@en ;
+                 rdfs:label "Flight Diversion"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FlightInformationRegion
+:FlightInformationRegion rdf:type owl:Class ;
+                         rdfs:subClassOf :Airspace ;
+                         rdfs:comment "A defined volume of airspace within which flight information and alerting services are provided."@en ;
+                         rdfs:label "Flight Information Region"@en ;
+                         <http://www.w3.org/2004/02/skos/core#altLabel> "FIR"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FlightManifest
+:FlightManifest rdf:type owl:Class ;
+                rdfs:subClassOf :Document ;
+                rdfs:comment "A list of passengers or cargo aboard a particular flight."@en ;
+                rdfs:label "Flight Manifest"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FlightOperation
+:FlightOperation rdf:type owl:Class ;
+                 owl:equivalentClass [ rdf:type owl:Class ;
+                                       owl:unionOf ( :CommercialAirTransportOperation
+                                                     :NonCommercialOperation
+                                                     :SpecialisedOperation
+                                                   )
+                                     ] ;
+                 rdfs:subClassOf :Process ;
+                 rdfs:comment "The conduct of a flight or series of flights under a defined operational category."@en ;
+                 rdfs:label "Flight Operation"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FlightOperationsOfficer
+:FlightOperationsOfficer rdf:type owl:Class ;
+                         rdfs:subClassOf :GroundPersonnel ;
+                         rdfs:comment "Personnel who assist in flight planning, dispatch, and monitoring of flights."@en ;
+                         rdfs:label "Flight Operations Officer"@en ;
+                         <http://www.w3.org/2004/02/skos/core#altLabel> "Dispatcher"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FlightPhase
+:FlightPhase rdf:type owl:Class ;
+             rdfs:subClassOf :Process ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :partOf ;
+                               owl:someValuesFrom :Flight
+                             ] ;
+             rdfs:comment "A distinct stage within the conduct of a flight."@en ;
+             rdfs:label "Flight Phase"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FlightPlan
+:FlightPlan rdf:type owl:Class ;
+            rdfs:subClassOf :Document ;
+            rdfs:comment "A document filed with air traffic services detailing a flight's intended route, altitude, timing, and fuel."@en ;
+            rdfs:label "Flight Plan"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FlightRecorder
+:FlightRecorder rdf:type owl:Class ;
+                rdfs:subClassOf :AircraftComponent ;
+                rdfs:comment "An onboard device that records flight data and/or cockpit audio for safety investigation purposes."@en ;
+                rdfs:label "Flight Recorder"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FlightSchedule
+:FlightSchedule rdf:type owl:Class ;
+                rdfs:subClassOf :Document ;
+                rdfs:comment "A timetable showing the planned flights of an airline."@en ;
+                rdfs:label "Flight Schedule"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FreightForwarder
+:FreightForwarder rdf:type owl:Class ;
+                  rdfs:subClassOf :Organization ;
+                  rdfs:comment "A logistics service provider that arranges cargo transport, documentation, and compliance on behalf of exporters/importers."@en ;
+                  rdfs:label "Freight Forwarder"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FreighterAircraft
+:FreighterAircraft rdf:type owl:Class ;
+                   rdfs:subClassOf :Aircraft ;
+                   owl:disjointWith :PassengerAircraft ;
+                   rdfs:comment "An aircraft designed specifically to carry freight or cargo, with no passenger cabin."@en ;
+                   rdfs:label "Freighter Aircraft"@en ;
+                   <http://www.w3.org/2004/02/skos/core#altLabel> "Cargo Aircraft"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#GroundHandlingAgent
+:GroundHandlingAgent rdf:type owl:Class ;
+                     rdfs:subClassOf :Organization ;
+                     rdfs:comment "A company contracted to provide ground handling services (baggage, ramp, catering, etc.) to airlines at an airport."@en ;
+                     rdfs:label "Ground Handling Agent"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#GroundHandlingService
+:GroundHandlingService rdf:type owl:Class ;
+                       rdfs:subClassOf :Process ;
+                       rdfs:comment "A service performed to support an aircraft's turnaround at an airport."@en ;
+                       rdfs:label "Ground Handling Service"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#GroundPersonnel
+:GroundPersonnel rdf:type owl:Class ;
+                 rdfs:subClassOf :Person ;
+                 rdfs:comment "Staff who perform operational duties on the ground rather than aboard an aircraft."@en ;
+                 rdfs:label "Ground Personnel"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#GroundSupportEquipment
+:GroundSupportEquipment rdf:type owl:Class ;
+                        rdfs:subClassOf :Equipment ;
+                        rdfs:comment "Vehicles and equipment used to service aircraft while on the ground."@en ;
+                        rdfs:label "Ground Support Equipment"@en ;
+                        <http://www.w3.org/2004/02/skos/core#altLabel> "GSE"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#GroundTransport
+:GroundTransport rdf:type owl:Class ;
+                 rdfs:subClassOf :TransportMode ;
+                 rdfs:comment "Vehicle-based transport used to move goods or passengers to/from the airport."@en ;
+                 rdfs:label "Ground Transport"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#GroundVehicle
+:GroundVehicle rdf:type owl:Class ;
+               rdfs:subClassOf :PhysicalObject ;
+               rdfs:comment "A road vehicle (e.g. a truck or van) used to move cargo or passengers to or from an airport."@en ;
+               rdfs:label "Ground Vehicle"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#HandSearch
+:HandSearch rdf:type owl:Class ;
+            rdfs:subClassOf :SecurityScreening ;
+            rdfs:comment "Manual security inspection of baggage or cargo."@en ;
+            rdfs:label "Hand Search"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Hangar
+:Hangar rdf:type owl:Class ;
+        rdfs:subClassOf :Infrastructure ;
+        rdfs:comment "A building used to store, maintain, or repair aircraft."@en ;
+        rdfs:label "Hangar"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#HeldShipment
+:HeldShipment rdf:type owl:Class ;
+              rdfs:subClassOf :ShipmentException ;
+              rdfs:comment "A shipment held pending resolution of an exception."@en ;
+              rdfs:label "Held Shipment"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Helicopter
+:Helicopter rdf:type owl:Class ;
+            rdfs:subClassOf :Aircraft ;
+            rdfs:comment "A rotorcraft that derives lift and propulsion from horizontally spinning rotors, used for passenger, cargo, or specialised operations."@en ;
+            rdfs:label "Helicopter"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#HouseAirwayBill
+:HouseAirwayBill rdf:type owl:Class ;
+                 rdfs:subClassOf :AirwayBill ;
+                 owl:disjointWith :MasterAirwayBill ;
+                 rdfs:comment "A shipment document issued by a freight forwarder for individual consignments."@en ;
+                 rdfs:label "House Airway Bill"@en ;
+                 <http://www.w3.org/2004/02/skos/core#altLabel> "HAWB"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#IATACode
+:IATACode rdf:type owl:Class ;
+          rdfs:subClassOf :Identifier ;
+          rdfs:comment "A unique 3-letter identifier for airlines and airports issued by IATA."@en ;
+          rdfs:label "IATA Code"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ICAOCode
+:ICAOCode rdf:type owl:Class ;
+          rdfs:subClassOf :Identifier ;
+          rdfs:comment "A 4-letter or alphanumeric code designating airports, airlines, or aircraft, issued by ICAO."@en ;
+          rdfs:label "ICAO Code"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Identifier
+:Identifier rdf:type owl:Class ;
+            rdfs:subClassOf :InformationObject ;
+            rdfs:comment "A code or designator that uniquely identifies an entity within an identification scheme (e.g. IATA or ICAO codes)."@en ;
+            rdfs:label "Identifier"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ImportCustomsClearance
+:ImportCustomsClearance rdf:type owl:Class ;
+                        rdfs:subClassOf :CustomsClearance ;
+                        rdfs:comment "Customs clearance conducted for goods entering the destination country."@en ;
+                        rdfs:label "Import Customs Clearance"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Importer
+:Importer rdf:type owl:Class ;
+          rdfs:subClassOf :Agent ;
+          rdfs:comment "The party (person or organisation) that receives goods in the destination country after import clearance."@en ;
+          rdfs:label "Importer"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#InformationObject
+:InformationObject rdf:type owl:Class ;
+                   rdfs:comment "A document, record, code, message, or digital artefact that carries information within air transport operations."@en ;
+                   rdfs:label "Information Object"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Infrastructure
+:Infrastructure rdf:type owl:Class ;
+                rdfs:subClassOf :PhysicalObject ;
+                rdfs:comment "A fixed facility or structure that supports air transport operations."@en ;
+                rdfs:label "Infrastructure"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#InsuranceProvider
+:InsuranceProvider rdf:type owl:Class ;
+                   rdfs:subClassOf :Organization ;
+                   rdfs:comment "An organization that provides insurance cover for aircraft, cargo, or aviation liability."@en ;
+                   rdfs:label "Insurance Provider"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Invoice
+:Invoice rdf:type owl:Class ;
+         rdfs:subClassOf :Document ;
+         rdfs:comment "A commercial document stating the value of the goods and transaction details."@en ;
+         rdfs:label "Invoice"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#KPI
+:KPI rdf:type owl:Class ;
+     rdfs:subClassOf :Measurement ;
+     rdfs:comment "A Key Performance Indicator used to measure airport or airline operational performance."@en ;
+     rdfs:label "KPI"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Label
+:Label rdf:type owl:Class ;
+       rdfs:subClassOf :Document ;
+       rdfs:comment "A tag placed on cargo to identify flight, destination, and handling instructions."@en ;
+       rdfs:label "Label"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Landing
+:Landing rdf:type owl:Class ;
+         rdfs:subClassOf :FlightPhase ;
+         rdfs:comment "The phase in which an aircraft transitions from flight to ground movement."@en ;
+         rdfs:label "Landing"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#LeaseAgreement
+:LeaseAgreement rdf:type owl:Class ;
+                rdfs:subClassOf :Document ;
+                rdfs:comment "A contract under which an aircraft owner grants an airline the right to operate the aircraft for a defined period."@en ;
+                rdfs:label "Lease Agreement"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#LeasedAircraft
+:LeasedAircraft rdf:type owl:Class ;
+                owl:equivalentClass [ owl:intersectionOf ( :Aircraft
+                                                           [ rdf:type owl:Restriction ;
+                                                             owl:onProperty :leasedUnder ;
+                                                             owl:someValuesFrom :LeaseAgreement
+                                                           ]
+                                                         ) ;
+                                      rdf:type owl:Class
+                                    ] ;
+                rdfs:comment "Defined class: any aircraft operated under a lease agreement. Membership is inferred by the reasoner."@en ;
+                rdfs:label "Leased Aircraft"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#LeasingCompany
+:LeasingCompany rdf:type owl:Class ;
+                rdfs:subClassOf :Organization ;
+                rdfs:comment "An organization that owns aircraft and leases them to airlines under a lease agreement."@en ;
+                rdfs:label "Leasing Company"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Licence
+:Licence rdf:type owl:Class ;
+         rdfs:subClassOf :Certificate ;
+         rdfs:comment "A certificate issued to a person authorising them to exercise specified privileges (e.g. pilot, ATCO or engineer licence)."@en ;
+         rdfs:label "Licence"@en ;
+         <http://www.w3.org/2004/02/skos/core#altLabel> "License"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#LiftingEquipment
+:LiftingEquipment rdf:type owl:Class ;
+                  rdfs:subClassOf :GroundSupportEquipment ;
+                  rdfs:comment "Equipment that assists with loading and unloading cargo or baggage."@en ;
+                  rdfs:label "Lifting Equipment"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#LineMaintenance
+:LineMaintenance rdf:type owl:Class ;
+                 rdfs:subClassOf :MaintenanceActivity ;
+                 rdfs:comment "Routine maintenance performed on an aircraft between flights, typically at an airport."@en ;
+                 rdfs:label "Line Maintenance"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Location
+:Location rdf:type owl:Class ;
+          rdfs:comment "A geographic, spatial, or airspace entity relevant to air transport."@en ;
+          rdfs:label "Location"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#LooseLoading
+:LooseLoading rdf:type owl:Class ;
+              rdfs:subClassOf :CargoHandlingOperation ;
+              rdfs:comment "The direct loading of cargo into trucks without using ULDs."@en ;
+              rdfs:label "Loose Loading"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#METAR
+:METAR rdf:type owl:Class ;
+       rdfs:subClassOf :Document ;
+       rdfs:comment "A routine, coded surface weather observation report used in aviation."@en ;
+       rdfs:label "METAR"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#MROOrganization
+:MROOrganization rdf:type owl:Class ;
+                 rdfs:subClassOf :Organization ;
+                 rdfs:comment "An organization approved to perform aircraft Maintenance, Repair, and Overhaul (MRO)."@en ;
+                 rdfs:label "MRO Organization"@en ;
+                 <http://www.w3.org/2004/02/skos/core#altLabel> "MRO"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#MaintenanceActivity
+:MaintenanceActivity rdf:type owl:Class ;
+                     rdfs:subClassOf :Process ;
+                     rdfs:comment "An activity performed to inspect, service, or repair an aircraft or its components."@en ;
+                     rdfs:label "Maintenance Activity"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#MaintenanceCheckFlight
+:MaintenanceCheckFlight rdf:type owl:Class ;
+                        rdfs:subClassOf :Flight ;
+                        rdfs:comment "A flight conducted to verify aircraft airworthiness following maintenance."@en ;
+                        rdfs:label "Maintenance Check Flight"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#MaintenanceEngineer
+:MaintenanceEngineer rdf:type owl:Class ;
+                     rdfs:subClassOf :Person ,
+                                     [ rdf:type owl:Restriction ;
+                                       owl:onProperty :holdsLicense ;
+                                       owl:someValuesFrom :Licence
+                                     ] ;
+                     rdfs:comment "A licensed person qualified to inspect, maintain, and certify aircraft airworthiness."@en ;
+                     rdfs:label "Maintenance Engineer"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ManageService
+:ManageService rdf:type owl:Class ;
+               rdfs:subClassOf :Service ;
+               rdfs:comment "A service that supports the active management of airport or flight operations."@en ;
+               rdfs:label "Manage Service"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ManualScanning
+:ManualScanning rdf:type owl:Class ;
+                rdfs:subClassOf :SecurityScreening ;
+                rdfs:comment "Manual scanning of a shipment identifier by an operator."@en ;
+                rdfs:label "Manual Scanning"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ManualXRayMachine
+:ManualXRayMachine rdf:type owl:Class ;
+                   rdfs:subClassOf :ScreeningEquipment ;
+                   rdfs:comment "A manually operated X-ray machine used for security screening."@en ;
+                   rdfs:label "Manual X-Ray Machine"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Marshalling
+:Marshalling rdf:type owl:Class ;
+             rdfs:subClassOf :GroundHandlingService ;
+             rdfs:comment "The visual guidance of an aircraft during taxiing, parking, or pushback by ground staff."@en ;
+             rdfs:label "Marshalling"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#MasterAirwayBill
+:MasterAirwayBill rdf:type owl:Class ;
+                  rdfs:subClassOf :AirwayBill ;
+                  rdfs:comment "A shipment document issued by the airline to the freight forwarder for consolidated cargo."@en ;
+                  rdfs:label "Master Airway Bill"@en ;
+                  <http://www.w3.org/2004/02/skos/core#altLabel> "MAWB"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#MasterMinimumEquipmentList
+:MasterMinimumEquipmentList rdf:type owl:Class ;
+                            rdfs:subClassOf :Document ;
+                            rdfs:comment "The baseline list, approved for an aircraft type, from which an operator's Minimum Equipment List is derived."@en ;
+                            rdfs:label "Master Minimum Equipment List"@en ;
+                            <http://www.w3.org/2004/02/skos/core#altLabel> "MMEL"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Measurement
+:Measurement rdf:type owl:Class ;
+             rdfs:comment "A quantity, metric, classification, or measured/assigned value used in air transport operations."@en ;
+             rdfs:label "Measurement"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#MedicalCertificate
+:MedicalCertificate rdf:type owl:Class ;
+                    rdfs:subClassOf :Certificate ;
+                    rdfs:comment "A certificate confirming that a crew member meets the medical fitness requirements for their role."@en ;
+                    rdfs:label "Medical Certificate"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#MinimumEquipmentList
+:MinimumEquipmentList rdf:type owl:Class ;
+                      rdfs:subClassOf :Document ;
+                      rdfs:comment "A list, specific to an aircraft, of equipment that may be inoperative for dispatch under defined conditions."@en ;
+                      rdfs:label "Minimum Equipment List"@en ;
+                      <http://www.w3.org/2004/02/skos/core#altLabel> "MEL"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#MonitorService
+:MonitorService rdf:type owl:Class ;
+                rdfs:subClassOf :Service ;
+                rdfs:comment "A service that monitors current airport or flight operations in real time."@en ;
+                rdfs:label "Monitor Service"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#MultimodalLink
+:MultimodalLink rdf:type owl:Class ;
+                rdfs:subClassOf :Location ;
+                rdfs:comment "A connection point between air and road (or other) transport systems."@en ;
+                rdfs:label "Multimodal Link"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#NOTAM
+:NOTAM rdf:type owl:Class ;
+       rdfs:subClassOf :Document ;
+       rdfs:comment "A Notice to Airmen, distributed to alert pilots of potential hazards or changes to facilities, services, or procedures."@en ;
+       rdfs:label "NOTAM"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#NoiseRegulation
+:NoiseRegulation rdf:type owl:Class ;
+                 rdfs:subClassOf :EnvironmentalRegulation ;
+                 rdfs:comment "A regulation restricting or managing aircraft noise, particularly around airports."@en ;
+                 rdfs:label "Noise Regulation"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#NonCommercialOperation
+:NonCommercialOperation rdf:type owl:Class ;
+                        rdfs:subClassOf :FlightOperation ;
+                        rdfs:comment "An aircraft operation other than commercial air transport, not undertaken for remuneration or hire."@en ;
+                        rdfs:label "Non-Commercial Operation"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Occurrence
+:Occurrence rdf:type owl:Class ;
+            rdfs:subClassOf :Process ;
+            rdfs:comment "An unplanned event that affects, or could affect, normal operations. Safety incidents are one kind of occurrence; operational disruptions and shipment exceptions are others."@en ;
+            rdfs:label "Occurrence"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Offloading
+:Offloading rdf:type owl:Class ;
+            rdfs:subClassOf :CargoHandlingOperation ;
+            rdfs:comment "The removal of cargo or ULDs from an aircraft."@en ;
+            rdfs:label "Offloading"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#OperationalControlSystem
+:OperationalControlSystem rdf:type owl:Class ;
+                          rdfs:subClassOf :InformationObject ;
+                          rdfs:comment "A system used by an operator to exercise control over the initiation, continuation, diversion, or termination of a flight."@en ;
+                          rdfs:label "Operational Control System"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#OperationalData
+:OperationalData rdf:type owl:Class ;
+                 rdfs:subClassOf :InformationObject ;
+                 rdfs:comment "Data describing the current or historical state of airport or flight operations."@en ;
+                 rdfs:label "Operational Data"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#OperationalDisruption
+:OperationalDisruption rdf:type owl:Class ;
+                       rdfs:subClassOf :Occurrence ;
+                       rdfs:comment "An unexpected disruption to planned operations."@en ;
+                       rdfs:label "Operational Disruption"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#OperationsManual
+:OperationsManual rdf:type owl:Class ;
+                  rdfs:subClassOf :Document ;
+                  rdfs:comment "A manual, approved by the regulator, describing an operator's procedures for the safe conduct of operations."@en ;
+                  rdfs:label "Operations Manual"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Organization
+:Organization rdf:type owl:Class ;
+              rdfs:subClassOf :Agent ;
+              owl:disjointWith :Person ;
+              rdfs:comment "A formally structured group that acts as a single entity within air transport."@en ;
+              rdfs:label "Organization"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Origin
+:Origin rdf:type owl:Class ;
+        rdfs:subClassOf :Location ;
+        rdfs:comment "The starting point of a flight or cargo journey."@en ;
+        rdfs:label "Origin"@en ;
+        owl:deprecated "true"^^xsd:boolean ;
+        <http://www.w3.org/2004/02/skos/core#editorialNote> "Deprecated in 0.2.0: origin/destination are roles a place plays for a shipment. Use hasOrigin/hasDestination pointing directly at an Aerodrome, Location or premises."@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#PackingCompany
+:PackingCompany rdf:type owl:Class ;
+                rdfs:subClassOf :Organization ;
+                rdfs:comment "A service provider responsible for securely packing cargo before shipment."@en ;
+                rdfs:label "Packing Company"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#PackingList
+:PackingList rdf:type owl:Class ;
+             rdfs:subClassOf :Document ;
+             rdfs:comment "A detailed list of the contents of the shipment."@en ;
+             rdfs:label "Packing List"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Parcel
+:Parcel rdf:type owl:Class ;
+        rdfs:subClassOf :Cargo ;
+        rdfs:comment "An individual shipment."@en ;
+        rdfs:label "Parcel"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Passenger
+:Passenger rdf:type owl:Class ;
+           rdfs:subClassOf :Person ;
+           rdfs:comment "An individual who travels in an aircraft but is not part of the crew."@en ;
+           rdfs:label "Passenger"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#PassengerAircraft
+:PassengerAircraft rdf:type owl:Class ;
+                   rdfs:subClassOf :Aircraft ;
+                   rdfs:comment "An aircraft primarily designed to transport passengers."@en ;
+                   rdfs:label "Passenger Aircraft"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#PassengerClass
+:PassengerClass rdf:type owl:Class ;
+                rdfs:subClassOf :Category ;
+                rdfs:comment "The category of service assigned to a passenger (e.g. economy, business)."@en ;
+                rdfs:label "Passenger Class"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#PerformanceService
+:PerformanceService rdf:type owl:Class ;
+                    rdfs:subClassOf :Service ;
+                    rdfs:comment "A service that measures and reports on airport or airline operational performance."@en ;
+                    rdfs:label "Performance Service"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Person
+:Person rdf:type owl:Class ;
+        rdfs:subClassOf :Agent ;
+        rdfs:comment "An individual human being."@en ;
+        rdfs:label "Person"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#PhysicalObject
+:PhysicalObject rdf:type owl:Class ;
+                rdfs:comment "A material entity that occupies space, such as an aircraft, item of equipment, cargo, or piece of infrastructure."@en ;
+                rdfs:label "Physical Object"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#PilotInCommand
+:PilotInCommand rdf:type owl:Class ;
+                rdfs:subClassOf :FlightCrew ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty :holdsLicense ;
+                                  owl:someValuesFrom :PilotLicense
+                                ] ;
+                rdfs:comment "The pilot designated as being in command and responsible for the safe conduct of the flight."@en ;
+                rdfs:label "Pilot in Command"@en ;
+                <http://www.w3.org/2004/02/skos/core#altLabel> "Captain"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#PilotLicense
+:PilotLicense rdf:type owl:Class ;
+              rdfs:subClassOf :Licence ;
+              rdfs:comment "A licence issued by a competent authority certifying that a pilot is qualified to act in a specified capacity."@en ;
+              rdfs:label "Pilot License"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#PolicyOrRegulation
+:PolicyOrRegulation rdf:type owl:Class ;
+                    rdfs:subClassOf :InformationObject ;
+                    rdfs:comment "A rule, standard, directive, or regulatory instrument governing air transport."@en ;
+                    rdfs:label "Policy or Regulation"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#PostOpsAnalysisService
+:PostOpsAnalysisService rdf:type owl:Class ;
+                        rdfs:subClassOf :Service ;
+                        rdfs:comment "A service that analyses completed operations to identify performance trends and improvement opportunities."@en ;
+                        rdfs:label "Post-Operations Analysis Service"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Process
+:Process rdf:type owl:Class ;
+         rdfs:comment "An activity, operation, or event that occurs over time within air transport operations."@en ;
+         rdfs:label "Process"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Pushback
+:Pushback rdf:type owl:Class ;
+          rdfs:subClassOf :GroundHandlingService ;
+          rdfs:comment "The use of a tug to move an aircraft away from its gate before taxiing."@en ;
+          rdfs:label "Pushback"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Refuelling
+:Refuelling rdf:type owl:Class ;
+            rdfs:subClassOf :GroundHandlingService ;
+            rdfs:comment "The supply of fuel to an aircraft on the ground."@en ;
+            rdfs:label "Refuelling"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#RegulatoryAuthority
+:RegulatoryAuthority rdf:type owl:Class ;
+                     rdfs:subClassOf :Organization ;
+                     rdfs:comment "A governmental or international body responsible for setting and enforcing aviation rules and standards."@en ;
+                     rdfs:label "Regulatory Authority"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Reloading
+:Reloading rdf:type owl:Class ;
+           rdfs:subClassOf :CargoHandlingOperation ;
+           rdfs:comment "The loading of sorted cargo for onward transport."@en ;
+           rdfs:label "Reloading"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#RoadNetwork
+:RoadNetwork rdf:type owl:Class ;
+             rdfs:subClassOf :Location ;
+             rdfs:comment "The interconnected system of road routes and road vehicles."@en ;
+             rdfs:label "Road Network"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Route
+:Route rdf:type owl:Class ;
+       rdfs:subClassOf :Location ;
+       rdfs:comment "A designated air corridor between two airports."@en ;
+       rdfs:label "Route"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#RoutingException
+:RoutingException rdf:type owl:Class ;
+                  rdfs:subClassOf :ShipmentException ;
+                  rdfs:comment "A routing-related exception encountered during shipment handling."@en ;
+                  rdfs:label "Routing Exception"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#RoutingInstruction
+:RoutingInstruction rdf:type owl:Class ;
+                    rdfs:subClassOf :Document ;
+                    rdfs:comment "Routing information used to direct a shipment through a sortation system."@en ;
+                    rdfs:label "Routing Instruction"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Runway
+:Runway rdf:type owl:Class ;
+        rdfs:subClassOf :Infrastructure ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :partOf ;
+                          owl:someValuesFrom :Aerodrome
+                        ] ;
+        rdfs:comment "A strip of land at an airport on which aircraft can take off and land."@en ;
+        rdfs:label "Runway"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SafetyIncident
+:SafetyIncident rdf:type owl:Class ;
+                rdfs:subClassOf :Occurrence ;
+                rdfs:comment "An occurrence involving an aircraft or aviation operation that affects or could affect safety."@en ;
+                rdfs:label "Safety Incident"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SafetyManagementSystem
+:SafetyManagementSystem rdf:type owl:Class ;
+                        rdfs:subClassOf :PolicyOrRegulation ;
+                        rdfs:comment "A systematic approach to managing safety, including the necessary organisational structures, accountabilities, policies, and procedures."@en ;
+                        rdfs:label "Safety Management System"@en ;
+                        <http://www.w3.org/2004/02/skos/core#altLabel> "SMS"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SafetyReport
+:SafetyReport rdf:type owl:Class ;
+              rdfs:subClassOf :Document ;
+              rdfs:comment "A report documenting a safety occurrence, hazard, or concern for review by safety management."@en ;
+              rdfs:label "Safety Report"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Scanner
+:Scanner rdf:type owl:Class ;
+         rdfs:subClassOf :CargoHandlingEquipment ;
+         rdfs:comment "A device that reads shipment identifiers such as barcodes or airway bill numbers."@en ;
+         rdfs:label "Scanner"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Scenario
+:Scenario rdf:type owl:Class ;
+          rdfs:subClassOf :InformationObject ;
+          rdfs:comment "A defined operational situation, used for planning or simulation of airport or flight operations."@en ;
+          rdfs:label "Scenario"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ScreeningEquipment
+:ScreeningEquipment rdf:type owl:Class ;
+                    rdfs:subClassOf :Equipment ;
+                    rdfs:comment "Equipment used to inspect passengers, baggage, or cargo for prohibited or dangerous items."@en ;
+                    rdfs:label "Screening Equipment"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ScreeningResult
+:ScreeningResult rdf:type owl:Class ;
+                 rdfs:subClassOf :Document ;
+                 rdfs:comment "The recorded result of a security screening process."@en ;
+                 rdfs:label "Screening Result"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SecurityException
+:SecurityException rdf:type owl:Class ;
+                   rdfs:subClassOf :ShipmentException ;
+                   rdfs:comment "A security-related exception encountered during shipment handling."@en ;
+                   rdfs:label "Security Exception"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SecurityScreening
+:SecurityScreening rdf:type owl:Class ;
+                   rdfs:subClassOf :Process ;
+                   rdfs:comment "A process to inspect passengers, baggage, or cargo before boarding or onward transport."@en ;
+                   rdfs:label "Security Screening"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SeriousIncident
+:SeriousIncident rdf:type owl:Class ;
+                 rdfs:subClassOf :SafetyIncident ;
+                 rdfs:comment "An occurrence, other than an accident, associated with the operation of an aircraft in which safety was seriously compromised."@en ;
+                 rdfs:label "Serious Incident"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Service
+:Service rdf:type owl:Class ;
+         rdfs:comment "A defined capability or function offered by a system, facility, or organization."@en ;
+         rdfs:label "Service"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ServiceBulletin
+:ServiceBulletin rdf:type owl:Class ;
+                 rdfs:subClassOf :Document ;
+                 rdfs:comment "A notice issued by a manufacturer recommending or describing modifications, inspections, or repairs to a product."@en ;
+                 rdfs:label "Service Bulletin"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ShipmentException
+:ShipmentException rdf:type owl:Class ;
+                   rdfs:subClassOf :Occurrence ;
+                   rdfs:comment "An unplanned event that interrupts the normal handling of a shipment."@en ;
+                   rdfs:label "Shipment Exception"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Shipper
+:Shipper rdf:type owl:Class ;
+         rdfs:subClassOf :Agent ;
+         rdfs:comment "The party that tenders goods for carriage and is named as such on the airway bill."@en ;
+         rdfs:label "Shipper"@en ;
+         <http://www.w3.org/2004/02/skos/core#altLabel> "Consignor"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ShippingInstruction
+:ShippingInstruction rdf:type owl:Class ;
+                     rdfs:subClassOf :Document ;
+                     rdfs:comment "A document outlining the exporter's request to arrange shipment."@en ;
+                     rdfs:label "Shipping Instruction"@en ;
+                     <http://www.w3.org/2004/02/skos/core#altLabel> "SI"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Slot
+:Slot rdf:type owl:Class ;
+      rdfs:subClassOf :InformationObject ;
+      rdfs:comment "An authorisation to use the full range of airport infrastructure necessary to arrive or depart at an airport on a specific date and time."@en ;
+      rdfs:label "Slot"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SmallParcel
+:SmallParcel rdf:type owl:Class ;
+             rdfs:subClassOf :Parcel ;
+             rdfs:comment "A small shipment handled separately from standard cargo."@en ;
+             rdfs:label "Small Parcel"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Sortation
+:Sortation rdf:type owl:Class ;
+           rdfs:subClassOf :CargoHandlingOperation ;
+           rdfs:comment "The automated routing of shipments through a handling facility."@en ;
+           rdfs:label "Sortation"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SortationSystem
+:SortationSystem rdf:type owl:Class ;
+                 rdfs:subClassOf :CargoHandlingEquipment ;
+                 rdfs:comment "Automated infrastructure that routes shipments to their correct destination within a facility."@en ;
+                 rdfs:label "Sortation System"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SpecialisedOperation
+:SpecialisedOperation rdf:type owl:Class ;
+                      rdfs:subClassOf :FlightOperation ;
+                      rdfs:comment "An aircraft operation involving specialised activities such as aerial survey, agriculture, or construction."@en ;
+                      rdfs:label "Specialised Operation"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SpiralChute
+:SpiralChute rdf:type owl:Class ;
+             rdfs:subClassOf :CargoHandlingEquipment ;
+             rdfs:comment "A destination-specific chute used to route sorted shipments."@en ;
+             rdfs:label "Spiral Chute"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Stakeholder
+:Stakeholder rdf:type owl:Class ;
+             rdfs:subClassOf :Agent ;
+             rdfs:comment "Any organization, role, or individual who contributes to, is affected by, or has an interest in airport or airline operations."@en ;
+             rdfs:label "Stakeholder"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SteerService
+:SteerService rdf:type owl:Class ;
+              rdfs:subClassOf :Service ;
+              rdfs:comment "A service that supports collaborative decision-making to steer airport operations."@en ;
+              rdfs:label "Steer Service"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#StorageShed
+:StorageShed rdf:type owl:Class ;
+             rdfs:subClassOf :Warehouse ;
+             rdfs:comment "A bonded holding area at the airport for cargo before loading or after unloading."@en ;
+             rdfs:label "Storage Shed"@en ;
+             <http://www.w3.org/2004/02/skos/core#altLabel> "Airside Storage Shed"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Supervisor
+:Supervisor rdf:type owl:Class ;
+            rdfs:subClassOf :GroundPersonnel ;
+            rdfs:comment "Personnel responsible for overseeing ground operations staff and activities."@en ;
+            rdfs:label "Supervisor"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SustainableAviationFuel
+:SustainableAviationFuel rdf:type owl:Class ;
+                         rdfs:subClassOf :EnergySource ;
+                         rdfs:comment "An aviation fuel derived from non-petroleum feedstocks that reduces lifecycle carbon emissions relative to conventional jet fuel."@en ;
+                         rdfs:label "Sustainable Aviation Fuel"@en ;
+                         <http://www.w3.org/2004/02/skos/core#altLabel> "SAF"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#SystemFailure
+:SystemFailure rdf:type owl:Class ;
+               rdfs:subClassOf :Occurrence ;
+               rdfs:comment "The failure of an operational system or piece of equipment."@en ;
+               rdfs:label "System Failure"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TAF
+:TAF rdf:type owl:Class ;
+     rdfs:subClassOf :Document ;
+     rdfs:comment "A coded aerodrome weather forecast used in aviation."@en ;
+     rdfs:label "TAF"@en ;
+     <http://www.w3.org/2004/02/skos/core#altLabel> "Terminal Aerodrome Forecast"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Takeoff
+:Takeoff rdf:type owl:Class ;
+         rdfs:subClassOf :FlightPhase ;
+         rdfs:comment "The phase in which an aircraft transitions from ground movement to flight."@en ;
+         rdfs:label "Takeoff"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Taxiing
+:Taxiing rdf:type owl:Class ;
+         rdfs:subClassOf :FlightPhase ;
+         rdfs:comment "The movement of an aircraft on the ground under its own power."@en ;
+         rdfs:label "Taxiing"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Taxiway
+:Taxiway rdf:type owl:Class ;
+         rdfs:subClassOf :Infrastructure ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :partOf ;
+                           owl:someValuesFrom :Aerodrome
+                         ] ;
+         rdfs:comment "A defined path at an airport on which aircraft taxi between the runway and other airport facilities."@en ;
+         rdfs:label "Taxiway"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TechnicalCrew
+:TechnicalCrew rdf:type owl:Class ;
+               rdfs:subClassOf :CrewMember ;
+               rdfs:comment "Crew members responsible for technical/engineering duties during a flight."@en ;
+               rdfs:label "Technical Crew"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Terminal
+:Terminal rdf:type owl:Class ;
+          rdfs:subClassOf :Infrastructure ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :partOf ;
+                            owl:someValuesFrom :Aerodrome
+                          ] ;
+          rdfs:comment "A building at an airport where passengers transfer between ground transport and their aircraft."@en ;
+          rdfs:label "Terminal"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TomographyMachine
+:TomographyMachine rdf:type owl:Class ;
+                   rdfs:subClassOf :ScreeningEquipment ;
+                   rdfs:comment "3D X-ray computed tomography screening equipment used for advanced security inspection."@en ;
+                   rdfs:label "Tomography Machine"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TradeAssociation
+:TradeAssociation rdf:type owl:Class ;
+                  rdfs:subClassOf :Organization ;
+                  rdfs:comment "An industry body representing member organisations and setting non-binding commercial or operational standards."@en ;
+                  rdfs:label "Trade Association"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Training
+:Training rdf:type owl:Class ;
+          rdfs:subClassOf :Process ;
+          rdfs:comment "An activity intended to develop or maintain the competence of aviation personnel."@en ;
+          rdfs:label "Training"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TrainingFlight
+:TrainingFlight rdf:type owl:Class ;
+                rdfs:subClassOf :Flight ;
+                rdfs:comment "A flight conducted for the purpose of crew training."@en ;
+                rdfs:label "Training Flight"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TrainingInstructor
+:TrainingInstructor rdf:type owl:Class ;
+                    rdfs:subClassOf :GroundPersonnel ;
+                    rdfs:comment "Personnel responsible for delivering training to aviation staff."@en ;
+                    rdfs:label "Training Instructor"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TrainingProgramme
+:TrainingProgramme rdf:type owl:Class ;
+                   rdfs:subClassOf :Training ;
+                   rdfs:comment "A structured programme of instruction for personnel."@en ;
+                   rdfs:label "Training Programme"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TransitFlight
+:TransitFlight rdf:type owl:Class ;
+               owl:equivalentClass [ owl:intersectionOf ( :Flight
+                                                          [ rdf:type owl:Restriction ;
+                                                            owl:onProperty :hasIntermediateStop ;
+                                                            owl:someValuesFrom :Aerodrome
+                                                          ]
+                                                        ) ;
+                                     rdf:type owl:Class
+                                   ] ;
+               rdfs:subClassOf :Flight ;
+               rdfs:comment "A flight that includes one or more stops before reaching the final destination."@en ;
+               rdfs:label "Transit Flight"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TransportBag
+:TransportBag rdf:type owl:Class ;
+              rdfs:subClassOf :Equipment ;
+              rdfs:comment "A reusable bag used to consolidate small parcels for handling."@en ;
+              rdfs:label "Transport Bag"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TransportMode
+:TransportMode rdf:type owl:Class ;
+               rdfs:subClassOf :Category ;
+               rdfs:comment "A classification of the mode used to move goods or passengers."@en ;
+               rdfs:label "Transport Mode"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TravelAgency
+:TravelAgency rdf:type owl:Class ;
+              rdfs:subClassOf :Organization ;
+              rdfs:comment "An organization that sells flights and travel services to passengers on behalf of airlines."@en ;
+              rdfs:label "Travel Agency"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TypeCertificate
+:TypeCertificate rdf:type owl:Class ;
+                 rdfs:subClassOf :Certificate ;
+                 rdfs:comment "A certificate issued by a regulatory authority approving the design of an aircraft type as meeting applicable safety standards."@en ;
+                 rdfs:label "Type Certificate"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#TypeRating
+:TypeRating rdf:type owl:Class ;
+            rdfs:subClassOf :Certificate ;
+            rdfs:comment "A qualification, endorsed on a pilot's licence, permitting them to operate a specific aircraft type."@en ;
+            rdfs:label "Type Rating"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ULD
+:ULD rdf:type owl:Class ;
+     rdfs:subClassOf :CargoContainer ;
+     rdfs:comment "A container or pallet used to consolidate cargo for easier handling and loading onto an aircraft."@en ;
+     rdfs:label "ULD"@en ;
+     <http://www.w3.org/2004/02/skos/core#altLabel> "Unit Load Device"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#UnmannedAircraftSystem
+:UnmannedAircraftSystem rdf:type owl:Class ;
+                        rdfs:subClassOf :Aircraft ;
+                        rdfs:comment "An aircraft and its associated remote-control equipment operated without a pilot on board."@en ;
+                        rdfs:label "Unmanned Aircraft System"@en ;
+                        <http://www.w3.org/2004/02/skos/core#altLabel> "Drone"@en ,
+                                                                       "UAS"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#Warehouse
+:Warehouse rdf:type owl:Class ;
+           rdfs:subClassOf :Infrastructure ;
+           rdfs:comment "A facility for storing goods before or after transportation."@en ;
+           rdfs:label "Warehouse"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#XRayMachine
+:XRayMachine rdf:type owl:Class ;
+             rdfs:subClassOf :ScreeningEquipment ;
+             rdfs:comment "Security screening equipment that uses X-rays to inspect the contents of baggage or cargo."@en ;
+             rdfs:label "X-Ray Machine"@en .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#CORSIA
+:CORSIA rdf:type owl:NamedIndividual ,
+                 :EnvironmentalRegulation ;
+        rdfs:comment "The Carbon Offsetting and Reduction Scheme for International Aviation, an ICAO scheme to offset growth in international aviation CO2 emissions."@en ;
+        rdfs:label "CORSIA"@en ;
+        <http://www.w3.org/2004/02/skos/core#altLabel> "Carbon Offsetting and Reduction Scheme for International Aviation"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#DangerousGoodsCargoType
+:DangerousGoodsCargoType rdf:type owl:NamedIndividual ,
+                                  :CargoType ;
+                         rdfs:comment "The cargo-type value for goods classified as dangerous under the ICAO Technical Instructions / IATA DGR."@en ;
+                         rdfs:label "Dangerous goods (cargo type)"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#EASA
+:EASA rdf:type owl:NamedIndividual ,
+               :RegulatoryAuthority ;
+      rdfs:comment "The European Union Aviation Safety Agency, responsible for civil aviation safety regulation in the EU."@en ;
+      rdfs:label "EASA"@en ;
+      <http://www.w3.org/2004/02/skos/core#altLabel> "European Union Aviation Safety Agency"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#FAA
+:FAA rdf:type owl:NamedIndividual ,
+              :RegulatoryAuthority ;
+     rdfs:comment "The Federal Aviation Administration, the United States' national aviation authority."@en ;
+     rdfs:label "FAA"@en ;
+     <http://www.w3.org/2004/02/skos/core#altLabel> "Federal Aviation Administration"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#IATA
+:IATA rdf:type owl:NamedIndividual ,
+               :TradeAssociation ;
+      rdfs:comment "The International Air Transport Association, the trade body for the world's airlines that sets commercial and operational industry standards. It is not a regulator."@en ;
+      rdfs:label "IATA"@en ;
+      <http://www.w3.org/2004/02/skos/core#altLabel> "International Air Transport Association"@en .
+
+
+###  http://www.cranfield.ac.uk/ontology/air-domain#ICAO
+:ICAO rdf:type owl:NamedIndividual ,
+               :RegulatoryAuthority ;
+      rdfs:comment "The International Civil Aviation Organization, a UN agency that sets global standards and recommended practices for civil aviation."@en ;
+      rdfs:label "ICAO"@en ;
+      <http://www.w3.org/2004/02/skos/core#altLabel> "International Civil Aviation Organization"@en .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Agent
+                :Category
+                :InformationObject
+                :Location
+                :Measurement
+                :Process
+                :Service
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Approach
+                :Cruise
+                :Landing
+                :Takeoff
+                :Taxiing
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Category
+                :InformationObject
+                :Location
+                :Measurement
+                :PhysicalObject
+                :Process
+                :Service
+              )
+] .
+
+
+###  Generated by the OWL API (version 5.1.18) https://github.com/owlcs/owlapi/
