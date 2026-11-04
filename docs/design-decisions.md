@@ -12,6 +12,7 @@ is final.
 | core | `https://www.cranfield.ac.uk/transit/core` | IOF Core (hence BFO) | everything that is true of transport regardless of mode |
 | road, rail, air, maritime | `https://www.cranfield.ac.uk/transit/<mode>` | core | vehicles, ways, terminals and travel legs of one mode |
 | rail-road, air-road, rail-maritime, road-maritime, air-maritime, air-rail | `https://www.cranfield.ac.uk/transit/<a>-<b>` | the two mode modules | terminals that connect two modes, journeys that use both, transshipments between them |
+| freight, passenger | `https://www.cranfield.ac.uk/transit/freight`, `.../passenger` | core | what is moved (consignments) and who is moved (passengers), independent of mode (section 8) |
 | air-domain | `https://www.cranfield.ac.uk/transit/air-domain` | air, road, Air Domain Ontology | bridge hanging the Air Domain Ontology under TransiT (section 6) |
 | all | `https://www.cranfield.ac.uk/transit/all` | the six intersections and the bridge | convenience entry point |
 
@@ -135,7 +136,32 @@ plus 254 air classes, is consistent under HermiT.
 material fuel), `ad:Terminal` (an airport building, not a transfer node), and
 `ad:hasPart`/`ad:partOf` (used for both continuants and occurrents).
 
-## 7. Known open issues
+## 8. Version 0.5: freight and passenger movement
+
+A coverage review found that the ontology described vehicles, infrastructure, energy and
+emissions in detail but what is moved only as "a leg carries a payload". Version 0.5 adds
+the missing layer, split into a core part and two cross-cutting modules.
+
+| Topic | Decision | Why |
+|---|---|---|
+| Vehicle run versus carried leg | `VehicleRun` is a travel leg that is one vehicle's movement. The legs of passengers and consignments aboard are separate travel legs `carriedBy` the run; `carriedBy` is a sub-property of BFO *occurrent part of*. `ConsignmentLeg` and `PassengerLeg` are both disjoint from `VehicleRun`. | one bus run carries many passenger journeys and one truck round many consignments; load factor, groupage and allocating a run's emissions to what it carried are inexpressible without the split |
+| No property chain from run to leg | `carriedBy o operatedByVehicle -> operatedByVehicle` was considered and rejected: it makes `operatedByVehicle` non-simple, and `TravelLeg` carries a cardinality on it. Data must assert the vehicle on carried legs for mode classification. A SPARQL rule can propagate it. | stay in OWL 2 DL |
+| Services and operators | `TransportService` is an IOF commercial service specification `offeredBy` a `TransportOperator`; runs `realiseService`. `CarrierRole` is now a sub-role of `TransportOperatorRole`. `Line` (passenger) is a service with at least two stops; `TimetabledRun` is a run that realises a line. | the offering, the operator and the realisation are three different things |
+| Stops and calls | `Stop` is a transfer node at which runs call; `StopCall` is the dwell process at one stop (arrival to departure), part of the run. `LoadingBay` (freight) and `Platform` (passenger) attach here. | boarding, alighting, loading and unloading happen at calls, and time slots are booked for them |
+| Capacity and load | `Occupancy` and `LoadFactor` are measured value expressions on runs; `TransportWork` (tonne-km, passenger-km) on movements; `MassAmount` and `VolumeAmount` on material entities. `SeatedCapacity` and `StandingCapacity` are design specifications. | the denominators of every emission-intensity figure |
+| Status | `TransportStatus` is a value expression; the freight and passenger modules provide the individuals (booked, collected, in transit, delivered; scheduled, boarded, completed, cancelled). Handling processes are modelled separately as processes. | track-and-trace states are information about a movement, not kinds of movement |
+| Bookings, documents, prices | `Booking` is an agreement that `books` a service or run; `TransportDocument` is an information content entity that `documents` a movement, payload or booking; `Tariff` prescribes a `MonetaryAmount` whose unit is a QUDT currency. Freight: `Waybill` and its kinds, `ProofOfDelivery`, `CustomsDeclaration`, `TransportOrder`, `FreightRate`. Passenger: `Ticket`, `Reservation`, `Fare`, `FareClass`. | contracts and evidence were entirely absent |
+| Consignments | `Consignment` is a payload with a shipper and a consignee, the unit of contract and tracking. `FreightJourney` is its journey. `EmptyRun` is a defined class: a vehicle run with no payload. | the unit of freight transport |
+| Kinds of goods | Dangerous, perishable, temperature-controlled, live animals, oversized, high-value and bulk are subclasses of `Payload`; containerised and palletised are defined by being part of a container or pallet. Cargo units: `Container`, `SwapBody`, `Pallet`, `Parcel`. | handling needs drive mode, vehicle and cost |
+| Delivery terms | `DeliveryTerm` value expression with six Incoterms 2020 individuals. | who pays and where risk passes |
+| Handling processes | `HandlingProcess` (a planned process that `handlesPayload`) with Pickup, Delivery, Loading, Unloading, Storage, Picking, Packing, Consolidation, Deconsolidation, CrossDocking, CustomsClearance, Inspection, ReturnOfEmpties. `Transshipment` in the core is left as is; `Interchange` (passenger) is a transshipment made by the passengers themselves. | the nodes of a freight event chain |
+| Freight nodes | `Warehouse`, `DistributionCentre` (also a transfer node), `Depot`, `CrossDock`, `ContainerYard`, `LoadingBay`, `DockAppointment` (a time slot). | the places handling happens |
+| Passenger journeys | `PassengerLeg` boards and alights at stops; `PassengerJourney` is made of passenger and pedestrian legs with a `TripPurpose`. `PassengerGroup`, `Luggage` (payload that accompanies a passenger). | the passenger's trip is not the bus's run |
+| Services for people | `PublicTransportService`, `SharedMobilityService` with demand-responsive, ride-hailing, car-sharing and bike-sharing, `TransportAuthority`. | shared mobility is not timetabled public transport |
+| Accessibility | `AccessibilityNeed` on passengers and `AccessibilityFeature` on infrastructure and vehicles share four individuals (wheelchair, step-free, visual, hearing); `ReducedMobilityPassenger` is defined. | needs and provisions must be matchable |
+| Service quality | `Cancellation` (core), `MissedConnection`, `Punctuality`, `Headway`. | the quality measures that passengers notice |
+
+## 9. Known open issues
 
 - `Electricity` is a material resource by convention. A process-based model would be
   cleaner but would change every energy property.

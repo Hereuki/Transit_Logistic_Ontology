@@ -21,12 +21,17 @@
     rdfs:comment "Classes annotated with iof-av:adaptedFrom an IES4 IRI are TransiT's own terms placed under BFO and IOF Core; IES4 is a 4D ontology and is not imported. Extension points for mode modules: Vehicle, TravelLeg, Infrastructure, TransportWay, TransferNode, Terminal, the TransportMode individuals and the hasTransportMode property."@en ;
     owl:imports <https://spec.industrialontologies.org/ontology/202401/core/Core/> ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/core/2025-11> ;
-    owl:versionInfo "0.4.0" .
+    owl:versionInfo "0.5.0" .
 
 :Byproduct a owl:Class ;
     rdfs:label "Byproduct"@en ;
     rdfs:subClassOf :MaterialResidual ;
     iof-av:naturalLanguageDefinition "A secondary material or substance that is produced during the manufacturing or chemical process, which is not the primary product but may have commercial value or potential reuse."@en .
+
+:Cancellation a owl:Class ;
+    rdfs:label "Cancellation"@en ;
+    rdfs:subClassOf :Disruption ;
+    iof-av:naturalLanguageDefinition "A disruption in which a scheduled movement does not take place."@en .
 
 :CarbonDioxideEmission a owl:Class ;
     rdfs:label "Carbon Dioxide Emission"@en ;
@@ -96,7 +101,7 @@
 
 :ChargingPoint a owl:Class ;
     rdfs:label "Charging Point"@en ;
-    rdfs:comment """A charging station can have one or multilpe charging point, and a charging point have 1+charger.\r
+    rdfs:comment """A charging station can have one or multilpe charging point, and a charging point have 1+charger.\r\r
 Each charging point belongs to a specific energy provider, e.g. tesla, total""" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:onProperty iof:hasComponentPartAtSomeTime ;
@@ -171,7 +176,7 @@ Each charging point belongs to a specific energy provider, e.g. tesla, total""" 
     owl:disjointWith :EnergyChargerRole ;
     skos:example "A battery being charged in a power system,  a vehicle whose tank is being fueled in a gaz station, a capacitor in an electronic circuit"@en ;
     iof-av:naturalLanguageDefinition "A role assumed by an entity that receives energy."@en ;
-    iof-av:synonym """Powered Device Role\r
+    iof-av:synonym """Powered Device Role\r\r
 Receiving device role""" .
 
 :EnergyGenerationProcess a owl:Class ;
@@ -188,6 +193,17 @@ Receiving device role""" .
                         owl:someValuesFrom :EnergyProviderRole ] ) ] ;
     skos:example "Entreprice such as Total, EDF"@en ;
     iof-av:naturalLanguageDefinition "A supplier that offers to sell or provide an energy carrier, e.g. fuel or electricity."@en .
+
+:Fleet a owl:Class ;
+    rdfs:label "Fleet"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty obo:BFO_0000115 ;
+            owl:someValuesFrom :Vehicle ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom :Vehicle ;
+            owl:onProperty obo:BFO_0000115 ],
+        :GroupOfArtifacts ;
+    iof-av:naturalLanguageDefinition "A group of vehicles operated by one transport operator."@en .
 
 :FuelStation a owl:Class ;
     rdfs:label "Fuel Station"@en ;
@@ -286,6 +302,14 @@ Receiving device role""" .
     iof-av:naturalLanguageDefinition "A CorrespondencePort is a specialized correspondence equipped with facilities for mode transitions, cargo handling, or passenger services, typically hosting more complex operations than a simple rest stop."@en,
         "A transfer node equipped with facilities for mode transitions, cargo handling or passenger services. Mode modules add airports, seaports, railway stations and road terminals; intersection modules define the terminals that connect two modes. Replaces the earlier class CorrespondencePort."@en .
 
+:TimeSlot a owl:Class ;
+    rdfs:label "Time Slot"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty iof:prescribes ;
+            owl:someValuesFrom :StopCall ],
+        :Schedule ;
+    iof-av:naturalLanguageDefinition "A schedule that prescribes the time window within which one vehicle run may call at one node: a dock appointment at a warehouse, an airport slot, a berth window."@en .
+
 :TransportCapacityDesignSpecification a owl:Class ;
     rdfs:label "Transport Capacity Design Specification"@en ;
     rdfs:subClassOf :TransportDesignSpecification ;
@@ -326,12 +350,35 @@ Receiving device role""" .
     rdfs:subClassOf :PhysicalQuality ;
     iof-av:naturalLanguageDefinition "A physical quality that is the mass of an entity."@en .
 
+:callsAt a owl:ObjectProperty ;
+    rdfs:label "calls at"@en ;
+    rdfs:domain :VehicleRun ;
+    rdfs:range :Stop ;
+    rdfs:subPropertyOf :passesBy ;
+    iof-av:naturalLanguageDefinition "Relates a vehicle run to a stop it calls at between its origin and its destination."@en .
+
+:carriedBy a owl:ObjectProperty ;
+    rdfs:label "carried by"@en ;
+    rdfs:domain :TravelLeg ;
+    rdfs:range :VehicleRun ;
+    rdfs:subPropertyOf obo:BFO_0000132 ;
+    owl:inverseOf :carries ;
+    iof-av:naturalLanguageDefinition "Relates a passenger's or consignment's travel leg to the vehicle run it is an occurrent part of. Allocating the run's energy and emissions across what it carried goes through this relation."@en .
+
 :chargesEnergy a owl:ObjectProperty ;
     rdfs:label "charges Energy"@en ;
     rdfs:domain :EnergyCharger ;
     rdfs:range :EnergyCarrier ;
     rdfs:subPropertyOf :appliesEnergy ;
     iof-av:naturalLanguageDefinition "Relates an energy charger to the energy it delivers to another device or vehicle."@en .
+
+:documents a owl:ObjectProperty ;
+    rdfs:label "documents"@en ;
+    rdfs:domain :TransportDocument ;
+    rdfs:range [ a owl:Class ;
+            owl:unionOf ( :Movement :Payload :Booking ) ] ;
+    rdfs:subPropertyOf iof:isAbout ;
+    iof-av:naturalLanguageDefinition "Relates a transport document to the movement, payload or booking it is about."@en .
 
 :drives a owl:ObjectProperty ;
     rdfs:label "drives"@en ;
@@ -355,15 +402,17 @@ Receiving device role""" .
     rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ;
     iof-av:naturalLanguageDefinition "Relates a process or material entity to an energy amount that quantifies the energy it consumes, delivers or contains."@en .
 
+:hasMass a owl:ObjectProperty ;
+    rdfs:label "has mass"@en ;
+    rdfs:domain obo:BFO_0000040 ;
+    rdfs:range :MassAmount ;
+    rdfs:subPropertyOf :hasMeasuredDimensionValueAtSomeTime ;
+    iof-av:naturalLanguageDefinition "Relates a material entity, e.g. a consignment or a vehicle, to a value expression of its mass."@en .
+
 :hasMeasuredCostValueAtSomeTime a owl:ObjectProperty ;
     rdfs:label "has Measured Cost Value At Some Time"@en ;
     rdfs:subPropertyOf iof:hasMeasuredValueAtSomeTime ;
     iof-av:naturalLanguageDefinition "Relates an entity to a value expression of its measured monetary cost."@en .
-
-:hasMeasuredDimensionValueAtSomeTime a owl:ObjectProperty ;
-    rdfs:label "has Measured Dimension Value At Some Time"@en ;
-    rdfs:subPropertyOf iof:hasMeasuredValueAtSomeTime ;
-    iof-av:naturalLanguageDefinition "Relates an entity to a value expression of a measured dimension, e.g. length or weight."@en .
 
 :hasMeasuredTemporalValueAtSomeTime a owl:ObjectProperty ;
     rdfs:label "has Measured Temporal Value At Some Time"@en ;
@@ -382,6 +431,14 @@ Receiving device role""" .
     rdfs:subPropertyOf iof:hasSimpleExpressionValue ;
     iof-av:naturalLanguageDefinition "The numerical value carried by a value expression."@en .
 
+:hasOccupancy a owl:ObjectProperty ;
+    rdfs:label "has occupancy"@en ;
+    rdfs:domain :VehicleRun ;
+    rdfs:range [ a owl:Class ;
+            owl:unionOf ( :Occupancy :LoadFactor ) ] ;
+    rdfs:subPropertyOf iof:hasMeasuredValueAtSomeTime ;
+    iof-av:naturalLanguageDefinition "Relates a vehicle run to its measured occupancy or load factor."@en .
+
 :hasPayload a owl:ObjectProperty ;
     rdfs:label "has Payload"@en ;
     rdfs:comment "put under is carrier of" ;
@@ -397,6 +454,27 @@ Receiving device role""" .
     rdfs:subPropertyOf obo:BFO_0000057 ;
     iof-av:naturalLanguageDefinition "Relates a process to the agent that produces its output."@en .
 
+:hasTariff a owl:ObjectProperty ;
+    rdfs:label "has tariff"@en ;
+    rdfs:domain :TransportService ;
+    rdfs:range :Tariff ;
+    iof-av:naturalLanguageDefinition "Relates a transport service to a tariff that prices it."@en .
+
+:hasTransportStatus a owl:ObjectProperty ;
+    rdfs:label "has transport status"@en ;
+    rdfs:domain [ a owl:Class ;
+            owl:unionOf ( :Movement :Payload ) ] ;
+    rdfs:range :TransportStatus ;
+    rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ;
+    iof-av:naturalLanguageDefinition "Relates a movement or a payload to its transport status at some time."@en .
+
+:hasTransportWork a owl:ObjectProperty ;
+    rdfs:label "has transport work"@en ;
+    rdfs:domain :Movement ;
+    rdfs:range :TransportWork ;
+    rdfs:subPropertyOf iof:hasMeasuredValueAtSomeTime ;
+    iof-av:naturalLanguageDefinition "Relates a movement to the transport work it performed."@en .
+
 :hasUnit a owl:DatatypeProperty ;
     rdfs:label "has Unit"@en ;
     rdfs:comment "Deprecated since 0.4.0: use hasMeasurementUnit with a QUDT unit individual instead."@en ;
@@ -404,6 +482,13 @@ Receiving device role""" .
     rdfs:subPropertyOf iof:hasSimpleExpressionValue ;
     owl:deprecated true ;
     iof-av:naturalLanguageDefinition "The unit of measure, as a string, of the numerical value carried by a value expression."@en .
+
+:hasVolume a owl:ObjectProperty ;
+    rdfs:label "has volume"@en ;
+    rdfs:domain obo:BFO_0000040 ;
+    rdfs:range :VolumeAmount ;
+    rdfs:subPropertyOf :hasMeasuredDimensionValueAtSomeTime ;
+    iof-av:naturalLanguageDefinition "Relates a material entity to a value expression of its volume."@en .
 
 :isCarbonNeutral a owl:DatatypeProperty ;
     rdfs:label "is Carbon Neutral"@en ;
@@ -443,14 +528,6 @@ Receiving device role""" .
     owl:inverseOf :ownedBy ;
     iof-av:naturalLanguageDefinition "Relates a person or organization to a material entity it owns."@en .
 
-:passesBy a owl:ObjectProperty ;
-    rdfs:label "passes By"@en ;
-    rdfs:domain [ a owl:Class ;
-            owl:unionOf ( :Movement :Route ) ] ;
-    rdfs:range [ a owl:Class ;
-            owl:unionOf ( :Location :Infrastructure ) ] ;
-    iof-av:naturalLanguageDefinition "Relates a movement or a route to an intermediate location or infrastructure it passes through."@en .
-
 :plannedEndTime a owl:DatatypeProperty ;
     rdfs:label "planned end time"@en ;
     rdfs:domain :Schedule ;
@@ -462,6 +539,12 @@ Receiving device role""" .
     rdfs:domain :Schedule ;
     rdfs:range xsd:dateTimeStamp ;
     iof-av:naturalLanguageDefinition "The time stamp at which a schedule prescribes a movement to start. The actual start is recorded on the movement with startsAtTimeInstance."@en .
+
+:realisesService a owl:ObjectProperty ;
+    rdfs:label "realises service"@en ;
+    rdfs:domain :VehicleRun ;
+    rdfs:range :TransportService ;
+    iof-av:naturalLanguageDefinition "Relates a vehicle run to the transport service it is an instance of, e.g. a bus run to its line."@en .
 
 :usesEnergy a owl:ObjectProperty ;
     rdfs:label "uses Energy"@en ;
@@ -489,8 +572,8 @@ Receiving device role""" .
 
 :CarrierRole a owl:Class ;
     rdfs:label "Carrier Role"@en ;
-    rdfs:subClassOf iof:ServiceProviderRole ;
-    iof-av:naturalLanguageDefinition "A service provider role held by an organization or person that performs the transport of payload or passengers on behalf of another party."@en .
+    rdfs:subClassOf :TransportOperatorRole ;
+    iof-av:naturalLanguageDefinition "A transport operator role held by an organization or person that performs the transport of a consignment on behalf of a shipper."@en .
 
 :ConsigneeRole a owl:Class ;
     rdfs:label "Consignee Role"@en ;
@@ -608,20 +691,27 @@ Receiving device role""" .
     rdfs:subClassOf obo:BFO_0000019 ;
     iof-av:naturalLanguageDefinition "A quality pertaining to the shape, size or spatial extent of an entity."@en .
 
-:GroupOfArtifacts a owl:Class ;
-    rdfs:label "Group Of Artifacts"@en ;
-    rdfs:subClassOf obo:BFO_0000027 ;
-    owl:equivalentClass [ a owl:Class ;
-            owl:intersectionOf ( obo:BFO_0000027 [ a owl:Restriction ;
-                        owl:onProperty obo:BFO_0000115 ;
-                        owl:someValuesFrom iof:MaterialArtifact ] [ a owl:Restriction ;
-                        owl:allValuesFrom iof:MaterialArtifact ;
-                        owl:onProperty obo:BFO_0000115 ] ) ] ;
-    iof-av:naturalLanguageDefinition "An object aggregate whose member parts are material artifacts."@en .
+:LoadFactor a owl:Class ;
+    rdfs:label "Load Factor"@en ;
+    rdfs:subClassOf iof:MeasuredValueExpression ;
+    iof-av:naturalLanguageDefinition "A measured value expression of the ratio between the occupancy of a vehicle run and its capacity, between 0 and 1."@en .
 
 :MaritimeMode a owl:NamedIndividual,
         :TransportMode ;
     rdfs:label "maritime mode"@en .
+
+:MassAmount a owl:Class ;
+    rdfs:label "Mass Amount"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :hasMeasurementUnit ;
+            owl:someValuesFrom qudt:Unit ],
+        iof:ValueExpression ;
+    iof-av:naturalLanguageDefinition "A value expression of a mass, with a numerical value and a unit such as kilogram or tonne."@en .
+
+:Occupancy a owl:Class ;
+    rdfs:label "Occupancy"@en ;
+    rdfs:subClassOf iof:MeasuredValueExpression ;
+    iof-av:naturalLanguageDefinition "A measured value expression of how much of a vehicle run's capacity is in use: a count of passengers aboard, or the mass or volume of payload loaded."@en .
 
 :Order a owl:Class ;
     rdfs:label "Order"@en ;
@@ -655,28 +745,52 @@ Receiving device role""" .
 :Scope1 a owl:NamedIndividual,
         :GHGProtocolScope ;
     rdfs:label "scope 1"@en ;
-    iof-av:naturalLanguageDefinition """Scope 1 includes all direct emissions that are generated from sources that are directly owned or controlled by an organisation. These include the use of natural gas at local or international sites, using liquid fuels to run a fleet of owned vehicles, or gases leaking from air-conditioning and refrigeration units.  \r
-\r
+    iof-av:naturalLanguageDefinition """Scope 1 includes all direct emissions that are generated from sources that are directly owned or controlled by an organisation. These include the use of natural gas at local or international sites, using liquid fuels to run a fleet of owned vehicles, or gases leaking from air-conditioning and refrigeration units.  \r\r
+\r\r
 Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/"""@en .
 
 :Scope2 a owl:NamedIndividual,
         :GHGProtocolScope ;
     rdfs:label "scope 2"@en ;
-    iof-av:naturalLanguageDefinition """Scope 2 includes all indirect emissions from the generation of the electricity purchased and used by an organisation at local or international sites. These emissions can be measured as location-based or market-based. \r
-\r
+    iof-av:naturalLanguageDefinition """Scope 2 includes all indirect emissions from the generation of the electricity purchased and used by an organisation at local or international sites. These emissions can be measured as location-based or market-based. \r\r
+\r\r
 Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/"""@en .
 
 :Scope3 a owl:NamedIndividual,
         :GHGProtocolScope ;
     rdfs:label "scope 3"@en ;
-    iof-av:naturalLanguageDefinition """Scope 3 includes all indirect emissions that occur in an organisation’s value chain – so activities that they do not own or control. These are usually the greatest share of an organisation’s carbon footprint, covering emissions associated with the following 15 categories. There are also additional categories you can measure, such as home working emissions.  \r
-\r
+    iof-av:naturalLanguageDefinition """Scope 3 includes all indirect emissions that occur in an organisation’s value chain – so activities that they do not own or control. These are usually the greatest share of an organisation’s carbon footprint, covering emissions associated with the following 15 categories. There are also additional categories you can measure, such as home working emissions.  \r\r
+\r\r
 Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/"""@en .
 
 :ShipperRole a owl:Class ;
     rdfs:label "Shipper Role"@en ;
     rdfs:subClassOf iof:CustomerRole ;
     iof-av:naturalLanguageDefinition "A customer role held by the party that consigns payload to a carrier for transport."@en .
+
+:StopCall a owl:Class ;
+    rdfs:label "Stop Call"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty obo:BFO_0000132 ;
+            owl:someValuesFrom :VehicleRun ],
+        [ a owl:Restriction ;
+            owl:onProperty obo:BFO_0000066 ;
+            owl:someValuesFrom :Stop ],
+        obo:BFO_0000015 ;
+    iof-av:naturalLanguageDefinition "The process, part of a vehicle run, of the vehicle dwelling at one stop: from arrival (starts at time instance) to departure (ends at time instance). Passengers board and alight and consignments are loaded and unloaded during a stop call."@en .
+
+:Tariff a owl:Class ;
+    rdfs:label "Tariff"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :hasMonetaryAmount ;
+            owl:someValuesFrom :MonetaryAmount ],
+        iof:InformationContentEntity ;
+    iof-av:naturalLanguageDefinition "An information content entity that prescribes the price of a transport service under given conditions: a passenger fare or a freight rate."@en .
+
+:TransportDocument a owl:Class ;
+    rdfs:label "Transport Document"@en ;
+    rdfs:subClassOf iof:InformationContentEntity ;
+    iof-av:naturalLanguageDefinition "An information content entity that accompanies or evidences a transport: a ticket, a waybill, a bill of lading, a proof of delivery, a customs declaration."@en .
 
 :TransportEmissionDesignSpecification a owl:Class ;
     rdfs:label "TransportEmissionDesignSpecification"@en ;
@@ -693,6 +807,41 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     rdfs:label "TransportSpeedDesignSpecification"@en ;
     rdfs:subClassOf :TransportDesignSpecification ;
     iof-av:naturalLanguageDefinition "A TransportSpeedDesignSpecification is a transport design specification that prescribes speed constraints, performance envelopes, or operational velocity guidelines for a transport system or vehicle."@en .
+
+:TransportStatus a owl:Class ;
+    rdfs:label "Transport Status"@en ;
+    rdfs:subClassOf iof:ValueExpression ;
+    iof-av:naturalLanguageDefinition "A value expression that classifies the current state of a movement or of what it carries, for track and trace: booked, collected, in transit, delivered, cancelled. The freight and passenger modules provide the individuals."@en .
+
+:TransportWork a owl:Class ;
+    rdfs:label "Transport Work"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :hasMeasurementUnit ;
+            owl:someValuesFrom qudt:Unit ],
+        iof:MeasuredValueExpression ;
+    iof-av:naturalLanguageDefinition "A measured value expression of the transport performed by a movement: tonne-kilometres for freight or passenger-kilometres for people. The usual denominator for emission intensity."@en .
+
+:VolumeAmount a owl:Class ;
+    rdfs:label "Volume Amount"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :hasMeasurementUnit ;
+            owl:someValuesFrom qudt:Unit ],
+        iof:ValueExpression ;
+    iof-av:naturalLanguageDefinition "A value expression of a volume, with a numerical value and a unit such as cubic metre."@en .
+
+:books a owl:ObjectProperty ;
+    rdfs:label "books"@en ;
+    rdfs:domain :Booking ;
+    rdfs:range [ a owl:Class ;
+            owl:unionOf ( :TransportService :VehicleRun ) ] ;
+    iof-av:naturalLanguageDefinition "Relates a booking to the transport service or vehicle run on which capacity is reserved."@en .
+
+:carries a owl:ObjectProperty ;
+    rdfs:label "carries"@en ;
+    rdfs:domain :VehicleRun ;
+    rdfs:range :TravelLeg ;
+    rdfs:subPropertyOf obo:BFO_0000117 ;
+    iof-av:naturalLanguageDefinition "Relates a vehicle run to a passenger or consignment travel leg that is an occurrent part of it. Inverse of carried by."@en .
 
 :disrupts a owl:ObjectProperty ;
     rdfs:label "disrupts"@en ;
@@ -719,6 +868,13 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     rdfs:range :TravelLeg ;
     iof-av:naturalLanguageDefinition "Relates a transshipment to the travel leg that delivered the payload to the transfer node."@en .
 
+:hasCurrency a owl:ObjectProperty ;
+    rdfs:label "has currency"@en ;
+    rdfs:domain :MonetaryAmount ;
+    rdfs:range qudt:Unit ;
+    rdfs:subPropertyOf :hasMeasurementUnit ;
+    iof-av:naturalLanguageDefinition "Relates a monetary amount to its currency, a QUDT currency unit."@en .
+
 :hasGHGProtocolScope a owl:ObjectProperty ;
     rdfs:label "has GHG Protocol scope"@en ;
     rdfs:domain :EmissionScopeAssignment ;
@@ -726,12 +882,11 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ;
     iof-av:naturalLanguageDefinition "Relates an emission scope assignment to the scope it assigns."@en .
 
-:hasMeasurementUnit a owl:ObjectProperty ;
-    rdfs:label "has measurement unit"@en ;
-    rdfs:domain iof:ValueExpression ;
-    rdfs:range qudt:Unit ;
-    rdfs:seeAlso qudt:unit ;
-    iof-av:naturalLanguageDefinition "Relates a value expression to the QUDT unit in which its numerical value is expressed. Replaces the string property hasUnit."@en .
+:hasMonetaryAmount a owl:ObjectProperty ;
+    rdfs:label "has monetary amount"@en ;
+    rdfs:range :MonetaryAmount ;
+    rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ;
+    iof-av:naturalLanguageDefinition "Relates a tariff, booking, document or process to a monetary amount: a price, a cost, a charge."@en .
 
 :hasReportingOrganization a owl:ObjectProperty ;
     rdfs:label "has reporting organization"@en ;
@@ -759,11 +914,25 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     rdfs:subPropertyOf :participatesInMovement ;
     iof-av:naturalLanguageDefinition "Relates a vehicle to a movement it operates. Inverse of operated by vehicle."@en .
 
+:offeredBy a owl:ObjectProperty ;
+    rdfs:label "offered by"@en ;
+    rdfs:domain :TransportService ;
+    rdfs:range :TransportOperator ;
+    iof-av:naturalLanguageDefinition "Relates a transport service to the operator that offers it."@en .
+
 :ownedBy a owl:ObjectProperty ;
     rdfs:label "owned By"@en ;
     rdfs:domain obo:BFO_0000040 ;
     rdfs:range iof:Agent ;
     iof-av:naturalLanguageDefinition "Relates a material entity to the person or organization that owns it. Inverse of owns."@en .
+
+:passesBy a owl:ObjectProperty ;
+    rdfs:label "passes By"@en ;
+    rdfs:domain [ a owl:Class ;
+            owl:unionOf ( :Movement :Route ) ] ;
+    rdfs:range [ a owl:Class ;
+            owl:unionOf ( :Location :Infrastructure ) ] ;
+    iof-av:naturalLanguageDefinition "Relates a movement or a route to an intermediate location or infrastructure it passes through."@en .
 
 :precedesTravelLeg a owl:ObjectProperty ;
     rdfs:label "precedes travel leg"@en ;
@@ -789,11 +958,6 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     rdfs:subPropertyOf obo:BFO_0000132 ;
     iof-av:naturalLanguageDefinition "Relates a travel leg to the journey it is part of."@en .
 
-qudt:Unit a owl:Class ;
-    rdfs:label "Unit (QUDT)"@en ;
-    rdfs:comment "Declared here so that QUDT unit individuals (http://qudt.org/vocab/unit/, e.g. unit:KiloW-HR, unit:KiloGM, unit:KiloM) can be used without importing the full QUDT ontology."@en ;
-    rdfs:isDefinedBy qudt: .
-
 :ArtifactIdentifier a owl:Class ;
     rdfs:label "Artifact Identifier"@en ;
     rdfs:subClassOf iof:Identifier ;
@@ -802,6 +966,15 @@ qudt:Unit a owl:Class ;
                         owl:onProperty iof:designates ;
                         owl:someValuesFrom iof:MaterialArtifact ] ) ] ;
     iof-av:naturalLanguageDefinition "An identifier that designates a material artifact."@en .
+
+:Booking a owl:Class ;
+    rdfs:label "Booking"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :books ;
+            owl:someValuesFrom [ a owl:Class ;
+                    owl:unionOf ( :TransportService :VehicleRun ) ] ],
+        iof:Agreement ;
+    iof-av:naturalLanguageDefinition "An agreement that reserves capacity on a transport service or a vehicle run for a passenger or a consignment."@en .
 
 :EmissionScopeAssignment a owl:Class ;
     rdfs:label "Emission Scope Assignment"@en ;
@@ -839,6 +1012,17 @@ qudt:Unit a owl:Class ;
     rdfs:subClassOf obo:BFO_0000040 ;
     iof-av:naturalLanguageDefinition "A compressible material entity that exists in the gaseous state at standard temperature and pressure, and may consist of a pure substance or a mixture of gases."@en .
 
+:GroupOfArtifacts a owl:Class ;
+    rdfs:label "Group Of Artifacts"@en ;
+    rdfs:subClassOf obo:BFO_0000027 ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( obo:BFO_0000027 [ a owl:Restriction ;
+                        owl:onProperty obo:BFO_0000115 ;
+                        owl:someValuesFrom iof:MaterialArtifact ] [ a owl:Restriction ;
+                        owl:allValuesFrom iof:MaterialArtifact ;
+                        owl:onProperty obo:BFO_0000115 ] ) ] ;
+    iof-av:naturalLanguageDefinition "An object aggregate whose member parts are material artifacts."@en .
+
 :HumanDrivenVehicle a owl:Class ;
     rdfs:label "Human-Driven Vehicle"@en ;
     rdfs:subClassOf :Vehicle ;
@@ -861,13 +1045,23 @@ qudt:Unit a owl:Class ;
     skos:example "A bus passenger, an airline traveler." ;
     iof-av:naturalLanguageDefinition "A role assumed by an person that is transported by a vehicle but does not contribute to its operation."@en .
 
-:Schedule a owl:Class ;
-    rdfs:label "Schedule"@en ;
-    rdfs:subClassOf [ a owl:Restriction ;
-            owl:onProperty iof:prescribes ;
-            owl:someValuesFrom :Movement ],
-        iof:PlanSpecification ;
-    iof-av:naturalLanguageDefinition "A plan specification that prescribes the planned start and end times of one or more movements."@en .
+:Stop a owl:Class ;
+    rdfs:label "Stop"@en ;
+    rdfs:subClassOf :TransferNode ;
+    iof-av:naturalLanguageDefinition "A transfer node at which vehicle runs of a transport service call so that passengers can board or alight or consignments can be loaded or unloaded: a bus stop, a station, a depot door, a port berth."@en .
+
+:TransportOperator a owl:Class ;
+    rdfs:label "Transport Operator"@en ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( iof:Agent [ a owl:Restriction ;
+                        owl:onProperty iof:hasRole ;
+                        owl:someValuesFrom :TransportOperatorRole ] ) ] ;
+    iof-av:naturalLanguageDefinition "An agent that bears a transport operator role."@en .
+
+:TransportOperatorRole a owl:Class ;
+    rdfs:label "Transport Operator Role"@en ;
+    rdfs:subClassOf iof:ServiceProviderRole ;
+    iof-av:naturalLanguageDefinition "A service provider role held by an organization or person that operates vehicle runs or transport services. The carrier role is the special case of operating on behalf of a shipper."@en .
 
 :WalkingMode a owl:NamedIndividual,
         :TransportMode ;
@@ -887,6 +1081,11 @@ qudt:Unit a owl:Class ;
     rdfs:subPropertyOf :hasParticipantInEmission ;
     iof-av:naturalLanguageDefinition "Relates an emission process to the material entity that releases the emission, e.g. a vehicle or a power plant."@en .
 
+:hasMeasuredDimensionValueAtSomeTime a owl:ObjectProperty ;
+    rdfs:label "has Measured Dimension Value At Some Time"@en ;
+    rdfs:subPropertyOf iof:hasMeasuredValueAtSomeTime ;
+    iof-av:naturalLanguageDefinition "Relates an entity to a value expression of a measured dimension, e.g. length or weight."@en .
+
 :hasParticipantInEmission a owl:ObjectProperty ;
     rdfs:label "has Participant In Emission"@en ;
     rdfs:domain :EmissionProcess ;
@@ -902,28 +1101,11 @@ qudt:Unit a owl:Class ;
     rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ;
     iof-av:naturalLanguageDefinition "Relates a vehicle, travel leg or infrastructure to the transport mode it belongs to. A travel leg has exactly one mode; a transfer node may have several."@en .
 
-:operatedByVehicle a owl:ObjectProperty ;
-    rdfs:label "operated By Vehicle"@en ;
-    rdfs:comment "put under hasParticipant" ;
-    rdfs:domain :Movement ;
-    rdfs:range :Vehicle ;
-    rdfs:subPropertyOf :hasParticipantsInMovement ;
-    owl:inverseOf :isVehicleInMovement ;
-    iof-av:naturalLanguageDefinition "Relates a movement to the vehicle that performs it. A travel leg is operated by exactly one vehicle."@en .
-
 :participatesInMovement a owl:ObjectProperty ;
     rdfs:label "participates In Movement"@en ;
     rdfs:range :Movement ;
     rdfs:subPropertyOf obo:BFO_0000056 ;
     iof-av:naturalLanguageDefinition "Relates a material entity to a movement it participates in. Inverse of has participants in movement."@en .
-
-:Disruption a owl:Class ;
-    rdfs:label "Disruption"@en ;
-    rdfs:subClassOf [ a owl:Restriction ;
-            owl:onProperty :disrupts ;
-            owl:someValuesFrom :Movement ],
-        :InherentProcess ;
-    iof-av:naturalLanguageDefinition "An unplanned process that prevents a movement from following its schedule or route."@en .
 
 :EnergyChargerRole a owl:Class ;
     rdfs:label "Energy Charger Role"@en ;
@@ -950,22 +1132,23 @@ qudt:Unit a owl:Class ;
             owl:someValuesFrom :TravelLeg ],
         :Movement ;
     iof-av:adaptedFrom "http://ies.data.gov.uk/ontology/ies4#Journey" ;
-    iof-av:naturalLanguageDefinition "A movement of passengers or payload from an origin to a destination, made up of one or more travel legs. A journey with legs of different transport modes is an intermodal journey."@en,
-        "A movement that is made up of two or more travel legs."@en .
+    iof-av:naturalLanguageDefinition "A movement of passengers or payload from an origin to a destination, made up of one or more travel legs. A journey with legs of different transport modes is an intermodal journey. The freight and passenger modules distinguish freight journeys of consignments from passenger journeys."@en .
 
-:Payload a owl:Class ;
-    rdfs:label "Payload"@en ;
-    owl:equivalentClass [ a owl:Class ;
-            owl:intersectionOf ( obo:BFO_0000040 [ a owl:Restriction ;
-                        owl:onProperty iof:hasRole ;
-                        owl:someValuesFrom :PayloadRole ] ) ] ;
-    iof-av:naturalLanguageDefinition "A material entity that bears a payload role, i.e. goods or other non-human cargo being transported."@en .
+:MonetaryAmount a owl:Class ;
+    rdfs:label "Monetary Amount"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :hasCurrency ;
+            owl:someValuesFrom qudt:Unit ],
+        iof:ValueExpression ;
+    iof-av:naturalLanguageDefinition "A value expression of a sum of money, with a numerical value and a currency as its unit (QUDT currency units, e.g. unit:GBP)."@en .
 
-:TransferNode a owl:Class ;
-    rdfs:label "Correspondence"@en ;
-    rdfs:subClassOf :Infrastructure ;
-    iof-av:naturalLanguageDefinition "A Correspondence is a object that functions as a break point or pause location in a journey. Example: bus stop, highway rest zone, charging station"@en,
-        "Infrastructure at which travel legs begin, end or connect and where payload or passengers can be transferred between vehicles, e.g. a bus stop, a station, a port. Replaces the earlier class Correspondence."@en .
+:Schedule a owl:Class ;
+    rdfs:label "Schedule"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty iof:prescribes ;
+            owl:someValuesFrom :Movement ],
+        iof:PlanSpecification ;
+    iof-av:naturalLanguageDefinition "A plan specification that prescribes the planned start and end times of one or more movements or stop calls. A timetable and a time slot are schedules."@en .
 
 :TransportRole a owl:Class ;
     rdfs:label "Transport Role"@en ;
@@ -1026,6 +1209,23 @@ qudt:Unit a owl:Class ;
     owl:inverseOf :isSubstanceOf ;
     iof-av:naturalLanguageDefinition "Relates a material entity to a substance that is a continuant part of it, e.g. an emission to the gas it consists of."@en .
 
+:operatedByVehicle a owl:ObjectProperty ;
+    rdfs:label "operated By Vehicle"@en ;
+    rdfs:comment "put under hasParticipant" ;
+    rdfs:domain :Movement ;
+    rdfs:range :Vehicle ;
+    rdfs:subPropertyOf :hasParticipantsInMovement ;
+    owl:inverseOf :isVehicleInMovement ;
+    iof-av:naturalLanguageDefinition "Relates a movement to the vehicle that performs it. A travel leg is operated by exactly one vehicle."@en .
+
+:Disruption a owl:Class ;
+    rdfs:label "Disruption"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :disrupts ;
+            owl:someValuesFrom :Movement ],
+        :InherentProcess ;
+    iof-av:naturalLanguageDefinition "An unplanned process that prevents a movement from following its schedule or route."@en .
+
 :Emission a owl:Class ;
     rdfs:label "Emission"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
@@ -1065,6 +1265,12 @@ qudt:Unit a owl:Class ;
     iof-av:naturalLanguageDefinition "A plan specification that prescribes a journey as a sequence of route segments from an origin to a destination. A route is realised when a journey follows it."@en,
         "A realizable entity describing a possible solution for traveling from a starting point (A) to an endpoint (B). The realization of a route occurs when a traveler follows a specific sequence of movements (or travel legs), which is influenced by the physical environment and available transport options."@en .
 
+:TransferNode a owl:Class ;
+    rdfs:label "Correspondence"@en ;
+    rdfs:subClassOf :Infrastructure ;
+    iof-av:naturalLanguageDefinition "A Correspondence is a object that functions as a break point or pause location in a journey. Example: bus stop, highway rest zone, charging station"@en,
+        "Infrastructure at which travel legs begin, end or connect and where payload or passengers can be transferred between vehicles, e.g. a bus stop, a station, a port. Replaces the earlier class Correspondence."@en .
+
 :Device a owl:Class ;
     rdfs:label "Device"@en ;
     rdfs:seeAlso <http://ies.data.gov.uk/ontology/ies4#Device> ;
@@ -1103,6 +1309,29 @@ qudt:Unit a owl:Class ;
     iof-av:synonym "GHG",
         "Greenhouse Gas Emission" .
 
+:Payload a owl:Class ;
+    rdfs:label "Payload"@en ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( obo:BFO_0000040 [ a owl:Restriction ;
+                        owl:onProperty iof:hasRole ;
+                        owl:someValuesFrom :PayloadRole ] ) ] ;
+    iof-av:naturalLanguageDefinition "A material entity that bears a payload role, i.e. goods or other non-human cargo being transported."@en .
+
+:TransportService a owl:Class ;
+    rdfs:label "Transport Service"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :offeredBy ;
+            owl:someValuesFrom :TransportOperator ],
+        iof:CommercialServiceSpecification ;
+    iof-av:naturalLanguageDefinition "A commercial service specification that describes a transport offering of an operator: a bus line with its stops and timetable, a freight service between two terminals, a ride-hailing offer. Vehicle runs are the realisations of a transport service."@en .
+
+:hasMeasurementUnit a owl:ObjectProperty ;
+    rdfs:label "has measurement unit"@en ;
+    rdfs:domain iof:ValueExpression ;
+    rdfs:range qudt:Unit ;
+    rdfs:seeAlso qudt:unit ;
+    iof-av:naturalLanguageDefinition "Relates a value expression to the QUDT unit in which its numerical value is expressed. Replaces the string property hasUnit."@en .
+
 :EnergyCarrier a owl:Class ;
     rdfs:label "Energy Carrier"@en ;
     rdfs:subClassOf iof:MaterialResource ;
@@ -1129,6 +1358,11 @@ qudt:Unit a owl:Class ;
         iof:DesignSpecification ;
     iof-av:naturalLanguageDefinition "A TransportDesignSpecification is a design specification that prescribes transport systems or vehicles."@en .
 
+qudt:Unit a owl:Class ;
+    rdfs:label "Unit (QUDT)"@en ;
+    rdfs:comment "Declared here so that QUDT unit individuals (http://qudt.org/vocab/unit/, e.g. unit:KiloW-HR, unit:KiloGM, unit:KiloM) can be used without importing the full QUDT ontology."@en ;
+    rdfs:isDefinedBy qudt: .
+
 :TransportMode a owl:Class ;
     rdfs:label "Transport Mode"@en ;
     rdfs:subClassOf iof:ValueExpression ;
@@ -1142,6 +1376,21 @@ qudt:Unit a owl:Class ;
         iof:DesignSpecification ;
     iof-av:naturalLanguageDefinition "A design specification that prescribes an electrical or mechanical characteristic of an energy charger. Replaces the earlier Designed* function classes, whose definitions described specification values rather than functions."@en .
 
+:VehicleRun a owl:Class ;
+    rdfs:label "Vehicle Run"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :operatedByVehicle ;
+            owl:someValuesFrom :Vehicle ],
+        :TravelLeg ;
+    iof-av:naturalLanguageDefinition "A travel leg that is the movement of one vehicle from an origin to a destination, possibly calling at intermediate stops, and that carries the travel legs of the passengers or consignments aboard. A bus run on a line, a truck round, a train service between two stations and a flight are vehicle runs. The passengers' and consignments' own legs are occurrent parts of the run (carried by it)."@en .
+
+:Location a owl:Class ;
+    rdfs:label "Location"@en ;
+    rdfs:seeAlso <http://ies.data.gov.uk/ontology/ies4#Location> ;
+    rdfs:subClassOf obo:BFO_0000029 ;
+    iof-av:adaptedFrom "http://ies.data.gov.uk/ontology/ies4#Location" ;
+    iof-av:naturalLanguageDefinition "A site that is a geographic place specifying a point or an area on the Earth's surface or elsewhere."@en .
+
 :Vehicle a owl:Class ;
     rdfs:label "Vehicle"@en ;
     rdfs:seeAlso <http://ies.data.gov.uk/ontology/ies4#Vehicle> ;
@@ -1154,10 +1403,10 @@ qudt:Unit a owl:Class ;
 
 :TravelLeg a owl:Class ;
     rdfs:label "Travel Leg"@en ;
-    rdfs:comment """A Journey/Transit can consist of multiple travel legs. \r
-E.g., you go from home to departure airport by car, then take the plane, then from arrival airport to the hotel by taxi. It is one journey with three legs of travel.\r
-\r
-TravelLeg is also considered the minimum travel "unit" that is not dividable. Inside a optimal  travelLeg it is a point-to-point relation, there is no pause or switch or change of payload or passenger.\r
+    rdfs:comment """A Journey/Transit can consist of multiple travel legs. \r\r
+E.g., you go from home to departure airport by car, then take the plane, then from arrival airport to the hotel by taxi. It is one journey with three legs of travel.\r\r
+\r\r
+TravelLeg is also considered the minimum travel "unit" that is not dividable. Inside a optimal  travelLeg it is a point-to-point relation, there is no pause or switch or change of payload or passenger.\r\r
 This one originates from IES4 TravelLeg"""@en ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
@@ -1184,15 +1433,8 @@ This one originates from IES4 TravelLeg"""@en ;
             owl:maxCardinality "1"^^xsd:nonNegativeInteger ;
             owl:onProperty :endsAtTimeInstance ],
         :Movement ;
-    iof-av:naturalLanguageDefinition "A movement in exactly one transport mode, from one origin to one destination, operated by at most one vehicle (none for a pedestrian leg), with no transfer of payload or passengers in between. Travel legs are the units a journey is composed of."@en ;
+    iof-av:naturalLanguageDefinition "A movement in exactly one transport mode, from one origin to one destination, operated by at most one vehicle (none for a pedestrian leg), with no transfer of payload or passengers in between. A travel leg is either a vehicle run (the vehicle's own movement) or the leg of a passenger or consignment carried by a vehicle run."@en ;
     iof-av:synonym "Jouney leg" .
-
-:Location a owl:Class ;
-    rdfs:label "Location"@en ;
-    rdfs:seeAlso <http://ies.data.gov.uk/ontology/ies4#Location> ;
-    rdfs:subClassOf obo:BFO_0000029 ;
-    iof-av:adaptedFrom "http://ies.data.gov.uk/ontology/ies4#Location" ;
-    iof-av:naturalLanguageDefinition "A site that is a geographic place specifying a point or an area on the Earth's surface or elsewhere."@en .
 
 :Infrastructure a owl:Class ;
     rdfs:label "Infrastructure"@en ;

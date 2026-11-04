@@ -1,0 +1,207 @@
+@prefix : <https://www.cranfield.ac.uk/transit/passenger#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iof: <https://spec.industrialontologies.org/ontology/core/Core/> .
+@prefix iof-av: <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+
+<https://www.cranfield.ac.uk/transit/passenger> a owl:Ontology ;
+    owl:versionIRI <https://www.cranfield.ac.uk/transit/passenger/2025-11> ;
+    owl:versionInfo "0.5.0" ;
+    owl:imports <https://www.cranfield.ac.uk/transit/core> ;
+    rdfs:label "TransiT Passenger Module"@en ;
+    dcterms:license <https://opensource.org/licenses/MIT> ;
+    dcterms:abstract "People-movement specialisations of the TransiT Core Ontology, independent of transport mode: passenger journeys and legs, lines, timetables and timetabled runs, public and shared mobility services, tickets, reservations and fares, capacity and passenger counts, trip purposes, accessibility needs and features, luggage, interchanges and service quality."@en .
+
+#################################################################
+#    Passenger journeys and legs
+#################################################################
+
+:PassengerLeg a owl:Class ;
+    rdfs:subClassOf transit:TravelLeg ,
+        [ a owl:Restriction ; owl:onProperty transit:hasParticipantsInMovement ; owl:someValuesFrom transit:Passenger ] ;
+    owl:disjointWith transit:VehicleRun ;
+    rdfs:label "Passenger Leg"@en ;
+    iof-av:naturalLanguageDefinition "A travel leg of one passenger or passenger group: their movement from the stop where they board to the stop where they alight, carried by one vehicle run, or on foot as a pedestrian leg. Not the vehicle run itself, which may carry many passenger legs."@en .
+:boardsAt a owl:ObjectProperty ; rdfs:subPropertyOf transit:departsAtOrigin ; rdfs:domain :PassengerLeg ; rdfs:range transit:Stop ; rdfs:label "boards at"@en ;
+    iof-av:naturalLanguageDefinition "Relates a passenger leg to the stop at which the passenger boards."@en .
+:alightsAt a owl:ObjectProperty ; rdfs:subPropertyOf transit:endsAtDestination ; rdfs:domain :PassengerLeg ; rdfs:range transit:Stop ; rdfs:label "alights at"@en ;
+    iof-av:naturalLanguageDefinition "Relates a passenger leg to the stop at which the passenger alights."@en .
+
+:PassengerJourney a owl:Class ;
+    rdfs:subClassOf transit:Journey ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTravelLeg ; owl:someValuesFrom [ a owl:Class ; owl:unionOf ( :PassengerLeg transit:PedestrianLeg ) ] ] ,
+        [ a owl:Restriction ; owl:onProperty transit:hasParticipantsInMovement ; owl:someValuesFrom transit:Passenger ] ;
+    rdfs:label "Passenger Journey"@en ;
+    iof-av:naturalLanguageDefinition "A journey of one passenger or passenger group from an origin to a destination, made of passenger legs and pedestrian legs with interchanges between them."@en .
+:TripPurpose a owl:Class ; rdfs:subClassOf iof:ValueExpression ; rdfs:label "Trip Purpose"@en ;
+    iof-av:naturalLanguageDefinition "A value expression that classifies why a passenger journey is made."@en .
+:Commuting a owl:NamedIndividual , :TripPurpose ; rdfs:label "commuting"@en .
+:Business a owl:NamedIndividual , :TripPurpose ; rdfs:label "business"@en .
+:Education a owl:NamedIndividual , :TripPurpose ; rdfs:label "education"@en .
+:Shopping a owl:NamedIndividual , :TripPurpose ; rdfs:label "shopping"@en .
+:Leisure a owl:NamedIndividual , :TripPurpose ; rdfs:label "leisure"@en .
+:Healthcare a owl:NamedIndividual , :TripPurpose ; rdfs:label "healthcare"@en .
+[] a owl:AllDifferent ; owl:distinctMembers ( :Commuting :Business :Education :Shopping :Leisure :Healthcare ) .
+:hasTripPurpose a owl:ObjectProperty ; rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ; rdfs:domain :PassengerJourney ; rdfs:range :TripPurpose ;
+    rdfs:label "has trip purpose"@en ; iof-av:naturalLanguageDefinition "Relates a passenger journey to its purpose."@en .
+
+:PassengerGroup a owl:Class ;
+    rdfs:subClassOf iof:GroupOfPersons ,
+        [ a owl:Restriction ; owl:onProperty obo:BFO_0000115 ; owl:someValuesFrom transit:Passenger ] ;
+    rdfs:label "Passenger Group"@en ;
+    iof-av:naturalLanguageDefinition "A group of persons travelling together as passengers, e.g. a family or a tour party, booked and ticketed as one."@en .
+:Luggage a owl:Class ;
+    rdfs:subClassOf transit:Payload ,
+        [ a owl:Restriction ; owl:onProperty :accompanies ; owl:someValuesFrom transit:Passenger ] ;
+    rdfs:label "Luggage"@en ; iof-av:synonym "baggage"@en ;
+    iof-av:naturalLanguageDefinition "Payload that travels with a passenger: bags, suitcases, prams, bicycles carried aboard."@en .
+:accompanies a owl:ObjectProperty ; rdfs:domain :Luggage ; rdfs:range transit:Passenger ; rdfs:label "accompanies"@en ;
+    iof-av:naturalLanguageDefinition "Relates luggage to the passenger it travels with."@en .
+
+#################################################################
+#    Lines, timetables and runs
+#################################################################
+
+:Line a owl:Class ;
+    rdfs:subClassOf transit:TransportService ,
+        [ a owl:Restriction ; owl:onProperty :servesStop ; owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ; owl:onClass transit:Stop ] ;
+    rdfs:label "Line"@en ; iof-av:synonym "route (public transport)"@en ;
+    iof-av:naturalLanguageDefinition "A transport service whose vehicle runs follow a fixed sequence of stops under one name or number, e.g. bus line 12 or the Paris to Lyon rail service."@en .
+:servesStop a owl:ObjectProperty ; rdfs:domain :Line ; rdfs:range transit:Stop ; rdfs:label "serves stop"@en ;
+    iof-av:naturalLanguageDefinition "Relates a line to a stop its runs call at."@en .
+:Timetable a owl:Class ;
+    rdfs:subClassOf transit:Schedule ,
+        [ a owl:Restriction ; owl:onProperty :timetableOf ; owl:someValuesFrom :Line ] ;
+    rdfs:label "Timetable"@en ;
+    iof-av:naturalLanguageDefinition "A schedule that prescribes the vehicle runs of a line: their departure and arrival times at each stop over a period."@en .
+:timetableOf a owl:ObjectProperty ; rdfs:subPropertyOf iof:isAbout ; rdfs:domain :Timetable ; rdfs:range :Line ; rdfs:label "timetable of"@en ;
+    iof-av:naturalLanguageDefinition "Relates a timetable to the line it schedules."@en .
+:TimetabledRun a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:VehicleRun
+        [ a owl:Restriction ; owl:onProperty transit:realisesService ; owl:someValuesFrom :Line ] ) ] ;
+    rdfs:subClassOf transit:VehicleRun ;
+    rdfs:label "Timetabled Run"@en ;
+    iof-av:naturalLanguageDefinition "A vehicle run that realises a line, i.e. one scheduled trip of a public transport service."@en .
+:Headway a owl:Class ; rdfs:subClassOf iof:TemporalDurationValueExpression ; rdfs:label "Headway"@en ;
+    iof-av:naturalLanguageDefinition "A duration value expression of the time between consecutive runs of a line at a stop."@en .
+:hasHeadway a owl:ObjectProperty ; rdfs:subPropertyOf transit:hasMeasuredTemporalValueAtSomeTime ; rdfs:domain :Line ; rdfs:range :Headway ;
+    rdfs:label "has headway"@en ; iof-av:naturalLanguageDefinition "Relates a line to its headway."@en .
+
+#################################################################
+#    Kinds of service and operators
+#################################################################
+
+:PublicTransportService a owl:Class ; rdfs:subClassOf transit:TransportService ; rdfs:label "Public Transport Service"@en ;
+    iof-av:naturalLanguageDefinition "A transport service open to the general public, usually timetabled and run under a public transport authority."@en .
+:SharedMobilityService a owl:Class ; rdfs:subClassOf transit:TransportService ; rdfs:label "Shared Mobility Service"@en ;
+    iof-av:naturalLanguageDefinition "A transport service in which vehicles are used by different passengers in turn or together, booked on demand."@en .
+:DemandResponsiveService a owl:Class ; rdfs:subClassOf :SharedMobilityService ; rdfs:label "Demand-Responsive Service"@en ;
+    iof-av:naturalLanguageDefinition "A shared mobility service whose runs and stops are set by passenger requests rather than a fixed timetable."@en .
+:RideHailingService a owl:Class ; rdfs:subClassOf :SharedMobilityService ; rdfs:label "Ride-Hailing Service"@en ;
+    iof-av:naturalLanguageDefinition "A shared mobility service in which a passenger books a driver and vehicle for a single trip."@en .
+:CarSharingService a owl:Class ; rdfs:subClassOf :SharedMobilityService ; rdfs:label "Car-Sharing Service"@en ;
+    iof-av:naturalLanguageDefinition "A shared mobility service in which passengers rent vehicles from a shared fleet for short periods."@en .
+:BikeSharingService a owl:Class ; rdfs:subClassOf :SharedMobilityService ; rdfs:label "Bike-Sharing Service"@en ;
+    iof-av:naturalLanguageDefinition "A shared mobility service in which bicycles are rented from a shared fleet for short trips."@en .
+:TransportAuthorityRole a owl:Class ; rdfs:subClassOf iof:AgentRole ; rdfs:label "Transport Authority Role"@en ;
+    iof-av:naturalLanguageDefinition "An agent role held by a public body that plans, contracts or regulates public transport services in an area."@en .
+:TransportAuthority a owl:Class ; owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( iof:Organization [ a owl:Restriction ; owl:onProperty iof:hasRole ; owl:someValuesFrom :TransportAuthorityRole ] ) ] ;
+    rdfs:label "Transport Authority"@en ; iof-av:naturalLanguageDefinition "An organization that bears a transport authority role."@en .
+
+#################################################################
+#    Tickets, reservations and fares
+#################################################################
+
+:Ticket a owl:Class ;
+    rdfs:subClassOf transit:TransportDocument ,
+        [ a owl:Restriction ; owl:onProperty :entitles ; owl:someValuesFrom transit:Passenger ] ;
+    rdfs:label "Ticket"@en ;
+    iof-av:naturalLanguageDefinition "A transport document that entitles a passenger to travel on a transport service or a vehicle run under the conditions of a fare."@en .
+:entitles a owl:ObjectProperty ; rdfs:domain :Ticket ; rdfs:range transit:Passenger ; rdfs:label "entitles"@en ;
+    iof-av:naturalLanguageDefinition "Relates a ticket to the passenger it entitles to travel."@en .
+:Reservation a owl:Class ; rdfs:subClassOf transit:Booking ; rdfs:label "Reservation"@en ;
+    iof-av:naturalLanguageDefinition "A booking of a place for a passenger on a vehicle run."@en .
+:SeatReservation a owl:Class ; rdfs:subClassOf :Reservation ; rdfs:label "Seat Reservation"@en ;
+    iof-av:naturalLanguageDefinition "A reservation of a specific seat."@en .
+:Fare a owl:Class ; rdfs:subClassOf transit:Tariff ; rdfs:label "Fare"@en ;
+    iof-av:naturalLanguageDefinition "A tariff for carrying a passenger, with its conditions of use."@en .
+:FareClass a owl:Class ; rdfs:subClassOf iof:ValueExpression ; rdfs:label "Fare Class"@en ;
+    iof-av:naturalLanguageDefinition "A value expression that classifies the level of service a fare entitles to."@en .
+:StandardClass a owl:NamedIndividual , :FareClass ; rdfs:label "standard class"@en .
+:FirstClass a owl:NamedIndividual , :FareClass ; rdfs:label "first class"@en .
+:BusinessClass a owl:NamedIndividual , :FareClass ; rdfs:label "business class"@en .
+[] a owl:AllDifferent ; owl:distinctMembers ( :StandardClass :FirstClass :BusinessClass ) .
+:hasFareClass a owl:ObjectProperty ; rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ; rdfs:domain [ a owl:Class ; owl:unionOf ( :Fare :Ticket ) ] ; rdfs:range :FareClass ;
+    rdfs:label "has fare class"@en ; iof-av:naturalLanguageDefinition "Relates a fare or ticket to its fare class."@en .
+
+#################################################################
+#    Capacity and counts
+#################################################################
+
+:SeatedCapacity a owl:Class ; rdfs:subClassOf transit:TransportCapacityDesignSpecification ; rdfs:label "Seated Capacity"@en ;
+    iof-av:naturalLanguageDefinition "A transport capacity design specification prescribing the number of seats of a vehicle."@en .
+:StandingCapacity a owl:Class ; rdfs:subClassOf transit:TransportCapacityDesignSpecification ; rdfs:label "Standing Capacity"@en ;
+    iof-av:naturalLanguageDefinition "A transport capacity design specification prescribing the number of standing passengers a vehicle is designed for."@en .
+:PassengerCount a owl:Class ; rdfs:subClassOf transit:Occupancy ; rdfs:label "Passenger Count"@en ;
+    iof-av:naturalLanguageDefinition "An occupancy value expression that is the number of passengers aboard a vehicle run."@en .
+
+#################################################################
+#    Accessibility
+#################################################################
+
+:AccessibilityNeed a owl:Class ; rdfs:subClassOf iof:ValueExpression ; rdfs:label "Accessibility Need"@en ;
+    iof-av:naturalLanguageDefinition "A value expression that classifies assistance or facilities a passenger needs to travel."@en .
+:WheelchairAccess a owl:NamedIndividual , :AccessibilityNeed , :AccessibilityFeature ; rdfs:label "wheelchair access"@en .
+:StepFreeAccess a owl:NamedIndividual , :AccessibilityNeed , :AccessibilityFeature ; rdfs:label "step-free access"@en .
+:VisualAssistance a owl:NamedIndividual , :AccessibilityNeed , :AccessibilityFeature ; rdfs:label "visual assistance"@en .
+:HearingAssistance a owl:NamedIndividual , :AccessibilityNeed , :AccessibilityFeature ; rdfs:label "hearing assistance"@en .
+[] a owl:AllDifferent ; owl:distinctMembers ( :WheelchairAccess :StepFreeAccess :VisualAssistance :HearingAssistance ) .
+:hasAccessibilityNeed a owl:ObjectProperty ; rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ; rdfs:domain transit:Passenger ; rdfs:range :AccessibilityNeed ;
+    rdfs:label "has accessibility need"@en ; iof-av:naturalLanguageDefinition "Relates a passenger to an accessibility need."@en .
+:ReducedMobilityPassenger a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:Passenger
+        [ a owl:Restriction ; owl:onProperty :hasAccessibilityNeed ; owl:someValuesFrom :AccessibilityNeed ] ) ] ;
+    rdfs:subClassOf transit:Passenger ;
+    rdfs:label "Reduced Mobility Passenger"@en ;
+    iof-av:naturalLanguageDefinition "A passenger with at least one accessibility need."@en .
+:AccessibilityFeature a owl:Class ; rdfs:subClassOf iof:ValueExpression ; rdfs:label "Accessibility Feature"@en ;
+    iof-av:naturalLanguageDefinition "A value expression that classifies a facility of infrastructure or a vehicle that meets an accessibility need, e.g. step-free access or a wheelchair space."@en .
+:hasAccessibilityFeature a owl:ObjectProperty ; rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ; rdfs:domain [ a owl:Class ; owl:unionOf ( transit:Infrastructure transit:Vehicle ) ] ; rdfs:range :AccessibilityFeature ;
+    rdfs:label "has accessibility feature"@en ; iof-av:naturalLanguageDefinition "Relates infrastructure or a vehicle to an accessibility feature it provides."@en .
+
+#################################################################
+#    Access, interchange and service quality
+#################################################################
+
+:ParkAndRide a owl:Class ; rdfs:subClassOf transit:TransferNode ; rdfs:label "Park and Ride"@en ;
+    iof-av:naturalLanguageDefinition "A transfer node at which passengers leave a private car or bicycle and continue by public transport."@en .
+:Platform a owl:Class ; rdfs:subClassOf transit:Infrastructure ,
+        [ a owl:Restriction ; owl:onProperty obo:BFO_0000176 ; owl:someValuesFrom transit:Stop ] ;
+    rdfs:label "Platform"@en ; iof-av:synonym "quay"@en ;
+    iof-av:naturalLanguageDefinition "Infrastructure that is part of a stop, at which passengers wait for and board a vehicle."@en .
+:Interchange a owl:Class ;
+    rdfs:subClassOf transit:Transshipment ,
+        [ a owl:Restriction ; owl:onProperty transit:followsTravelLeg ; owl:someValuesFrom [ a owl:Class ; owl:unionOf ( :PassengerLeg transit:PedestrianLeg ) ] ] ;
+    rdfs:label "Interchange"@en ;
+    iof-av:naturalLanguageDefinition "A transshipment made by passengers themselves at a transfer node: alighting from one vehicle run and boarding the next, including the walk between them."@en .
+:MissedConnection a owl:Class ; rdfs:subClassOf transit:Disruption ; rdfs:label "Missed Connection"@en ;
+    iof-av:naturalLanguageDefinition "A disruption in which a passenger arrives at an interchange after the next vehicle run has departed."@en .
+:Punctuality a owl:Class ; rdfs:subClassOf iof:MeasuredValueExpression ; rdfs:label "Punctuality"@en ;
+    iof-av:naturalLanguageDefinition "A measured value expression of the share of vehicle runs of a service that arrived within the tolerance of their timetable."@en .
+:hasPunctuality a owl:ObjectProperty ; rdfs:subPropertyOf iof:hasMeasuredValueAtSomeTime ; rdfs:domain transit:TransportService ; rdfs:range :Punctuality ;
+    rdfs:label "has punctuality"@en ; iof-av:naturalLanguageDefinition "Relates a transport service to its measured punctuality."@en .
+
+#################################################################
+#    Statuses
+#################################################################
+
+:Scheduled a owl:NamedIndividual , transit:TransportStatus ; rdfs:label "scheduled"@en .
+:Boarded a owl:NamedIndividual , transit:TransportStatus ; rdfs:label "boarded"@en .
+:Completed a owl:NamedIndividual , transit:TransportStatus ; rdfs:label "completed"@en .
+:Cancelled a owl:NamedIndividual , transit:TransportStatus ; rdfs:label "cancelled"@en .
+[] a owl:AllDifferent ; owl:distinctMembers ( :Scheduled :Boarded :Completed :Cancelled ) .

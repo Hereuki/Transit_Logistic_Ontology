@@ -1,0 +1,82 @@
+@prefix : <https://www.cranfield.ac.uk/transit/examples/passenger-commute#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix pax: <https://www.cranfield.ac.uk/transit/passenger#> .
+@prefix road: <https://www.cranfield.ac.uk/transit/road#> .
+@prefix rail: <https://www.cranfield.ac.uk/transit/rail#> .
+@prefix iof: <https://spec.industrialontologies.org/ontology/core/Core/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# A commuter walks to a bus stop, rides bus line 12 to the station, changes to
+# a train, and walks to the office. The bus run and the train run each carry
+# many passengers; only this passenger's legs are shown.
+# A reasoner should classify
+#   busRun        as pax:TimetabledRun and road:RoadTravelLeg,
+#   trainRun      as rail:RailTravelLeg,
+#   busLeg        as road:RoadTravelLeg (operated by the bus) and pax:PassengerLeg,
+#   trainLeg      as rail:RailTravelLeg and pax:PassengerLeg,
+#   walk1, walk2  as transit:PedestrianLeg (asserted),
+#   journey       as rail-road intermodal journey when the rail-road module is loaded,
+#   commuter      as pax:ReducedMobilityPassenger,
+#   operator      as transit:TransportOperator.
+
+<https://www.cranfield.ac.uk/transit/examples/passenger-commute> a owl:Ontology ;
+    owl:imports <https://www.cranfield.ac.uk/transit/passenger> , <https://www.cranfield.ac.uk/transit/rail-road> ;
+    rdfs:label "Example: a commute by bus and train"@en .
+
+# people and operators
+:commuter a owl:NamedIndividual , iof:Person ; rdfs:label "the commuter"@en ;
+    iof:hasRole :commuterPaxRole ; pax:hasAccessibilityNeed pax:StepFreeAccess .
+:commuterPaxRole a owl:NamedIndividual , transit:PassengerRole .
+:operator a owl:NamedIndividual , iof:Organization ; rdfs:label "City Buses"@en ; iof:hasRole :operatorRole .
+:operatorRole a owl:NamedIndividual , transit:TransportOperatorRole .
+
+# the line, its stops and timetable
+:home a owl:NamedIndividual , transit:Location ; rdfs:label "home"@en .
+:office a owl:NamedIndividual , transit:Location ; rdfs:label "office"@en .
+:stopA a owl:NamedIndividual , transit:Stop ; rdfs:label "High Street stop"@en ; pax:hasAccessibilityFeature pax:StepFreeAccess .
+:station a owl:NamedIndividual , rail:RailwayStation ; rdfs:label "Central station"@en ;
+    transit:hasTransportMode transit:RailMode , transit:RoadMode .
+:cityStation a owl:NamedIndividual , rail:RailwayStation ; rdfs:label "City station"@en .
+:line12 a owl:NamedIndividual , pax:Line ; rdfs:label "bus line 12"@en ;
+    transit:offeredBy :operator ; pax:servesStop :stopA , :station ; transit:hasTariff :fare12 .
+:fare12 a owl:NamedIndividual , pax:Fare ; pax:hasFareClass pax:StandardClass ; transit:hasMonetaryAmount :price12 .
+:price12 a owl:NamedIndividual , transit:MonetaryAmount ; transit:hasNumericalValue "2.50"^^xsd:double .
+:timetable12 a owl:NamedIndividual , pax:Timetable ; pax:timetableOf :line12 .
+
+# vehicle runs
+:bus a owl:NamedIndividual , road:Bus ; rdfs:label "bus 4471"@en .
+:train a owl:NamedIndividual , rail:Train ; rdfs:label "07:52 service"@en .
+:busRun a owl:NamedIndividual , transit:VehicleRun ; rdfs:label "line 12, 07:20 run"@en ;
+    transit:operatedByVehicle :bus ; transit:realisesService :line12 ;
+    transit:departsAtOrigin :stopA ; transit:endsAtDestination :station ;
+    transit:hasOccupancy :count12 .
+:count12 a owl:NamedIndividual , pax:PassengerCount ; transit:hasNumericalValue "38"^^xsd:double .
+:trainRun a owl:NamedIndividual , transit:VehicleRun ; rdfs:label "07:52 train run"@en ;
+    transit:operatedByVehicle :train ;
+    transit:departsAtOrigin :station ; transit:endsAtDestination :cityStation .
+
+# the commuter's journey
+:walk1 a owl:NamedIndividual , transit:PedestrianLeg ; rdfs:label "walk home to stop"@en ;
+    transit:hasParticipantsInMovement :commuter ;
+    transit:departsAtOrigin :home ; transit:endsAtDestination :stopA .
+:busLeg a owl:NamedIndividual , pax:PassengerLeg ; rdfs:label "bus leg"@en ;
+    transit:hasParticipantsInMovement :commuter ; transit:carriedBy :busRun ; transit:operatedByVehicle :bus ;
+    pax:boardsAt :stopA ; pax:alightsAt :station ;
+    transit:hasTransportStatus pax:Completed .
+:change a owl:NamedIndividual , pax:Interchange ; rdfs:label "change at Central"@en ;
+    obo:BFO_0000066 :station ; transit:followsTravelLeg :busLeg ; transit:precedesTravelLeg :trainLeg .
+:trainLeg a owl:NamedIndividual , pax:PassengerLeg ; rdfs:label "train leg"@en ;
+    transit:hasParticipantsInMovement :commuter ; transit:carriedBy :trainRun ; transit:operatedByVehicle :train ;
+    pax:boardsAt :station ; pax:alightsAt :cityStation .
+:walk2 a owl:NamedIndividual , transit:PedestrianLeg ; rdfs:label "walk station to office"@en ;
+    transit:hasParticipantsInMovement :commuter ;
+    transit:departsAtOrigin :cityStation ; transit:endsAtDestination :office .
+:journey a owl:NamedIndividual , pax:PassengerJourney ; rdfs:label "morning commute"@en ;
+    transit:hasParticipantsInMovement :commuter ;
+    transit:hasTravelLeg :walk1 , :busLeg , :trainLeg , :walk2 ;
+    pax:hasTripPurpose pax:Commuting ;
+    transit:departsAtOrigin :home ; transit:endsAtDestination :office .
+:ticket a owl:NamedIndividual , pax:Ticket ; pax:entitles :commuter ; transit:documents :journey ; pax:hasFareClass pax:StandardClass .

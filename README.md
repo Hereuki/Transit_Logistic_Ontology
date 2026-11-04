@@ -4,11 +4,12 @@ A modular OWL ontology for multimodal transport and logistics, developed at Cran
 University with the Université de Technologie Tarbes Occitanie Pyrénées (UTTOP).
 
 TransiT gives a shared vocabulary for the things that take part in a transport scenario:
-journeys and travel legs, vehicles, payload and passengers, infrastructure and terminals,
-energy carriers and charging, schedules and disruptions, and the greenhouse-gas emissions
-that result. The goal is a consistent semantic model that downstream analysis and
-optimisation tools can build on, for example to compute the carbon footprint of an
-intermodal journey.
+journeys and travel legs, vehicle runs and what they carry, consignments and passengers,
+infrastructure and terminals, services and timetables, energy carriers and charging,
+schedules and disruptions, and the greenhouse-gas emissions that result. The goal is a
+consistent semantic model that downstream analysis and optimisation tools can build on,
+for example to compute the carbon footprint of an intermodal journey and allocate it to
+the consignments or passengers carried.
 
 The ontology is built on the **Basic Formal Ontology (BFO 2020)** as top-level ontology
 and the **Industrial Ontologies Foundry Core (IOF Core, 2024-01)** as mid-level ontology.
@@ -18,22 +19,25 @@ Standard 4 (IES4)**; they are TransiT's own terms and IES4 is not imported (see
 
 | | |
 |---|---|
-| Version | 0.4.0 (2025-11) |
+| Version | 0.5.0 (2025-11) |
 | Core IRI | `https://www.cranfield.ac.uk/transit/core` (prefix `transit:` = `.../core#`) |
 | Format | Turtle, one file per module under [ontology/](ontology/) |
-| Size | 167 TransiT classes across all modules, 110 of them in the core, plus the 254-class Air Domain Ontology |
+| Size | 277 TransiT classes across all modules, 129 of them in the core, plus the 254-class Air Domain Ontology |
 | Licence | MIT (see [LICENSE](LICENSE)) |
 
 ## Modules
 
 The ontology is a mode-neutral **core**, one module per transport **mode**, one thin module
-per **intersection** of two modes, and a **bridge** that hangs the separately developed Air
-Domain Ontology under the core. Each module imports what it needs, has its own namespace,
-and can be loaded on its own.
+per **intersection** of two modes, two cross-cutting modules for **freight** and
+**passengers** (what is moved, independent of how), and a **bridge** that hangs the
+separately developed Air Domain Ontology under the core. Each module imports what it
+needs, has its own namespace, and can be loaded on its own.
 
 ```mermaid
 graph BT
     core[transit-core]
+    freight --> core
+    passenger --> core
     road --> core
     rail --> core
     air --> core
@@ -53,6 +57,8 @@ graph BT
     adb[air-domain bridge] --> air
     adb --> road
     adb --> ado[Air Domain Ontology]
+    all --> freight
+    all --> passenger
     all --> rr
     all --> ar
     all --> arl
@@ -64,7 +70,9 @@ graph BT
 
 | File | Namespace | Holds |
 |---|---|---|
-| [transit-core.ttl](ontology/transit-core.ttl) | `transit:` | movement, journey, travel leg, transshipment, vehicle, payload, infrastructure, energy carriers and amounts, charger specifications, emissions, schedules and disruptions, roles, the transport-mode individuals |
+| [transit-core.ttl](ontology/transit-core.ttl) | `transit:` | movement, journey, travel leg and vehicle run, transshipment, vehicle, payload, infrastructure and stops, transport services and operators, bookings, documents, tariffs, statuses, capacity and transport work, energy carriers and amounts, charger specifications, emissions, schedules, time slots and disruptions, roles, the transport-mode individuals |
+| [transit-freight.ttl](ontology/transit-freight.ttl) | `freight:` | Consignment, ConsignmentLeg, FreightJourney, EmptyRun, kinds of goods (dangerous, perishable, temperature-controlled, bulk, containerised, palletised), cargo units (Container, SwapBody, Pallet, Parcel), Waybill and other documents, TransportOrder, delivery terms (Incoterms), FreightRate, LeadTime, forwarder and broker roles, handling processes from Pickup to Delivery, Warehouse, DistributionCentre, Depot, CrossDock, LoadingBay, DockAppointment, track-and-trace statuses |
+| [transit-passenger.ttl](ontology/transit-passenger.ttl) | `pax:` | PassengerLeg, PassengerJourney, TripPurpose, PassengerGroup, Luggage, Line, Timetable, TimetabledRun, Headway, public and shared mobility services, TransportAuthority, Ticket, Reservation, Fare and FareClass, seated and standing capacity, PassengerCount, accessibility needs and features, ParkAndRide, Platform, Interchange, MissedConnection, Punctuality, statuses |
 | [transit-road.ttl](ontology/transit-road.ttl) | `road:` | RoadVehicle (Car, Bus, Truck, Van, Motorcycle, Bicycle), Road, RoadTerminal, BusStation, ServiceStation, RoadTravelLeg |
 | [transit-rail.ttl](ontology/transit-rail.ttl) | `rail:` | RailVehicle (Train, Locomotive, Wagon, Tram, Metro), Railway, RailwayStation, RailTravelLeg |
 | [transit-air.ttl](ontology/transit-air.ttl) | `air:` | Aircraft (Aeroplane, Helicopter, UnmannedAircraft), Airway, Airport, Flight, SustainableAviationFuel |
@@ -73,6 +81,16 @@ graph BT
 | [air-domain.ttl](ontology/air-domain.ttl) | `ad:` | the Air Domain Ontology (airports, aircraft, airworthiness, flight operations, crew, cargo handling, regulation, safety), version 0.3.0, own IRI |
 | [transit-air-domain.ttl](ontology/transit-air-domain.ttl) | | the bridge: subclass and sub-property axioms that place the air ontology's top level under BFO and IOF and its key classes under the TransiT core and air module |
 | [transit-all.ttl](ontology/transit-all.ttl) | | imports everything; open this to load the whole ontology |
+
+**Vehicle runs versus what they carry.** A `VehicleRun` is the vehicle's own movement: a
+bus run on a line, a truck round, a flight. The legs of the passengers and consignments
+aboard are separate `TravelLeg`s that are `carriedBy` the run, as occurrent parts of it.
+One run carries many legs, which is what load factor, groupage and allocating a run's
+emissions to what it carried require. The freight module's `ConsignmentLeg` and the
+passenger module's `PassengerLeg` are the two kinds of carried leg; both are disjoint from
+`VehicleRun`. For a carried leg to be classified by mode (for example as a `RoadTravelLeg`),
+data must also state the vehicle on it, since propagating the vehicle from run to leg
+through a property chain would put `operatedByVehicle` outside OWL 2 DL.
 
 **How a mode module plugs in.** The core offers a handful of extension points: `Vehicle`,
 `TravelLeg`, `Infrastructure`, `TransportWay`, `TransferNode`, `Terminal`, the
@@ -96,6 +114,8 @@ assessment of the Air Domain Ontology and the open issues are in
 │   ├── transit-core.ttl                 The mode-neutral core
 │   ├── transit-{road,rail,air,maritime}.ttl
 │   ├── transit-{rail-road,air-road,air-rail,rail-maritime,road-maritime,air-maritime}.ttl
+│   ├── transit-freight.ttl              What is moved: consignments, documents, handling, freight nodes
+│   ├── transit-passenger.ttl            Who is moved: passenger journeys, lines, tickets, accessibility
 │   ├── air-domain.ttl                   Air Domain Ontology (own IRI)
 │   ├── transit-air-domain.ttl           Bridge from the Air Domain Ontology to TransiT
 │   ├── transit-all.ttl                  Imports every module
@@ -108,6 +128,8 @@ assessment of the Air Domain Ontology and the open issues are in
 │   └── iof-annotation-vocabulary.rdf    IOF Annotation Vocabulary (imported by IOF Core)
 ├── examples/
 │   ├── rail-road-journey.ttl            A container moved by train, transshipped, delivered by truck
+│   ├── freight-consignments.ttl         Two consignments on one truck run, documents, handling, an empty return
+│   ├── passenger-commute.ttl            A commute by bus and train with an interchange, line, fare and ticket
 │   └── air-domain-flight.ttl            A flight described in Air Domain Ontology terms only
 ├── tools/
 │   └── validate.py                      Structural checks and HermiT reasoning over all modules
@@ -130,10 +152,21 @@ ontology loads offline and everyone works against the same versions.
   `TransferNode` that moves payload from the vehicle of one leg to the vehicle of the next.
   Properties: `hasTravelLeg`, `operatedByVehicle`, `departsAtOrigin`, `endsAtDestination`,
   `passesBy`, `hasPayload`, `followsTravelLeg`, `precedesTravelLeg`.
+- **Vehicle runs, services and stops.** `VehicleRun` is a travel leg that is one vehicle's
+  movement and `carries` the legs of what is aboard. A run `realisesService` a
+  `TransportService`, the operator's offering (a line, a freight service), which is
+  `offeredBy` a `TransportOperator`. Runs call at `Stop`s; a `StopCall` is the dwell at
+  one stop with arrival and departure times. `Occupancy`, `LoadFactor` and
+  `TransportWork` (tonne- or passenger-kilometres) are measured on runs and movements.
+- **Bookings, documents, prices and status.** `Booking` reserves capacity on a service or
+  run; `TransportDocument` (tickets, waybills, proofs of delivery) `documents` a movement,
+  payload or booking; `Tariff` prices a service in a `MonetaryAmount`; `TransportStatus`
+  values give the track-and-trace state of a movement or payload.
 - **Plans and disruptions.** `Route` is an IOF plan specification that prescribes a journey,
   made of `RouteSegment`s. `Schedule` prescribes movements with `plannedStartTime` and
-  `plannedEndTime`; actual times are on the movement. `Disruption`, `Delay` and `Incident`
-  are inherent processes that `disrupt` a movement.
+  `plannedEndTime`; actual times are on the movement. `TimeSlot` is a schedule for one
+  stop call (a dock appointment, an airport slot). `Disruption`, `Delay`, `Incident` and
+  `Cancellation` are inherent processes that `disrupt` a movement.
 - **Vehicles.** `Vehicle` is a `Device` (an IOF assembly) that applies some energy carrier.
   `HumanDrivenVehicle` and `AutonomousVehicle` are mode-neutral and disjoint. The kinds of
   vehicle live in the mode modules.
@@ -182,6 +215,8 @@ the inferred hierarchy.
 python tools/validate.py                      # parse, references, labels, definitions, OWL 2 DL check
 python tools/validate.py --reason             # + consistency and satisfiability with HermiT
 python tools/validate.py --reason --example examples/rail-road-journey.ttl
+python tools/validate.py --reason --example examples/freight-consignments.ttl
+python tools/validate.py --reason --example examples/passenger-commute.ttl
 python tools/validate.py --reason --example examples/air-domain-flight.ttl
 ```
 

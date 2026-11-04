@@ -1,0 +1,264 @@
+@prefix : <https://www.cranfield.ac.uk/transit/freight#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iof: <https://spec.industrialontologies.org/ontology/core/Core/> .
+@prefix iof-av: <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+
+<https://www.cranfield.ac.uk/transit/freight> a owl:Ontology ;
+    owl:versionIRI <https://www.cranfield.ac.uk/transit/freight/2025-11> ;
+    owl:versionInfo "0.5.0" ;
+    owl:imports <https://www.cranfield.ac.uk/transit/core> ;
+    rdfs:label "TransiT Freight Module"@en ;
+    dcterms:license <https://opensource.org/licenses/MIT> ;
+    dcterms:abstract "Freight and logistics specialisations of the TransiT Core Ontology, independent of transport mode: consignments and their legs, cargo kinds and cargo units, transport documents, delivery terms, the parties to a transport, handling processes from pickup to delivery, freight nodes such as warehouses and cross-docks, and track-and-trace statuses."@en .
+
+#################################################################
+#    Consignments and their movements
+#################################################################
+
+:Consignment a owl:Class ;
+    rdfs:subClassOf transit:Payload ,
+        [ a owl:Restriction ; owl:onProperty :hasShipper ; owl:someValuesFrom transit:Shipper ] ,
+        [ a owl:Restriction ; owl:onProperty :hasConsignee ; owl:someValuesFrom transit:Consignee ] ;
+    rdfs:label "Consignment"@en ;
+    iof-av:synonym "shipment"@en ;
+    iof-av:naturalLanguageDefinition "A payload that one shipper hands over to one carrier under one transport document for delivery to one consignee. The unit of contract, pricing and tracking in freight transport."@en .
+
+:ConsignmentIdentifier a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( iof:Identifier
+        [ a owl:Restriction ; owl:onProperty iof:designates ; owl:someValuesFrom :Consignment ] ) ] ;
+    rdfs:subClassOf iof:Identifier ;
+    rdfs:label "Consignment Identifier"@en ;
+    iof-av:naturalLanguageDefinition "An identifier that designates a consignment, e.g. a tracking number."@en .
+
+:hasShipper a owl:ObjectProperty ; rdfs:domain :Consignment ; rdfs:range transit:Shipper ; rdfs:label "has shipper"@en ;
+    iof-av:naturalLanguageDefinition "Relates a consignment to the party that consigns it."@en .
+:hasConsignee a owl:ObjectProperty ; rdfs:domain :Consignment ; rdfs:range transit:Consignee ; rdfs:label "has consignee"@en ;
+    iof-av:naturalLanguageDefinition "Relates a consignment to the party it is to be delivered to."@en .
+:hasCarrier a owl:ObjectProperty ; rdfs:domain :Consignment ; rdfs:range transit:Carrier ; rdfs:label "has carrier"@en ;
+    iof-av:naturalLanguageDefinition "Relates a consignment to the carrier contracted to move it."@en .
+:hasFreightForwarder a owl:ObjectProperty ; rdfs:domain :Consignment ; rdfs:range :FreightForwarder ; rdfs:label "has freight forwarder"@en ;
+    iof-av:naturalLanguageDefinition "Relates a consignment to the freight forwarder that arranges its transport."@en .
+
+:ConsignmentLeg a owl:Class ;
+    rdfs:subClassOf transit:TravelLeg ,
+        [ a owl:Restriction ; owl:onProperty transit:hasPayload ; owl:someValuesFrom :Consignment ] ,
+        [ a owl:Restriction ; owl:onProperty transit:carriedBy ; owl:someValuesFrom transit:VehicleRun ] ;
+    owl:disjointWith transit:VehicleRun ;
+    rdfs:label "Consignment Leg"@en ;
+    iof-av:naturalLanguageDefinition "A travel leg of a consignment: its movement aboard one vehicle run from the node where it was loaded to the node where it is unloaded. Not the vehicle run itself, which may carry many consignment legs."@en .
+
+:FreightJourney a owl:Class ;
+    rdfs:subClassOf transit:Journey ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTravelLeg ; owl:someValuesFrom :ConsignmentLeg ] ,
+        [ a owl:Restriction ; owl:onProperty transit:hasPayload ; owl:someValuesFrom :Consignment ] ;
+    rdfs:label "Freight Journey"@en ;
+    iof-av:naturalLanguageDefinition "A journey of a consignment from pickup to delivery, made of consignment legs and the handling processes between them."@en .
+
+:EmptyRun a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:VehicleRun
+        [ a owl:Restriction ; owl:onProperty transit:hasPayload ; owl:onClass transit:Payload ; owl:maxQualifiedCardinality "0"^^xsd:nonNegativeInteger ] ) ] ;
+    rdfs:subClassOf transit:VehicleRun ;
+    rdfs:label "Empty Run"@en ;
+    iof-av:naturalLanguageDefinition "A vehicle run that carries no payload, e.g. a truck repositioning after a delivery. A key freight efficiency indicator."@en .
+
+#################################################################
+#    Kinds of goods and cargo units
+#################################################################
+
+:DangerousGoods a owl:Class ; rdfs:subClassOf transit:Payload ,
+        [ a owl:Restriction ; owl:onProperty :hasUNNumber ; owl:minCardinality "1"^^xsd:nonNegativeInteger ] ;
+    rdfs:label "Dangerous Goods"@en ;
+    iof-av:naturalLanguageDefinition "Payload that poses a risk to health, safety, property or the environment and is subject to the UN Model Regulations: identified by a UN number and a hazard class."@en .
+:hasUNNumber a owl:DatatypeProperty ; rdfs:domain :DangerousGoods ; rdfs:range xsd:string ; rdfs:label "has UN number"@en ;
+    iof-av:naturalLanguageDefinition "The four-digit UN number identifying the dangerous substance or article."@en .
+:hasHazardClass a owl:DatatypeProperty ; rdfs:domain :DangerousGoods ; rdfs:range xsd:string ; rdfs:label "has hazard class"@en ;
+    iof-av:naturalLanguageDefinition "The UN hazard class or division of the dangerous goods, e.g. 3 for flammable liquids."@en .
+:PerishableGoods a owl:Class ; rdfs:subClassOf transit:Payload ; rdfs:label "Perishable Goods"@en ;
+    iof-av:naturalLanguageDefinition "Payload that deteriorates over time and must be delivered within a limited period, e.g. fresh food or flowers."@en .
+:TemperatureControlledGoods a owl:Class ; rdfs:subClassOf transit:Payload ; rdfs:label "Temperature-Controlled Goods"@en ;
+    iof-av:naturalLanguageDefinition "Payload that must be kept within a prescribed temperature range throughout transport, e.g. frozen food or pharmaceuticals."@en .
+:LiveAnimals a owl:Class ; rdfs:subClassOf transit:Payload ; rdfs:label "Live Animals"@en ;
+    iof-av:naturalLanguageDefinition "Payload consisting of living animals, subject to welfare rules during transport."@en .
+:OversizedCargo a owl:Class ; rdfs:subClassOf transit:Payload ; rdfs:label "Oversized Cargo"@en ;
+    iof-av:naturalLanguageDefinition "Payload whose dimensions or mass exceed the limits of standard vehicles or cargo units and that needs special permits or equipment."@en .
+:HighValueGoods a owl:Class ; rdfs:subClassOf transit:Payload ; rdfs:label "High-Value Goods"@en ;
+    iof-av:naturalLanguageDefinition "Payload whose value requires additional security measures during transport."@en .
+:BulkCargo a owl:Class ; rdfs:subClassOf transit:Payload ; rdfs:label "Bulk Cargo"@en ;
+    iof-av:naturalLanguageDefinition "Payload transported unpackaged in large quantities, liquid or dry, e.g. grain, ore, oil."@en .
+:ContainerisedCargo a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:Payload
+        [ a owl:Restriction ; owl:onProperty obo:BFO_0000176 ; owl:someValuesFrom :Container ] ) ] ;
+    rdfs:subClassOf transit:Payload ;
+    rdfs:label "Containerised Cargo"@en ;
+    iof-av:naturalLanguageDefinition "Payload that is a continuant part of a container during transport."@en .
+:PalletisedCargo a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:Payload
+        [ a owl:Restriction ; owl:onProperty obo:BFO_0000176 ; owl:someValuesFrom :Pallet ] ) ] ;
+    rdfs:subClassOf transit:Payload ;
+    rdfs:label "Palletised Cargo"@en ;
+    iof-av:naturalLanguageDefinition "Payload that is a continuant part of a pallet during transport."@en .
+
+:Container a owl:Class ; rdfs:subClassOf transit:CargoUnit ; rdfs:label "Container"@en ;
+    iof-av:naturalLanguageDefinition "A standardised, reusable cargo unit (e.g. an ISO 20 ft or 40 ft container) that can be transferred between ships, trains and trucks without unloading its contents."@en .
+:SwapBody a owl:Class ; rdfs:subClassOf transit:CargoUnit ; rdfs:label "Swap Body"@en ;
+    iof-av:naturalLanguageDefinition "A cargo unit with support legs that can be exchanged between road and rail vehicles but, unlike a container, cannot be stacked."@en .
+:Pallet a owl:Class ; rdfs:subClassOf transit:CargoUnit ; rdfs:label "Pallet"@en ;
+    iof-av:naturalLanguageDefinition "A flat cargo unit on which goods are stacked for handling by forklift."@en .
+:Parcel a owl:Class ; rdfs:subClassOf transit:CargoUnit ; rdfs:label "Parcel"@en ;
+    iof-av:naturalLanguageDefinition "A packaged cargo unit small enough to be handled by one person, typical of courier and last-mile delivery."@en .
+[] a owl:AllDisjointClasses ; owl:members ( :Container :SwapBody :Pallet :Parcel ) .
+
+#################################################################
+#    Documents, orders, delivery terms, prices
+#################################################################
+
+:TransportOrder a owl:Class ; rdfs:subClassOf transit:Order ,
+        [ a owl:Restriction ; owl:onProperty :orders ; owl:someValuesFrom :Consignment ] ;
+    rdfs:label "Transport Order"@en ;
+    iof-av:naturalLanguageDefinition "An order by which a shipper or forwarder requests a carrier to move a consignment."@en .
+:orders a owl:ObjectProperty ; rdfs:subPropertyOf iof:isAbout ; rdfs:domain :TransportOrder ; rdfs:range :Consignment ; rdfs:label "orders"@en ;
+    iof-av:naturalLanguageDefinition "Relates a transport order to the consignment whose transport it requests."@en .
+:Waybill a owl:Class ; rdfs:subClassOf transit:TransportDocument ,
+        [ a owl:Restriction ; owl:onProperty transit:documents ; owl:someValuesFrom :Consignment ] ;
+    rdfs:label "Waybill"@en ;
+    iof-av:naturalLanguageDefinition "A transport document issued by the carrier that identifies a consignment, its parties, origin and destination, and evidences the contract of carriage."@en .
+:BillOfLading a owl:Class ; rdfs:subClassOf :Waybill ; rdfs:label "Bill of Lading"@en ;
+    iof-av:naturalLanguageDefinition "A waybill for sea transport that is also a document of title to the goods."@en .
+:CMRConsignmentNote a owl:Class ; rdfs:subClassOf :Waybill ; rdfs:label "CMR Consignment Note"@en ;
+    iof-av:naturalLanguageDefinition "A waybill for international road transport under the CMR Convention."@en .
+:AirWaybill a owl:Class ; rdfs:subClassOf :Waybill ; rdfs:label "Air Waybill"@en ;
+    iof-av:naturalLanguageDefinition "A waybill for air transport."@en .
+:RailConsignmentNote a owl:Class ; rdfs:subClassOf :Waybill ; rdfs:label "Rail Consignment Note"@en ;
+    iof-av:naturalLanguageDefinition "A waybill for rail transport, e.g. a CIM consignment note."@en .
+:ProofOfDelivery a owl:Class ; rdfs:subClassOf transit:TransportDocument ; rdfs:label "Proof of Delivery"@en ;
+    iof-av:naturalLanguageDefinition "A transport document, signed or confirmed by the consignee, evidencing that a consignment was delivered."@en .
+:CustomsDeclaration a owl:Class ; rdfs:subClassOf transit:TransportDocument ; rdfs:label "Customs Declaration"@en ;
+    iof-av:naturalLanguageDefinition "A transport document lodged with a customs authority to declare goods crossing a border."@en .
+:PackingList a owl:Class ; rdfs:subClassOf transit:TransportDocument ; rdfs:label "Packing List"@en ;
+    iof-av:naturalLanguageDefinition "A transport document itemising the goods and cargo units in a consignment."@en .
+
+:DeliveryTerm a owl:Class ; rdfs:subClassOf iof:ValueExpression ; rdfs:label "Delivery Term"@en ;
+    iof-av:naturalLanguageDefinition "A value expression stating which party pays for and bears the risk of each stage of a transport, e.g. an Incoterms 2020 rule."@en .
+:EXW a owl:NamedIndividual , :DeliveryTerm ; rdfs:label "EXW (Ex Works)"@en .
+:FCA a owl:NamedIndividual , :DeliveryTerm ; rdfs:label "FCA (Free Carrier)"@en .
+:FOB a owl:NamedIndividual , :DeliveryTerm ; rdfs:label "FOB (Free On Board)"@en .
+:CIF a owl:NamedIndividual , :DeliveryTerm ; rdfs:label "CIF (Cost, Insurance and Freight)"@en .
+:DAP a owl:NamedIndividual , :DeliveryTerm ; rdfs:label "DAP (Delivered At Place)"@en .
+:DDP a owl:NamedIndividual , :DeliveryTerm ; rdfs:label "DDP (Delivered Duty Paid)"@en .
+[] a owl:AllDifferent ; owl:distinctMembers ( :EXW :FCA :FOB :CIF :DAP :DDP ) .
+:hasDeliveryTerm a owl:ObjectProperty ; rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ; rdfs:domain :Consignment ; rdfs:range :DeliveryTerm ;
+    rdfs:label "has delivery term"@en ; iof-av:naturalLanguageDefinition "Relates a consignment to the delivery term agreed for it."@en .
+
+:FreightRate a owl:Class ; rdfs:subClassOf transit:Tariff ; rdfs:label "Freight Rate"@en ;
+    iof-av:naturalLanguageDefinition "A tariff for moving freight, typically per consignment, per cargo unit, per tonne or per tonne-kilometre."@en .
+:LeadTime a owl:Class ; rdfs:subClassOf iof:TemporalDurationValueExpression ; rdfs:label "Lead Time"@en ;
+    iof-av:naturalLanguageDefinition "A duration value expression of the time between the order or pickup of a consignment and its delivery, promised or achieved."@en .
+:hasLeadTime a owl:ObjectProperty ; rdfs:subPropertyOf transit:hasMeasuredTemporalValueAtSomeTime ; rdfs:domain [ a owl:Class ; owl:unionOf ( :Consignment transit:TransportService ) ] ; rdfs:range :LeadTime ;
+    rdfs:label "has lead time"@en ; iof-av:naturalLanguageDefinition "Relates a consignment or a transport service to its lead time."@en .
+
+#################################################################
+#    Parties
+#################################################################
+
+:FreightForwarderRole a owl:Class ; rdfs:subClassOf iof:ServiceProviderRole ; rdfs:label "Freight Forwarder Role"@en ;
+    iof-av:naturalLanguageDefinition "A service provider role held by an organization that arranges the transport of consignments on behalf of shippers, contracting carriers and handling documentation."@en .
+:LogisticsServiceProviderRole a owl:Class ; rdfs:subClassOf iof:ServiceProviderRole ; rdfs:label "Logistics Service Provider Role"@en ;
+    iof-av:naturalLanguageDefinition "A service provider role held by an organization that performs outsourced logistics such as warehousing, distribution and transport management (a 3PL)."@en .
+:CustomsBrokerRole a owl:Class ; rdfs:subClassOf iof:ServiceProviderRole ; rdfs:label "Customs Broker Role"@en ;
+    iof-av:naturalLanguageDefinition "A service provider role held by an organization that prepares and lodges customs declarations on behalf of importers and exporters."@en .
+:WarehouseOperatorRole a owl:Class ; rdfs:subClassOf iof:ServiceProviderRole ; rdfs:label "Warehouse Operator Role"@en ;
+    iof-av:naturalLanguageDefinition "A service provider role held by an organization that stores and handles goods in a warehouse."@en .
+:FreightForwarder a owl:Class ; owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( iof:Agent [ a owl:Restriction ; owl:onProperty iof:hasRole ; owl:someValuesFrom :FreightForwarderRole ] ) ] ;
+    rdfs:label "Freight Forwarder"@en ; iof-av:naturalLanguageDefinition "An agent that bears a freight forwarder role."@en .
+:LogisticsServiceProvider a owl:Class ; owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( iof:Agent [ a owl:Restriction ; owl:onProperty iof:hasRole ; owl:someValuesFrom :LogisticsServiceProviderRole ] ) ] ;
+    rdfs:label "Logistics Service Provider"@en ; iof-av:naturalLanguageDefinition "An agent that bears a logistics service provider role."@en .
+:CustomsBroker a owl:Class ; owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( iof:Agent [ a owl:Restriction ; owl:onProperty iof:hasRole ; owl:someValuesFrom :CustomsBrokerRole ] ) ] ;
+    rdfs:label "Customs Broker"@en ; iof-av:naturalLanguageDefinition "An agent that bears a customs broker role."@en .
+
+#################################################################
+#    Handling processes
+#################################################################
+
+:HandlingProcess a owl:Class ; rdfs:subClassOf iof:PlannedProcess ,
+        [ a owl:Restriction ; owl:onProperty :handlesPayload ; owl:someValuesFrom transit:Payload ] ;
+    rdfs:label "Handling Process"@en ;
+    iof-av:naturalLanguageDefinition "A planned process in which payload is physically handled at a node between or around its travel legs: loaded, unloaded, stored, picked, packed, consolidated, inspected, cleared."@en .
+:handlesPayload a owl:ObjectProperty ; rdfs:subPropertyOf obo:BFO_0000057 ; rdfs:domain :HandlingProcess ; rdfs:range transit:Payload ; rdfs:label "handles payload"@en ;
+    iof-av:naturalLanguageDefinition "Relates a handling process to the payload it acts on."@en .
+:Pickup a owl:Class ; rdfs:subClassOf :HandlingProcess ; rdfs:label "Pickup"@en ; iof-av:synonym "collection"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which the carrier takes a consignment into its custody at the shipper's premises or the first node. Starts the freight journey."@en .
+:Delivery a owl:Class ; rdfs:subClassOf :HandlingProcess ; rdfs:label "Delivery"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which the carrier hands a consignment over to the consignee at the final node. Ends the freight journey."@en .
+:Loading a owl:Class ; rdfs:subClassOf :HandlingProcess ,
+        [ a owl:Restriction ; owl:onProperty :loadsOnto ; owl:someValuesFrom transit:Vehicle ] ;
+    rdfs:label "Loading"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which payload is placed into or onto a vehicle at the start of a consignment leg."@en .
+:Unloading a owl:Class ; rdfs:subClassOf :HandlingProcess ,
+        [ a owl:Restriction ; owl:onProperty :unloadsFrom ; owl:someValuesFrom transit:Vehicle ] ;
+    rdfs:label "Unloading"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which payload is taken out of or off a vehicle at the end of a consignment leg."@en .
+:loadsOnto a owl:ObjectProperty ; rdfs:subPropertyOf obo:BFO_0000057 ; rdfs:domain :Loading ; rdfs:range transit:Vehicle ; rdfs:label "loads onto"@en ;
+    iof-av:naturalLanguageDefinition "Relates a loading process to the vehicle the payload is loaded onto."@en .
+:unloadsFrom a owl:ObjectProperty ; rdfs:subPropertyOf obo:BFO_0000057 ; rdfs:domain :Unloading ; rdfs:range transit:Vehicle ; rdfs:label "unloads from"@en ;
+    iof-av:naturalLanguageDefinition "Relates an unloading process to the vehicle the payload is unloaded from."@en .
+:Storage a owl:Class ; rdfs:subClassOf :HandlingProcess ,
+        [ a owl:Restriction ; owl:onProperty obo:BFO_0000066 ; owl:someValuesFrom :Warehouse ] ;
+    rdfs:label "Storage"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which payload is kept in a warehouse between movements."@en .
+:Picking a owl:Class ; rdfs:subClassOf :HandlingProcess ; rdfs:label "Picking"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which the items of an order are retrieved from storage."@en .
+:Packing a owl:Class ; rdfs:subClassOf :HandlingProcess ; rdfs:label "Packing"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which goods are placed into cargo units for transport."@en .
+:Consolidation a owl:Class ; rdfs:subClassOf :HandlingProcess ; rdfs:label "Consolidation"@en ; iof-av:synonym "groupage"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which several consignments are combined into one load or cargo unit for a shared vehicle run."@en .
+:Deconsolidation a owl:Class ; rdfs:subClassOf :HandlingProcess ; rdfs:label "Deconsolidation"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which a combined load is split back into its consignments."@en .
+:CrossDocking a owl:Class ; rdfs:subClassOf :HandlingProcess ,
+        [ a owl:Restriction ; owl:onProperty obo:BFO_0000066 ; owl:someValuesFrom :CrossDock ] ;
+    rdfs:label "Cross-Docking"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which payload is moved directly from an inbound vehicle to an outbound vehicle with little or no storage."@en .
+:CustomsClearance a owl:Class ; rdfs:subClassOf :HandlingProcess ; rdfs:label "Customs Clearance"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which a customs authority examines a consignment and its declaration and releases it for import or export."@en .
+:Inspection a owl:Class ; rdfs:subClassOf :HandlingProcess ; rdfs:label "Inspection"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which payload is examined for condition, security or compliance."@en .
+:ReturnOfEmpties a owl:Class ; rdfs:subClassOf :HandlingProcess ; rdfs:label "Return of Empties"@en ;
+    iof-av:naturalLanguageDefinition "A handling process in which empty cargo units are returned to their owner or depot after use."@en .
+
+#################################################################
+#    Freight nodes
+#################################################################
+
+:Warehouse a owl:Class ; rdfs:subClassOf transit:Infrastructure ; rdfs:label "Warehouse"@en ;
+    iof-av:naturalLanguageDefinition "Infrastructure in which payload is stored and handled between movements."@en .
+:DistributionCentre a owl:Class ; rdfs:subClassOf :Warehouse , transit:TransferNode ; rdfs:label "Distribution Centre"@en ;
+    iof-av:naturalLanguageDefinition "A warehouse that is also a transfer node, from which consignments are dispatched to their consignees."@en .
+:Depot a owl:Class ; rdfs:subClassOf transit:TransferNode ; rdfs:label "Depot"@en ;
+    iof-av:naturalLanguageDefinition "A transfer node operated by a carrier at which vehicle runs start and end and consignments are sorted."@en .
+:CrossDock a owl:Class ; rdfs:subClassOf transit:TransferNode ; rdfs:label "Cross-Dock"@en ;
+    iof-av:naturalLanguageDefinition "A transfer node designed for moving payload directly between inbound and outbound vehicles."@en .
+:ContainerYard a owl:Class ; rdfs:subClassOf transit:TransferNode ; rdfs:label "Container Yard"@en ;
+    iof-av:naturalLanguageDefinition "A transfer node at which containers are stored, stacked and transferred between vehicles."@en .
+:LoadingBay a owl:Class ; rdfs:subClassOf transit:Stop ; rdfs:label "Loading Bay"@en ; iof-av:synonym "dock door"@en ;
+    iof-av:naturalLanguageDefinition "A stop at a freight node at which one vehicle is loaded or unloaded."@en .
+:DockAppointment a owl:Class ; rdfs:subClassOf transit:TimeSlot ; rdfs:label "Dock Appointment"@en ;
+    iof-av:naturalLanguageDefinition "A time slot booked for a vehicle run to call at a loading bay."@en .
+
+#################################################################
+#    Track and trace statuses
+#################################################################
+
+:Booked a owl:NamedIndividual , transit:TransportStatus ; rdfs:label "booked"@en .
+:Collected a owl:NamedIndividual , transit:TransportStatus ; rdfs:label "collected"@en .
+:InTransit a owl:NamedIndividual , transit:TransportStatus ; rdfs:label "in transit"@en .
+:AtTerminal a owl:NamedIndividual , transit:TransportStatus ; rdfs:label "at terminal"@en .
+:CustomsHold a owl:NamedIndividual , transit:TransportStatus ; rdfs:label "customs hold"@en .
+:OutForDelivery a owl:NamedIndividual , transit:TransportStatus ; rdfs:label "out for delivery"@en .
+:Delivered a owl:NamedIndividual , transit:TransportStatus ; rdfs:label "delivered"@en .
+:DeliveryException a owl:NamedIndividual , transit:TransportStatus ; rdfs:label "delivery exception"@en .
+[] a owl:AllDifferent ; owl:distinctMembers ( :Booked :Collected :InTransit :AtTerminal :CustomsHold :OutForDelivery :Delivered :DeliveryException ) .
