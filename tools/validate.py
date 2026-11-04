@@ -27,8 +27,10 @@ LOCAL = {
     "http://purl.obolibrary.org/obo/bfo.owl": os.path.join(ROOT, "imports", "bfo.owl"),
 }
 for f in sorted(os.listdir(ONT)):
-    if f.endswith(".ttl"):
+    if f.endswith(".ttl") and f.startswith("transit-"):
         LOCAL[BASE + f[len("transit-"):-4]] = os.path.join(ONT, f)
+# the Air Domain Ontology keeps its own IRI
+LOCAL["http://www.cranfield.ac.uk/ontology/air-domain"] = os.path.join(ONT, "air-domain.ttl")
 
 
 def load_closure(start_files):

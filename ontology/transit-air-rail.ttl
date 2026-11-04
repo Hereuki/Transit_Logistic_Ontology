@@ -1,0 +1,52 @@
+@prefix : <https://www.cranfield.ac.uk/transit/air-rail#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix road: <https://www.cranfield.ac.uk/transit/road#> .
+@prefix rail: <https://www.cranfield.ac.uk/transit/rail#> .
+@prefix air: <https://www.cranfield.ac.uk/transit/air#> .
+@prefix maritime: <https://www.cranfield.ac.uk/transit/maritime#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iof-av: <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/> .
+
+<https://www.cranfield.ac.uk/transit/air-rail> a owl:Ontology ;
+    owl:versionIRI <https://www.cranfield.ac.uk/transit/air-rail/2025-11> ;
+    owl:versionInfo "0.4.0" ;
+    owl:imports <https://www.cranfield.ac.uk/transit/air> , <https://www.cranfield.ac.uk/transit/rail> ;
+    rdfs:label "TransiT Air-Rail Intersection Module"@en ;
+    dcterms:license <https://opensource.org/licenses/MIT> ;
+    dcterms:abstract "Intersection of the TransiT air and rail modules: the terminals that connect the two modes, the journeys that use both, and the transshipments between them. Intentionally thin: everything mode-specific lives in the two mode modules, everything generic in the core."@en .
+
+:AirRailTerminal a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:Terminal
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:AirMode ]
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:RailMode ] ) ] ;
+    rdfs:subClassOf transit:Terminal ;
+    rdfs:label "Air-Rail Terminal"@en ;
+    iof-av:naturalLanguageDefinition "A terminal that serves both the air and the rail transport modes, at which payload or passengers are transferred between air and rail vehicles."@en .
+
+:AirRailJourney a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:Journey
+        [ a owl:Restriction ; owl:onProperty transit:hasTravelLeg ; owl:someValuesFrom air:Flight ]
+        [ a owl:Restriction ; owl:onProperty transit:hasTravelLeg ; owl:someValuesFrom rail:RailTravelLeg ] ) ] ;
+    rdfs:subClassOf transit:IntermodalJourney ;
+    rdfs:label "Air-Rail Journey"@en ;
+    iof-av:naturalLanguageDefinition "An intermodal journey that has at least one air travel leg and at least one rail travel leg."@en .
+
+:AirRailTransshipment a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:Transshipment
+        [ a owl:Class ; owl:unionOf (
+            [ a owl:Class ; owl:intersectionOf (
+                [ a owl:Restriction ; owl:onProperty transit:followsTravelLeg ; owl:someValuesFrom air:Flight ]
+                [ a owl:Restriction ; owl:onProperty transit:precedesTravelLeg ; owl:someValuesFrom rail:RailTravelLeg ] ) ]
+            [ a owl:Class ; owl:intersectionOf (
+                [ a owl:Restriction ; owl:onProperty transit:followsTravelLeg ; owl:someValuesFrom rail:RailTravelLeg ]
+                [ a owl:Restriction ; owl:onProperty transit:precedesTravelLeg ; owl:someValuesFrom air:Flight ] ) ] ) ] ) ] ;
+    rdfs:subClassOf transit:Transshipment ;
+    rdfs:label "Air-Rail Transshipment"@en ;
+    iof-av:naturalLanguageDefinition "A transshipment between a air travel leg and a rail travel leg, in either direction."@en .
+
+# vehicles of the two modes are disjoint
+air:Aircraft owl:disjointWith rail:RailVehicle .

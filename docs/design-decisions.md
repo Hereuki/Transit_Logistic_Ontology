@@ -11,12 +11,12 @@ is final.
 |---|---|---|---|
 | core | `https://www.cranfield.ac.uk/transit/core` | IOF Core (hence BFO) | everything that is true of transport regardless of mode |
 | road, rail, air, maritime | `https://www.cranfield.ac.uk/transit/<mode>` | core | vehicles, ways, terminals and travel legs of one mode |
-| rail-road, air-road, rail-maritime, road-maritime, air-maritime | `https://www.cranfield.ac.uk/transit/<a>-<b>` | the two mode modules | terminals that connect two modes, journeys that use both, transshipments between them |
-| all | `https://www.cranfield.ac.uk/transit/all` | the five intersections | convenience entry point |
+| rail-road, air-road, rail-maritime, road-maritime, air-maritime, air-rail | `https://www.cranfield.ac.uk/transit/<a>-<b>` | the two mode modules | terminals that connect two modes, journeys that use both, transshipments between them |
+| air-domain | `https://www.cranfield.ac.uk/transit/air-domain` | air, road, Air Domain Ontology | bridge hanging the Air Domain Ontology under TransiT (section 6) |
+| all | `https://www.cranfield.ac.uk/transit/all` | the six intersections and the bridge | convenience entry point |
 
 Each module has its own namespace, so the module a term belongs to is visible in its IRI.
-The air-rail intersection is not in the current figure and has not been created; the
-generator in the project history can add it in one line.
+The Air Domain Ontology keeps its original IRI `http://www.cranfield.ac.uk/ontology/air-domain`.
 
 **Namespace change.** The core namespace moved from
 `https://www.cranfield.ac.uk/transit/202501#` to `https://www.cranfield.ac.uk/transit/core#`.
@@ -88,15 +88,59 @@ An intersection module uses only `Terminal`, `Journey`, `IntermodalJourney`, `Tr
 | `hasPayLoad` | `hasPayload` | core |
 | `_tempPropertyObjectIES4`, `isBooleanProperty`, `isPlanned`, `hasParticipantsInIndustry` | dropped | |
 
-## 5. Known open issues
+## 5. Version 0.4 changes
 
-- `Energy`, `Fuel` and `Electricity` are still IOF material resources. Fuel is matter, but
-  electricity is a flow of charge and energy is a quantity. Left as is for now.
-- `DesignedCurrent`, `DesignedPower` and the other charger design classes are modelled as
-  functions, but their definitions describe specification values.
-- `hasUnit` is a string. A units ontology (QUDT or OM) should replace it.
-- `Vehicle` requires a `TransportDesignSpecification` for every instance, which forces data
-  completeness.
+| Topic | Decision | Why |
+|---|---|---|
+| Energy | `Energy` renamed `EnergyCarrier` (an IOF material resource: fuel, electricity, hydrogen). The *quantity* is a separate `EnergyAmount` value expression attached with `hasEnergyAmount` to a process or material entity. `Electricity` stays a material resource with an explicit note that this is a convention for accounting. `Fuel` and `Electricity` are disjoint; `Hydrogen` added under `Fuel`. | the old class conflated the carrier with the quantity; a flight's energy use is a quantity, the kerosene is a carrier |
+| Charger design | The eight `Designed*` function classes (current, voltage, power, frequency, phase, pin, connector, protocol) replaced by `ChargerDesignSpecification` and seven subclasses under IOF `DesignSpecification`. `EnergyCharger` is prescribed by some charger design specification and keeps its `DesignedChargerFunction`. | their definitions described specification values, not functions |
+| Units | `hasMeasurementUnit` (object property, range `qudt:Unit`) replaces the string property `hasUnit`, which is deprecated but kept. `qudt:Unit` is declared locally so QUDT unit individuals can be referenced without importing QUDT. `hasNumericalValue` now ranges over `xsd:double`. | computation needs machine-readable units |
+| Vehicle | No longer required to be prescribed by a `TransportDesignSpecification`. Still applies some energy carrier. | design specifications prescribe vehicle types, not every instance |
+| Air-rail intersection | Added; the generator now produces six intersection modules. | completes the pairwise set |
+| Mode coverage | Road: `Motorcycle`, `Bicycle`. Rail: `Tram`, `Metro`. Maritime: `Ferry`, `Barge`, `ContainerShip`. Air: `Aeroplane`, `Helicopter`, `UnmannedAircraft` (also an `AutonomousVehicle`). | the minimum set left obvious gaps |
+| Pedestrian legs | `TravelLeg` now has *at most* one vehicle. `PedestrianLeg` is a travel leg with no vehicle and the new `WalkingMode`. | a journey from station to office has a walking leg; it was unrepresentable |
+| Disruptions | `Disruption` (an inherent process that `disrupts` some movement) with `Delay` and `Incident`. `Schedule` gets `plannedStartTime` and `plannedEndTime`; actual times stay on the movement. | planned versus actual, and the reasons for divergence, were missing |
+| Air Domain Ontology | Copied from the `air-ontology` branch to `ontology/air-domain.ttl` (its own IRI), improved in place, and hung under TransiT by the bridge `transit-air-domain.ttl`. See section 6. | the user asked for it to be assessed and integrated |
+| IES4 alignment | `ontology/alignments/transit-ies4-alignment.ttl` records `skos:closeMatch` links for the fourteen adapted terms. Not imported anywhere. | provenance for data exchange without merging a 4D ontology into reasoning |
+
+## 6. Air Domain Ontology: assessment and integration
+
+**Assessment of version 0.2** (254 classes, 115 object properties, 13 data properties):
+every class has a label and a definition, the hierarchy is acyclic, the file is in OWL 2 DL,
+and HermiT finds it consistent with no unsatisfiable class. Its weaknesses were structural:
+no upper ontology, nine pragmatic top-level classes with pairwise disjointness, and a few
+misfiled branches: `Route`, `MultimodalLink`, `AirNetwork` and `RoadNetwork` under
+`Location` although they are built ways and nodes; `EnergyUnit` (a quantity) under
+`Measurement` next to `KPI`; `SustainableAviationFuel` under the `EnergySource`
+classification rather than as a material; `LeasedAircraft` floating at the top because it
+is only defined, never asserted, as a kind of aircraft.
+
+**Improvements made in the file** (now version 0.3.0, with a change note): the four
+misfiled classes moved to `Infrastructure` with corrected definitions, and
+`LeasedAircraft` asserted under `Aircraft`. Nothing else was changed, so the ontology
+remains usable on its own.
+
+**Bridge** (`transit-air-domain.ttl`, imports the air and road modules and the air
+ontology): the nine top-level classes are mapped to BFO and IOF (`Agent`, `Organization`,
+`Person`, material entity, process, `transit:Location`, information content entity,
+value expression for both `Measurement` and `Category`, IOF `Capability` for `Service`),
+and the key domain classes to TransiT (`Aircraft`, `Airport`, `Flight`, `GroundVehicle`,
+`Cargo` and `Consignment` as payload, `CargoContainer` as cargo unit, `Airline` as carrier,
+`Passenger`, schedules, `EnergyUnit` as energy amount, `CarbonEmission` as carbon
+footprint). Nine properties are mapped, so a flight described purely in air-domain terms
+is classified as a TransiT flight and travel leg. The whole closure, 167 TransiT classes
+plus 254 air classes, is consistent under HermiT.
+
+**Deliberately not aligned:** `ad:SustainableAviationFuel` (a classification value, not the
+material fuel), `ad:Terminal` (an airport building, not a transfer node), and
+`ad:hasPart`/`ad:partOf` (used for both continuants and occurrents).
+
+## 7. Known open issues
+
+- `Electricity` is a material resource by convention. A process-based model would be
+  cleaner but would change every energy property.
 - The diagrams in `docs/figures/` predate the split and still show the old class names.
-- The Air Domain Ontology on the `air-ontology` branch has its own upper level and must be
-  re-hung under the core before it can extend the air module.
+- The air ontology's `EDISystem` and `OperationalControlSystem` sit under
+  `InformationObject`; they are systems rather than information.
+- The air ontology models shipper, consignee and other parties as agent subclasses rather
+  than roles; the bridge maps them onto TransiT's defined classes, which entails the roles.

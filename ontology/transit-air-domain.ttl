@@ -1,0 +1,97 @@
+@prefix : <https://www.cranfield.ac.uk/transit/air-domain#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix air: <https://www.cranfield.ac.uk/transit/air#> .
+@prefix road: <https://www.cranfield.ac.uk/transit/road#> .
+@prefix ad: <http://www.cranfield.ac.uk/ontology/air-domain#> .
+@prefix iof: <https://spec.industrialontologies.org/ontology/core/Core/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://www.cranfield.ac.uk/transit/air-domain> a owl:Ontology ;
+    owl:versionIRI <https://www.cranfield.ac.uk/transit/air-domain/2025-11> ;
+    owl:versionInfo "0.4.0" ;
+    owl:imports <https://www.cranfield.ac.uk/transit/air> ,
+                <https://www.cranfield.ac.uk/transit/road> ,
+                <http://www.cranfield.ac.uk/ontology/air-domain> ;
+    rdfs:label "TransiT Air Domain Bridge"@en ;
+    dcterms:license <https://opensource.org/licenses/MIT> ;
+    dcterms:abstract "Bridge that hangs the Air Domain Ontology (254 classes, its own pragmatic top level) under the TransiT core and air module, and through them under BFO and IOF Core. It contains only subclass and sub-property axioms; the Air Domain Ontology itself is unchanged by it and stays usable on its own. The road module is imported because the air ontology's GroundVehicle is a road vehicle."@en ;
+    rdfs:comment "Not aligned on purpose: ad:SustainableAviationFuel is a classification value (an EnergySource category) in the air ontology, whereas air:SustainableAviationFuel in the TransiT air module is a material fuel; ad:Terminal is an airport terminal building, whereas transit:Terminal is a transfer node; ad:hasPart and ad:partOf are used for both continuants and occurrents and are not mapped to the BFO part relations."@en .
+
+#################################################################
+#    Top level: pragmatic air classes -> BFO / IOF
+#################################################################
+
+ad:Agent               rdfs:subClassOf iof:Agent .
+ad:Organization        rdfs:subClassOf iof:Organization .
+ad:Person              rdfs:subClassOf iof:Person .
+ad:PhysicalObject      rdfs:subClassOf obo:BFO_0000040 .          # material entity
+ad:Process             rdfs:subClassOf obo:BFO_0000015 .          # process
+ad:Location            rdfs:subClassOf transit:Location .         # BFO site
+ad:InformationObject   rdfs:subClassOf iof:InformationContentEntity .
+ad:Measurement         rdfs:subClassOf iof:ValueExpression .
+ad:Category            rdfs:subClassOf iof:ValueExpression .
+ad:Service             rdfs:subClassOf iof:Capability .           # a capability offered by a system or organization
+
+#################################################################
+#    Vehicles, infrastructure, payload
+#################################################################
+
+ad:Aircraft            rdfs:subClassOf air:Aircraft .
+ad:GroundVehicle       rdfs:subClassOf road:RoadVehicle .
+ad:Equipment           rdfs:subClassOf iof:MaterialArtifact .
+ad:CargoContainer      rdfs:subClassOf transit:CargoUnit .
+ad:Cargo               rdfs:subClassOf transit:Payload .
+ad:Consignment         rdfs:subClassOf transit:Payload .
+
+ad:Infrastructure      rdfs:subClassOf transit:Infrastructure .
+ad:Airport             rdfs:subClassOf air:Airport .
+ad:CargoTerminal       rdfs:subClassOf transit:TransferNode .
+ad:MultimodalLink      rdfs:subClassOf transit:TransferNode .
+ad:Route               rdfs:subClassOf air:Airway .
+ad:ChargingStation     rdfs:subClassOf transit:ChargingStation .
+ad:ChargingPoint       rdfs:subClassOf transit:ChargingPoint .
+
+#################################################################
+#    Movements and events
+#################################################################
+
+ad:Flight              rdfs:subClassOf air:Flight .
+ad:OperationalDisruption rdfs:subClassOf transit:Disruption .
+
+#################################################################
+#    Parties and people
+#################################################################
+
+ad:Airline             rdfs:subClassOf transit:Carrier .
+ad:Shipper             rdfs:subClassOf transit:Shipper .
+ad:Consignee           rdfs:subClassOf transit:Consignee .
+ad:Passenger           rdfs:subClassOf transit:Passenger .
+
+#################################################################
+#    Information
+#################################################################
+
+ad:Identifier          rdfs:subClassOf iof:Identifier .
+ad:FlightSchedule      rdfs:subClassOf transit:Schedule .
+ad:DispatchSchedule    rdfs:subClassOf transit:Schedule .
+ad:TransportMode       rdfs:subClassOf transit:TransportMode .
+ad:EnergyUnit          rdfs:subClassOf transit:EnergyAmount .
+ad:CarbonEmission      rdfs:subClassOf transit:CarbonFootprint .
+ad:EnergySource        rdfs:seeAlso transit:EnergyCarrier .
+
+#################################################################
+#    Properties
+#################################################################
+
+ad:usesAircraft        rdfs:subPropertyOf transit:operatedByVehicle .
+ad:departedFrom        rdfs:subPropertyOf transit:departsAtOrigin .
+ad:arrivedAt           rdfs:subPropertyOf transit:endsAtDestination .
+ad:hasIntermediateStop rdfs:subPropertyOf transit:passesBy .
+ad:carriesCargo        rdfs:subPropertyOf transit:hasPayload .
+ad:carriesPassenger    rdfs:subPropertyOf transit:hasParticipantsInMovement .
+ad:consumesEnergy      rdfs:subPropertyOf transit:hasEnergyAmount .
+ad:emitsCarbon         rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime .
+ad:hasName             rdfs:subPropertyOf transit:hasName .

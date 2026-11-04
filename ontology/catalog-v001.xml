@@ -27,6 +27,12 @@
         <uri name="https://www.cranfield.ac.uk/transit/road-maritime/2025-11" uri="transit-road-maritime.ttl"/>
         <uri name="https://www.cranfield.ac.uk/transit/air-maritime" uri="transit-air-maritime.ttl"/>
         <uri name="https://www.cranfield.ac.uk/transit/air-maritime/2025-11" uri="transit-air-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-rail" uri="transit-air-rail.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-rail/2025-11" uri="transit-air-rail.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-domain" uri="transit-air-domain.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-domain/2025-11" uri="transit-air-domain.ttl"/>
+        <uri name="http://www.cranfield.ac.uk/ontology/air-domain" uri="air-domain.ttl"/>
+        <uri name="http://www.cranfield.ac.uk/ontology/air-domain/0.3.0" uri="air-domain.ttl"/>
         <uri name="https://www.cranfield.ac.uk/transit/all" uri="transit-all.ttl"/>
         <uri name="https://www.cranfield.ac.uk/transit/all/2025-11" uri="transit-all.ttl"/>
     </group>

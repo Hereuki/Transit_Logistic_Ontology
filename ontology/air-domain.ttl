@@ -1,0 +1,2293 @@
+@prefix air: <http://www.cranfield.ac.uk/ontology/air-domain#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+dc:title a owl:AnnotationProperty .
+
+dcterms:abstract a owl:AnnotationProperty .
+
+dcterms:title a owl:AnnotationProperty .
+
+vann:preferredNamespacePrefix a owl:AnnotationProperty .
+
+vann:preferredNamespaceUri a owl:AnnotationProperty .
+
+<http://www.cranfield.ac.uk/ontology/air-domain> a owl:Ontology ;
+    rdfs:label "Air Domain Ontology"@en ;
+    dc:title "Air Domain Ontology"@en ;
+    dcterms:abstract "An OWL 2 DL ontology of the civil air transport domain: passenger and cargo operations, airports, aircraft and airworthiness, flight operations and crew, air traffic management, ground handling, regulation, safety and security, and environmental sustainability."@en ;
+    dcterms:title "Air Domain Ontology"@en ;
+    vann:preferredNamespacePrefix "air" ;
+    vann:preferredNamespaceUri "http://www.cranfield.ac.uk/ontology/air-domain#" ;
+    rdfs:comment "A comprehensive ontology of the civil air transport domain, covering air passenger and cargo/freight operations, airport infrastructure and operations, aircraft and airworthiness, flight operations and crew, air traffic management, ground handling, regulatory/certification instruments, safety and security, and environmental sustainability. Consolidated from the project's existing class/relationship tables (Air_Freight_and_Passenger_Ontology, Sheet3 organisational/regulatory layers, the cargo-handling 'Category' breakdown, and the Airport Operations Plan / APOC concepts) and extended with generally-recognised air-domain concepts not yet captured there. No upper ontology (e.g. BFO) is imported; a small set of pragmatic top-level classes (Agent, PhysicalObject, InformationObject, Process, Location, PolicyOrRegulation, Measurement, Service, Category) organises the hierarchy instead."@en ;
+    rdfs:seeAlso <https://www.cranfield.ac.uk/transit/air-domain> ;
+    owl:versionIRI <http://www.cranfield.ac.uk/ontology/air-domain/0.3.0> ;
+    owl:versionInfo "0.3.0" ;
+    skos:changeNote "0.2.0: fixed inverted/part-of subclass links (Aerodrome/Airport, AerodromeOperatingSite, ChargingPoint, Consignment); converted EASA, FAA, ICAO, IATA, CORSIA from classes to individuals; moved classifications out of Measurement into a new Category branch; added Identifier, Certificate, Licence, Occurrence, TradeAssociation, GroundVehicle; fixed IATAcode/ICAOcode range typos and over-narrow domains/ranges; added part-of, property hierarchy, inverses, functional properties, existential and cardinality restrictions, defined classes and disjointness axioms."@en,
+        "0.3.0: moved Route, MultimodalLink, AirNetwork and RoadNetwork from Location to Infrastructure (they are built ways, nodes and networks, not places); asserted LeasedAircraft as a subclass of Aircraft; no other content change. This version is aligned with the TransiT Core Ontology through the separate bridge module https://www.cranfield.ac.uk/transit/air-domain, which maps the pragmatic top-level classes to BFO and IOF Core."@en .
+
+air:Accident a owl:Class ;
+    rdfs:label "Accident"@en ;
+    rdfs:comment "An occurrence involving an aircraft resulting in death, serious injury, or significant aircraft damage."@en ;
+    rdfs:subClassOf air:SafetyIncident ;
+    owl:disjointWith air:SeriousIncident .
+
+air:AerodromeOperatingSite a owl:Class ;
+    rdfs:label "Aerodrome Operating Site"@en ;
+    rdfs:comment "A specific site within or associated with an aerodrome from which operations are conducted."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:partOf ;
+            owl:someValuesFrom air:Aerodrome ],
+        air:Infrastructure .
+
+air:AerodromeService a owl:Class ;
+    rdfs:label "Aerodrome Service"@en ;
+    rdfs:comment "A service provided at an aerodrome to support aircraft operations."@en ;
+    rdfs:subClassOf air:Service .
+
+air:AirNavigationFacility a owl:Class ;
+    rdfs:label "Air Navigation Facility"@en ;
+    rdfs:comment "A facility that provides navigation aids or communication services in support of air navigation."@en ;
+    rdfs:subClassOf air:Infrastructure .
+
+air:AirShipment a owl:Class ;
+    rdfs:label "Air Shipment"@en ;
+    rdfs:comment "A mode of cargo transportation using aircraft, known for speed and suitability for high-value or time-sensitive goods."@en ;
+    rdfs:subClassOf air:TransportMode .
+
+air:AirTrafficController a owl:Class ;
+    rdfs:label "Air Traffic Controller"@en ;
+    rdfs:comment "A licensed person who provides air traffic control services to manage aircraft movement in the air and on the ground."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:holdsLicense ;
+            owl:someValuesFrom air:Licence ],
+        air:Person ;
+    skos:altLabel "ATCO"@en .
+
+air:AirTrafficFlowManagement a owl:Class ;
+    rdfs:label "Air Traffic Flow Management"@en ;
+    rdfs:comment "A service that manages air traffic flow to optimise the use of available airspace and airport capacity."@en ;
+    rdfs:subClassOf air:Process ;
+    skos:altLabel "ATFM"@en .
+
+air:AircraftConfiguration a owl:Class ;
+    rdfs:label "Aircraft Configuration"@en ;
+    rdfs:comment "The specific approved configuration of an aircraft, including seating layout and fitted equipment."@en ;
+    rdfs:subClassOf air:InformationObject .
+
+air:AircraftEquipment a owl:Class ;
+    rdfs:label "Aircraft Equipment"@en ;
+    rdfs:comment "Equipment fitted to an aircraft in accordance with its approved configuration."@en ;
+    rdfs:subClassOf air:AircraftComponent .
+
+air:AircraftMaintenanceCheck a owl:Class ;
+    rdfs:label "Aircraft Maintenance Check"@en ;
+    rdfs:comment "A scheduled inspection of an aircraft carried out at defined intervals (e.g. A, B, C, or D check)."@en ;
+    rdfs:subClassOf air:MaintenanceActivity .
+
+air:AirportApron a owl:Class ;
+    rdfs:label "Airport Apron"@en ;
+    rdfs:comment "The area of an airport where aircraft are parked, unloaded or loaded, refuelled, boarded, or maintained."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:partOf ;
+            owl:someValuesFrom air:Aerodrome ],
+        air:Infrastructure ;
+    skos:altLabel "Ramp"@en .
+
+air:AirportPolicy a owl:Class ;
+    rdfs:label "Airport Policy"@en ;
+    rdfs:comment "Rules and regulations governing operations at an airport."@en ;
+    rdfs:subClassOf air:PolicyOrRegulation .
+
+air:AuthorisedEconomicOperator a owl:Class ;
+    rdfs:label "Authorised Economic Operator"@en ;
+    rdfs:comment "A certified party recognised as having secure and compliant supply chain and customs procedures."@en ;
+    rdfs:subClassOf air:Organization ;
+    skos:altLabel "AEO"@en .
+
+air:AutomaticScanning a owl:Class ;
+    rdfs:label "Automatic Scanning"@en ;
+    rdfs:comment "Automated barcode or airway bill scanning as part of screening."@en ;
+    rdfs:subClassOf air:SecurityScreening ;
+    owl:disjointWith air:ManualScanning .
+
+air:AviationPolicy a owl:Class ;
+    rdfs:label "Aviation Policy"@en ;
+    rdfs:comment "Policies and regulations that govern the safety, security, environmental standards, and operations of the aviation industry at a national or international level."@en ;
+    rdfs:subClassOf air:PolicyOrRegulation .
+
+air:BaggageHandling a owl:Class ;
+    rdfs:label "Baggage Handling"@en ;
+    rdfs:comment "The loading, unloading, and sorting of passenger baggage."@en ;
+    rdfs:subClassOf air:GroundHandlingService .
+
+air:Bagging a owl:Class ;
+    rdfs:label "Bagging"@en ;
+    rdfs:comment "The loading of small parcels into transport bags."@en ;
+    rdfs:subClassOf air:CargoHandlingOperation .
+
+air:BirdStrike a owl:Class ;
+    rdfs:label "Bird Strike"@en ;
+    rdfs:comment "A collision between an aircraft and a bird or wildlife."@en ;
+    rdfs:subClassOf air:SafetyIncident .
+
+air:BondedArea a owl:Class ;
+    rdfs:label "Bonded Area"@en ;
+    rdfs:comment "A secure zone authorised for storing cargo without paying duties until customs clearance."@en ;
+    rdfs:subClassOf air:CustomsWarehouse .
+
+air:CORSIA a air:EnvironmentalRegulation,
+        owl:NamedIndividual ;
+    rdfs:label "CORSIA"@en ;
+    rdfs:comment "The Carbon Offsetting and Reduction Scheme for International Aviation, an ICAO scheme to offset growth in international aviation CO2 emissions."@en ;
+    skos:altLabel "Carbon Offsetting and Reduction Scheme for International Aviation"@en .
+
+air:CargoTerminal a owl:Class ;
+    rdfs:label "Cargo Terminal"@en ;
+    rdfs:comment "A dedicated facility at an airport for the handling of air cargo."@en ;
+    rdfs:subClassOf air:Infrastructure .
+
+air:CivilAviationAuthority a owl:Class ;
+    rdfs:label "Civil Aviation Authority"@en ;
+    rdfs:comment "A national authority responsible for civil aviation safety oversight and regulation within its state."@en ;
+    rdfs:subClassOf air:RegulatoryAuthority ;
+    skos:altLabel "CAA"@en .
+
+air:CodeShareAgreement a owl:Class ;
+    rdfs:label "Code Share Agreement"@en ;
+    rdfs:comment "An agreement under which two or more airlines share the same flight, each marketing it under its own designator code."@en ;
+    rdfs:subClassOf air:Document .
+
+air:Commander a owl:Class ;
+    rdfs:label "Commander"@en ;
+    rdfs:comment "The crew member vested with command authority and overall responsibility for the safe conduct of the flight."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:holdsLicense ;
+            owl:someValuesFrom air:PilotLicense ],
+        air:FlightCrew .
+
+air:ComponentOverhaul a owl:Class ;
+    rdfs:label "Component Overhaul"@en ;
+    rdfs:comment "The disassembly, inspection, repair, and restoration of an aircraft component to a serviceable condition."@en ;
+    rdfs:subClassOf air:MaintenanceActivity .
+
+air:ContainerBuildUp a owl:Class ;
+    rdfs:label "Container Build-Up"@en ;
+    rdfs:comment "The consolidation of shipments into a ULD."@en ;
+    rdfs:subClassOf air:CargoHandlingOperation ;
+    skos:altLabel "ULD Build-Up"@en .
+
+air:ControlTower a owl:Class ;
+    rdfs:label "Control Tower"@en ;
+    rdfs:comment "An airport facility from which air traffic controllers direct aircraft movement on the ground and in the air near the airport."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:partOf ;
+            owl:someValuesFrom air:Aerodrome ],
+        air:Infrastructure .
+
+air:ControlledAirspace a owl:Class ;
+    rdfs:label "Controlled Airspace"@en ;
+    rdfs:comment "Airspace within which air traffic control service is provided to aircraft."@en ;
+    rdfs:subClassOf air:Airspace .
+
+air:ConveyorBelt a owl:Class ;
+    rdfs:label "Conveyor Belt"@en ;
+    rdfs:comment "A conveyor used to transport shipments through a handling facility."@en ;
+    rdfs:subClassOf air:CargoHandlingEquipment .
+
+air:CustomsAuthority a owl:Class ;
+    rdfs:label "Customs Authority"@en ;
+    rdfs:comment "A government agency responsible for controlling the flow of goods, including cargo, into and out of a country."@en ;
+    rdfs:subClassOf air:RegulatoryAuthority .
+
+air:CustomsException a owl:Class ;
+    rdfs:label "Customs Exception"@en ;
+    rdfs:comment "A customs-related exception encountered during shipment handling."@en ;
+    rdfs:subClassOf air:ShipmentException .
+
+air:CustomsPermit a owl:Class ;
+    rdfs:label "Customs Permit"@en ;
+    rdfs:comment "Official authorisation granted by customs to allow export or import of cargo."@en ;
+    rdfs:subClassOf air:Document .
+
+air:DeBagging a owl:Class ;
+    rdfs:label "De-Bagging"@en ;
+    rdfs:comment "The removal of parcels from transport bags."@en ;
+    rdfs:subClassOf air:CargoHandlingOperation .
+
+air:Deicing a owl:Class ;
+    rdfs:label "Deicing"@en ;
+    rdfs:comment "The removal or prevention of ice and frost accumulation on an aircraft prior to departure."@en ;
+    rdfs:subClassOf air:GroundHandlingService .
+
+air:DemonstrationFlight a owl:Class ;
+    rdfs:label "Demonstration Flight"@en ;
+    rdfs:comment "A flight conducted to demonstrate an aircraft's capabilities."@en ;
+    rdfs:subClassOf air:Flight .
+
+air:Destination a owl:Class ;
+    rdfs:label "Destination"@en ;
+    rdfs:comment "The final location where a flight or cargo shipment is to be delivered."@en ;
+    rdfs:subClassOf air:Location ;
+    owl:deprecated true ;
+    skos:editorialNote "Deprecated in 0.2.0: origin/destination are roles a place plays for a shipment. Use hasOrigin/hasDestination pointing directly at an Aerodrome, Location or premises."@en .
+
+air:DirectFlight a owl:Class ;
+    rdfs:label "Direct Flight"@en ;
+    rdfs:comment "A flight that travels from origin to destination without stopovers."@en ;
+    rdfs:subClassOf air:Flight ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( air:Flight [ a owl:Restriction ;
+                        owl:maxQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                        owl:onClass air:Aerodrome ;
+                        owl:onProperty air:hasIntermediateStop ] ) ] ;
+    skos:altLabel "Non-stop Flight"@en ;
+    skos:editorialNote "In airline usage a 'direct' flight may stop en route under one flight number; this class follows the non-stop meaning."@en .
+
+air:EASA a air:RegulatoryAuthority,
+        owl:NamedIndividual ;
+    rdfs:label "EASA"@en ;
+    rdfs:comment "The European Union Aviation Safety Agency, responsible for civil aviation safety regulation in the EU."@en ;
+    skos:altLabel "European Union Aviation Safety Agency"@en .
+
+air:EmergencyEquipment a owl:Class ;
+    rdfs:label "Emergency Equipment"@en ;
+    rdfs:comment "Equipment carried or provided for use in an aviation emergency, such as fire suppression or evacuation equipment."@en ;
+    rdfs:subClassOf air:Equipment .
+
+air:EnergyConsumption a owl:Class ;
+    rdfs:label "Energy Consumption"@en ;
+    rdfs:comment "The amount of energy used by an aircraft or ground equipment during operation."@en ;
+    rdfs:subClassOf air:Measurement .
+
+air:ExceptionRecord a owl:Class ;
+    rdfs:label "Exception Record"@en ;
+    rdfs:comment "A record of a shipment exception raised during handling."@en ;
+    rdfs:subClassOf air:Document .
+
+air:ExtendableConveyor a owl:Class ;
+    rdfs:label "Extendable Conveyor"@en ;
+    rdfs:comment "An extending conveyor used to load or unload cargo directly into or from a truck."@en ;
+    rdfs:subClassOf air:GroundSupportEquipment .
+
+air:FAA a air:RegulatoryAuthority,
+        owl:NamedIndividual ;
+    rdfs:label "FAA"@en ;
+    rdfs:comment "The Federal Aviation Administration, the United States' national aviation authority."@en ;
+    skos:altLabel "Federal Aviation Administration"@en .
+
+air:FareClass a owl:Class ;
+    rdfs:label "Fare Class"@en ;
+    rdfs:comment "A booking code representing a specific fare and set of conditions within a passenger class."@en ;
+    rdfs:subClassOf air:Category .
+
+air:FerryFlight a owl:Class ;
+    rdfs:label "Ferry Flight"@en ;
+    rdfs:comment "A non-revenue flight conducted to reposition an aircraft."@en ;
+    rdfs:subClassOf air:Flight .
+
+air:FirstOfficer a owl:Class ;
+    rdfs:label "First Officer"@en ;
+    rdfs:comment "A qualified pilot who assists the Pilot in Command in operating the aircraft."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:holdsLicense ;
+            owl:someValuesFrom air:PilotLicense ],
+        air:FlightCrew ;
+    skos:altLabel "Co-pilot"@en .
+
+air:FlightDataMonitoring a owl:Class ;
+    rdfs:label "Flight Data Monitoring"@en ;
+    rdfs:comment "The routine analysis of recorded flight data to identify safety trends and improve operations."@en ;
+    rdfs:subClassOf air:Process ;
+    skos:altLabel "FDM"@en .
+
+air:FlightDiversion a owl:Class ;
+    rdfs:label "Flight Diversion"@en ;
+    rdfs:comment "A flight diverted from its planned destination."@en ;
+    rdfs:subClassOf air:OperationalDisruption .
+
+air:FlightInformationRegion a owl:Class ;
+    rdfs:label "Flight Information Region"@en ;
+    rdfs:comment "A defined volume of airspace within which flight information and alerting services are provided."@en ;
+    rdfs:subClassOf air:Airspace ;
+    skos:altLabel "FIR"@en .
+
+air:FlightOperationsOfficer a owl:Class ;
+    rdfs:label "Flight Operations Officer"@en ;
+    rdfs:comment "Personnel who assist in flight planning, dispatch, and monitoring of flights."@en ;
+    rdfs:subClassOf air:GroundPersonnel ;
+    skos:altLabel "Dispatcher"@en .
+
+air:FlightPlan a owl:Class ;
+    rdfs:label "Flight Plan"@en ;
+    rdfs:comment "A document filed with air traffic services detailing a flight's intended route, altitude, timing, and fuel."@en ;
+    rdfs:subClassOf air:Document .
+
+air:FlightRecorder a owl:Class ;
+    rdfs:label "Flight Recorder"@en ;
+    rdfs:comment "An onboard device that records flight data and/or cockpit audio for safety investigation purposes."@en ;
+    rdfs:subClassOf air:AircraftComponent .
+
+air:GroundTransport a owl:Class ;
+    rdfs:label "Ground Transport"@en ;
+    rdfs:comment "Vehicle-based transport used to move goods or passengers to/from the airport."@en ;
+    rdfs:subClassOf air:TransportMode .
+
+air:HandSearch a owl:Class ;
+    rdfs:label "Hand Search"@en ;
+    rdfs:comment "Manual security inspection of baggage or cargo."@en ;
+    rdfs:subClassOf air:SecurityScreening .
+
+air:Hangar a owl:Class ;
+    rdfs:label "Hangar"@en ;
+    rdfs:comment "A building used to store, maintain, or repair aircraft."@en ;
+    rdfs:subClassOf air:Infrastructure .
+
+air:HeldShipment a owl:Class ;
+    rdfs:label "Held Shipment"@en ;
+    rdfs:comment "A shipment held pending resolution of an exception."@en ;
+    rdfs:subClassOf air:ShipmentException .
+
+air:Helicopter a owl:Class ;
+    rdfs:label "Helicopter"@en ;
+    rdfs:comment "A rotorcraft that derives lift and propulsion from horizontally spinning rotors, used for passenger, cargo, or specialised operations."@en ;
+    rdfs:subClassOf air:Aircraft .
+
+air:HouseAirwayBill a owl:Class ;
+    rdfs:label "House Airway Bill"@en ;
+    rdfs:comment "A shipment document issued by a freight forwarder for individual consignments."@en ;
+    rdfs:subClassOf air:AirwayBill ;
+    owl:disjointWith air:MasterAirwayBill ;
+    skos:altLabel "HAWB"@en .
+
+air:IATA a air:TradeAssociation,
+        owl:NamedIndividual ;
+    rdfs:label "IATA"@en ;
+    rdfs:comment "The International Air Transport Association, the trade body for the world's airlines that sets commercial and operational industry standards. It is not a regulator."@en ;
+    skos:altLabel "International Air Transport Association"@en .
+
+air:ICAO a air:RegulatoryAuthority,
+        owl:NamedIndividual ;
+    rdfs:label "ICAO"@en ;
+    rdfs:comment "The International Civil Aviation Organization, a UN agency that sets global standards and recommended practices for civil aviation."@en ;
+    skos:altLabel "International Civil Aviation Organization"@en .
+
+air:ImportCustomsClearance a owl:Class ;
+    rdfs:label "Import Customs Clearance"@en ;
+    rdfs:comment "Customs clearance conducted for goods entering the destination country."@en ;
+    rdfs:subClassOf air:CustomsClearance ;
+    owl:disjointWith air:ExportCustomsClearance .
+
+air:LeasedAircraft a owl:Class ;
+    rdfs:label "Leased Aircraft"@en ;
+    rdfs:comment "Defined class: any aircraft operated under a lease agreement. Membership is inferred by the reasoner."@en ;
+    rdfs:subClassOf air:Aircraft ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( air:Aircraft [ a owl:Restriction ;
+                        owl:onProperty air:leasedUnder ;
+                        owl:someValuesFrom air:LeaseAgreement ] ) ] .
+
+air:LeasingCompany a owl:Class ;
+    rdfs:label "Leasing Company"@en ;
+    rdfs:comment "An organization that owns aircraft and leases them to airlines under a lease agreement."@en ;
+    rdfs:subClassOf air:Organization .
+
+air:LiftingEquipment a owl:Class ;
+    rdfs:label "Lifting Equipment"@en ;
+    rdfs:comment "Equipment that assists with loading and unloading cargo or baggage."@en ;
+    rdfs:subClassOf air:GroundSupportEquipment .
+
+air:LineMaintenance a owl:Class ;
+    rdfs:label "Line Maintenance"@en ;
+    rdfs:comment "Routine maintenance performed on an aircraft between flights, typically at an airport."@en ;
+    rdfs:subClassOf air:MaintenanceActivity ;
+    owl:disjointWith air:BaseMaintenance .
+
+air:LooseLoading a owl:Class ;
+    rdfs:label "Loose Loading"@en ;
+    rdfs:comment "The direct loading of cargo into trucks without using ULDs."@en ;
+    rdfs:subClassOf air:CargoHandlingOperation .
+
+air:MaintenanceCheckFlight a owl:Class ;
+    rdfs:label "Maintenance Check Flight"@en ;
+    rdfs:comment "A flight conducted to verify aircraft airworthiness following maintenance."@en ;
+    rdfs:subClassOf air:Flight .
+
+air:MaintenanceEngineer a owl:Class ;
+    rdfs:label "Maintenance Engineer"@en ;
+    rdfs:comment "A licensed person qualified to inspect, maintain, and certify aircraft airworthiness."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:holdsLicense ;
+            owl:someValuesFrom air:Licence ],
+        air:Person .
+
+air:ManageService a owl:Class ;
+    rdfs:label "Manage Service"@en ;
+    rdfs:comment "A service that supports the active management of airport or flight operations."@en ;
+    rdfs:subClassOf air:Service .
+
+air:ManualXRayMachine a owl:Class ;
+    rdfs:label "Manual X-Ray Machine"@en ;
+    rdfs:comment "A manually operated X-ray machine used for security screening."@en ;
+    rdfs:subClassOf air:ScreeningEquipment .
+
+air:Marshalling a owl:Class ;
+    rdfs:label "Marshalling"@en ;
+    rdfs:comment "The visual guidance of an aircraft during taxiing, parking, or pushback by ground staff."@en ;
+    rdfs:subClassOf air:GroundHandlingService .
+
+air:MasterMinimumEquipmentList a owl:Class ;
+    rdfs:label "Master Minimum Equipment List"@en ;
+    rdfs:comment "The baseline list, approved for an aircraft type, from which an operator's Minimum Equipment List is derived."@en ;
+    rdfs:subClassOf air:Document ;
+    skos:altLabel "MMEL"@en .
+
+air:MinimumEquipmentList a owl:Class ;
+    rdfs:label "Minimum Equipment List"@en ;
+    rdfs:comment "A list, specific to an aircraft, of equipment that may be inoperative for dispatch under defined conditions."@en ;
+    rdfs:subClassOf air:Document ;
+    skos:altLabel "MEL"@en .
+
+air:MultimodalLink a owl:Class ;
+    rdfs:label "Multimodal Link"@en ;
+    rdfs:comment "A connection point between air and road (or other) transport systems, at which passengers or cargo change mode."@en ;
+    rdfs:subClassOf air:Infrastructure .
+
+air:NoiseRegulation a owl:Class ;
+    rdfs:label "Noise Regulation"@en ;
+    rdfs:comment "A regulation restricting or managing aircraft noise, particularly around airports."@en ;
+    rdfs:subClassOf air:EnvironmentalRegulation .
+
+air:Offloading a owl:Class ;
+    rdfs:label "Offloading"@en ;
+    rdfs:comment "The removal of cargo or ULDs from an aircraft."@en ;
+    rdfs:subClassOf air:CargoHandlingOperation .
+
+air:OperationalControlSystem a owl:Class ;
+    rdfs:label "Operational Control System"@en ;
+    rdfs:comment "A system used by an operator to exercise control over the initiation, continuation, diversion, or termination of a flight."@en ;
+    rdfs:subClassOf air:InformationObject .
+
+air:OperationsManual a owl:Class ;
+    rdfs:label "Operations Manual"@en ;
+    rdfs:comment "A manual, approved by the regulator, describing an operator's procedures for the safe conduct of operations."@en ;
+    rdfs:subClassOf air:Document .
+
+air:Origin a owl:Class ;
+    rdfs:label "Origin"@en ;
+    rdfs:comment "The starting point of a flight or cargo journey."@en ;
+    rdfs:subClassOf air:Location ;
+    owl:deprecated true ;
+    skos:editorialNote "Deprecated in 0.2.0: origin/destination are roles a place plays for a shipment. Use hasOrigin/hasDestination pointing directly at an Aerodrome, Location or premises."@en .
+
+air:PassengerAircraft a owl:Class ;
+    rdfs:label "Passenger Aircraft"@en ;
+    rdfs:comment "An aircraft primarily designed to transport passengers."@en ;
+    rdfs:subClassOf air:Aircraft ;
+    owl:disjointWith air:FreighterAircraft .
+
+air:PilotInCommand a owl:Class ;
+    rdfs:label "Pilot in Command"@en ;
+    rdfs:comment "The pilot designated as being in command and responsible for the safe conduct of the flight."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:holdsLicense ;
+            owl:someValuesFrom air:PilotLicense ],
+        air:FlightCrew ;
+    skos:altLabel "Captain"@en .
+
+air:PostOpsAnalysisService a owl:Class ;
+    rdfs:label "Post-Operations Analysis Service"@en ;
+    rdfs:comment "A service that analyses completed operations to identify performance trends and improvement opportunities."@en ;
+    rdfs:subClassOf air:Service .
+
+air:Pushback a owl:Class ;
+    rdfs:label "Pushback"@en ;
+    rdfs:comment "The use of a tug to move an aircraft away from its gate before taxiing."@en ;
+    rdfs:subClassOf air:GroundHandlingService .
+
+air:Refuelling a owl:Class ;
+    rdfs:label "Refuelling"@en ;
+    rdfs:comment "The supply of fuel to an aircraft on the ground."@en ;
+    rdfs:subClassOf air:GroundHandlingService .
+
+air:Reloading a owl:Class ;
+    rdfs:label "Reloading"@en ;
+    rdfs:comment "The loading of sorted cargo for onward transport."@en ;
+    rdfs:subClassOf air:CargoHandlingOperation .
+
+air:RoutingException a owl:Class ;
+    rdfs:label "Routing Exception"@en ;
+    rdfs:comment "A routing-related exception encountered during shipment handling."@en ;
+    rdfs:subClassOf air:ShipmentException .
+
+air:RoutingInstruction a owl:Class ;
+    rdfs:label "Routing Instruction"@en ;
+    rdfs:comment "Routing information used to direct a shipment through a sortation system."@en ;
+    rdfs:subClassOf air:Document .
+
+air:SafetyManagementSystem a owl:Class ;
+    rdfs:label "Safety Management System"@en ;
+    rdfs:comment "A systematic approach to managing safety, including the necessary organisational structures, accountabilities, policies, and procedures."@en ;
+    rdfs:subClassOf air:PolicyOrRegulation ;
+    skos:altLabel "SMS"@en .
+
+air:Scanner a owl:Class ;
+    rdfs:label "Scanner"@en ;
+    rdfs:comment "A device that reads shipment identifiers such as barcodes or airway bill numbers."@en ;
+    rdfs:subClassOf air:CargoHandlingEquipment .
+
+air:Scenario a owl:Class ;
+    rdfs:label "Scenario"@en ;
+    rdfs:comment "A defined operational situation, used for planning or simulation of airport or flight operations."@en ;
+    rdfs:subClassOf air:InformationObject .
+
+air:ScreeningResult a owl:Class ;
+    rdfs:label "Screening Result"@en ;
+    rdfs:comment "The recorded result of a security screening process."@en ;
+    rdfs:subClassOf air:Document .
+
+air:SecurityException a owl:Class ;
+    rdfs:label "Security Exception"@en ;
+    rdfs:comment "A security-related exception encountered during shipment handling."@en ;
+    rdfs:subClassOf air:ShipmentException .
+
+air:ServiceBulletin a owl:Class ;
+    rdfs:label "Service Bulletin"@en ;
+    rdfs:comment "A notice issued by a manufacturer recommending or describing modifications, inspections, or repairs to a product."@en ;
+    rdfs:subClassOf air:Document .
+
+air:SmallParcel a owl:Class ;
+    rdfs:label "Small Parcel"@en ;
+    rdfs:comment "A small shipment handled separately from standard cargo."@en ;
+    rdfs:subClassOf air:Parcel .
+
+air:Sortation a owl:Class ;
+    rdfs:label "Sortation"@en ;
+    rdfs:comment "The automated routing of shipments through a handling facility."@en ;
+    rdfs:subClassOf air:CargoHandlingOperation .
+
+air:SortationSystem a owl:Class ;
+    rdfs:label "Sortation System"@en ;
+    rdfs:comment "Automated infrastructure that routes shipments to their correct destination within a facility."@en ;
+    rdfs:subClassOf air:CargoHandlingEquipment .
+
+air:SpiralChute a owl:Class ;
+    rdfs:label "Spiral Chute"@en ;
+    rdfs:comment "A destination-specific chute used to route sorted shipments."@en ;
+    rdfs:subClassOf air:CargoHandlingEquipment .
+
+air:SteerService a owl:Class ;
+    rdfs:label "Steer Service"@en ;
+    rdfs:comment "A service that supports collaborative decision-making to steer airport operations."@en ;
+    rdfs:subClassOf air:Service .
+
+air:Supervisor a owl:Class ;
+    rdfs:label "Supervisor"@en ;
+    rdfs:comment "Personnel responsible for overseeing ground operations staff and activities."@en ;
+    rdfs:subClassOf air:GroundPersonnel .
+
+air:SystemFailure a owl:Class ;
+    rdfs:label "System Failure"@en ;
+    rdfs:comment "The failure of an operational system or piece of equipment."@en ;
+    rdfs:subClassOf air:Occurrence .
+
+air:Taxiway a owl:Class ;
+    rdfs:label "Taxiway"@en ;
+    rdfs:comment "A defined path at an airport on which aircraft taxi between the runway and other airport facilities."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:partOf ;
+            owl:someValuesFrom air:Aerodrome ],
+        air:Infrastructure .
+
+air:TechnicalCrew a owl:Class ;
+    rdfs:label "Technical Crew"@en ;
+    rdfs:comment "Crew members responsible for technical/engineering duties during a flight."@en ;
+    rdfs:subClassOf air:CrewMember .
+
+air:TomographyMachine a owl:Class ;
+    rdfs:label "Tomography Machine"@en ;
+    rdfs:comment "3D X-ray computed tomography screening equipment used for advanced security inspection."@en ;
+    rdfs:subClassOf air:ScreeningEquipment .
+
+air:TrainingFlight a owl:Class ;
+    rdfs:label "Training Flight"@en ;
+    rdfs:comment "A flight conducted for the purpose of crew training."@en ;
+    rdfs:subClassOf air:Flight .
+
+air:TrainingInstructor a owl:Class ;
+    rdfs:label "Training Instructor"@en ;
+    rdfs:comment "Personnel responsible for delivering training to aviation staff."@en ;
+    rdfs:subClassOf air:GroundPersonnel .
+
+air:TrainingProgramme a owl:Class ;
+    rdfs:label "Training Programme"@en ;
+    rdfs:comment "A structured programme of instruction for personnel."@en ;
+    rdfs:subClassOf air:Training .
+
+air:TransportBag a owl:Class ;
+    rdfs:label "Transport Bag"@en ;
+    rdfs:comment "A reusable bag used to consolidate small parcels for handling."@en ;
+    rdfs:subClassOf air:Equipment .
+
+air:TravelAgency a owl:Class ;
+    rdfs:label "Travel Agency"@en ;
+    rdfs:comment "An organization that sells flights and travel services to passengers on behalf of airlines."@en ;
+    rdfs:subClassOf air:Organization .
+
+air:UnmannedAircraftSystem a owl:Class ;
+    rdfs:label "Unmanned Aircraft System"@en ;
+    rdfs:comment "An aircraft and its associated remote-control equipment operated without a pilot on board."@en ;
+    rdfs:subClassOf air:Aircraft ;
+    skos:altLabel "Drone"@en,
+        "UAS"@en .
+
+air:XRayMachine a owl:Class ;
+    rdfs:label "X-Ray Machine"@en ;
+    rdfs:comment "Security screening equipment that uses X-rays to inspect the contents of baggage or cargo."@en ;
+    rdfs:subClassOf air:ScreeningEquipment .
+
+air:affectedByOperationalEvent a owl:ObjectProperty ;
+    rdfs:label "affected by operational event"@en ;
+    rdfs:comment "Relates airport operations to an operational event affecting them."@en ;
+    rdfs:domain air:AirportOperationsCentre ;
+    rdfs:range air:OperationalDisruption .
+
+air:affectedByWeather a owl:ObjectProperty ;
+    rdfs:label "affected by weather"@en ;
+    rdfs:comment "Relates a flight to a weather observation relevant to its conduct."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:METAR .
+
+air:allocatedSlot a owl:ObjectProperty ;
+    rdfs:label "allocated slot"@en ;
+    rdfs:comment "Relates a flight to the airport slot allocated to it."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:Slot .
+
+air:arrivesAtGate a owl:ObjectProperty ;
+    rdfs:label "arrives at gate"@en ;
+    rdfs:comment "Relates a flight to the arrival gate it uses."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:ArrivalGate .
+
+air:arrivesViaTransitFlight a owl:ObjectProperty ;
+    rdfs:label "arrives via transit flight"@en ;
+    rdfs:comment "Shows that the shipment travels via a flight with layovers."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:TransitFlight .
+
+air:assignedRoute a owl:ObjectProperty ;
+    rdfs:label "assigned route"@en ;
+    rdfs:comment "Relates a flight to its assigned route."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:Route .
+
+air:assignedToCargoHold a owl:ObjectProperty ;
+    rdfs:label "assigned to cargo hold"@en ;
+    rdfs:comment "Relates cargo to the cargo hold it is assigned to."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range air:CargoHold .
+
+air:certifiedBy a owl:ObjectProperty ;
+    rdfs:label "certified by"@en ;
+    rdfs:comment "Relates an airline to the regulatory authority that certifies it."@en ;
+    rdfs:domain air:Airline ;
+    rdfs:range air:RegulatoryAuthority .
+
+air:checkedInAt a owl:ObjectProperty ;
+    rdfs:label "checked in at"@en ;
+    rdfs:comment "Relates a passenger to the check-in counter where they checked in."@en ;
+    rdfs:domain air:Passenger ;
+    rdfs:range air:CheckInCounter .
+
+air:clearedThroughCustomsWarehouse a owl:ObjectProperty ;
+    rdfs:label "cleared through customs warehouse"@en ;
+    rdfs:comment "Links the cargo to the location where customs clearance is conducted."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range air:CustomsWarehouse .
+
+air:constrainedByCapacity a owl:ObjectProperty ;
+    rdfs:label "constrained by capacity"@en ;
+    rdfs:comment "Relates airport operations to a capacity constraint that affects them."@en ;
+    rdfs:domain air:AirportOperationsCentre ;
+    rdfs:range air:Capacity .
+
+air:consumesEnergy a owl:ObjectProperty ;
+    rdfs:label "consumes energy"@en ;
+    rdfs:comment "Relates a flight to the quantity of energy it consumes."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:EnergyUnit .
+
+air:containsOperationalData a owl:ObjectProperty ;
+    rdfs:label "contains operational data"@en ;
+    rdfs:comment "Relates an airport operations centre to the operational data it holds."@en ;
+    rdfs:domain air:AirportOperationsCentre ;
+    rdfs:range air:OperationalData .
+
+air:contributesTo a owl:ObjectProperty ;
+    rdfs:label "contributes to"@en ;
+    rdfs:comment "Relates a stakeholder to the airport operations centre they contribute to."@en ;
+    rdfs:domain air:Stakeholder ;
+    rdfs:range air:AirportOperationsCentre .
+
+air:controlsFlight a owl:ObjectProperty ;
+    rdfs:label "controls flight"@en ;
+    rdfs:comment "Relates air traffic control to a flight it controls."@en ;
+    rdfs:domain air:AirTrafficControl ;
+    rdfs:range air:Flight .
+
+air:crewedBy a owl:ObjectProperty ;
+    rdfs:label "crewed by"@en ;
+    rdfs:comment "Relates a flight to its flight crew."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:FlightCrew ;
+    rdfs:subPropertyOf air:hasCrewMember .
+
+air:declaredByFreightForwarder a owl:ObjectProperty ;
+    rdfs:label "declared by freight forwarder"@en ;
+    rdfs:comment "Indicates the freight forwarder submitted the customs documentation."@en ;
+    rdfs:domain air:CustomsDeclaration ;
+    rdfs:range air:FreightForwarder .
+
+air:declaredThroughEDI a owl:ObjectProperty ;
+    rdfs:label "declared through EDI"@en ;
+    rdfs:comment "Indicates the submission of shipment documents through an EDI system."@en ;
+    rdfs:domain air:CustomsDeclaration ;
+    rdfs:range air:EDISystem .
+
+air:deliveredToImporter a owl:ObjectProperty ;
+    rdfs:label "delivered to importer"@en ;
+    rdfs:comment "Indicates that cargo is transported to the importer's location."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range air:Importer .
+
+air:departsFromGate a owl:ObjectProperty ;
+    rdfs:label "departs from gate"@en ;
+    rdfs:comment "Relates a flight to the departure gate it uses."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:DepartureGate .
+
+air:documentedIn a owl:ObjectProperty ;
+    rdfs:label "documented in"@en ;
+    rdfs:comment "Relates a safety incident to the safety report documenting it."@en ;
+    rdfs:domain air:SafetyIncident ;
+    rdfs:range air:SafetyReport .
+
+air:emitsCarbon a owl:ObjectProperty ;
+    rdfs:label "emits carbon"@en ;
+    rdfs:comment "Relates a flight to the carbon emissions it produces."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:CarbonEmission .
+
+air:employedBy a owl:ObjectProperty ;
+    rdfs:label "employed by"@en ;
+    rdfs:comment "Relates a person to the organization that employs them."@en ;
+    rdfs:domain air:Person ;
+    rdfs:range air:Organization .
+
+air:flightOperatedBy a owl:ObjectProperty ;
+    rdfs:label "flight operated by"@en ;
+    rdfs:comment "Relates a flight to the airline that operates it (inverse of operatesFlight)."@en ;
+    owl:inverseOf air:operatesFlight .
+
+air:forecastBy a owl:ObjectProperty ;
+    rdfs:label "forecast by"@en ;
+    rdfs:comment "Relates a flight to a terminal aerodrome forecast relevant to its conduct."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:TAF .
+
+air:goesThroughScreening a owl:ObjectProperty ;
+    rdfs:label "goes through screening"@en ;
+    rdfs:comment "Relates a passenger to a security screening they go through."@en ;
+    rdfs:domain air:Passenger ;
+    rdfs:range air:SecurityScreening .
+
+air:handledByFreightForwarder a owl:ObjectProperty ;
+    rdfs:label "handled by freight forwarder"@en ;
+    rdfs:comment "Indicates that a freight forwarder is managing the shipment."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:FreightForwarder ;
+    rdfs:subPropertyOf air:hasParty .
+
+air:hasArrivalNotice a owl:ObjectProperty ;
+    rdfs:label "has arrival notice"@en ;
+    rdfs:comment "Links the cargo to the document confirming its arrival."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:ArrivalNotice .
+
+air:hasBoardingPass a owl:ObjectProperty ;
+    rdfs:label "has boarding pass"@en ;
+    rdfs:comment "Relates a passenger to their boarding pass."@en ;
+    rdfs:domain air:Passenger ;
+    rdfs:range air:BoardingPass .
+
+air:hasCO2Kg a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "has CO2 kg"@en ;
+    rdfs:comment "The mass of carbon dioxide emitted, in kilograms."@en ;
+    rdfs:domain air:CarbonEmission ;
+    rdfs:range xsd:decimal .
+
+air:hasCapacityValue a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "has capacity value"@en ;
+    rdfs:comment "The numeric value of a capacity measurement."@en ;
+    rdfs:domain air:Capacity ;
+    rdfs:range xsd:decimal .
+
+air:hasCertificateOfAirworthiness a owl:ObjectProperty ;
+    rdfs:label "has certificate of airworthiness"@en ;
+    rdfs:comment "Relates an aircraft to its certificate of airworthiness."@en ;
+    rdfs:domain air:Aircraft ;
+    rdfs:range air:CertificateOfAirworthiness .
+
+air:hasChargingPoint a owl:ObjectProperty ;
+    rdfs:label "has charging point"@en ;
+    rdfs:comment "Relates a depot to a charging point it hosts."@en ;
+    rdfs:domain air:AirDepot ;
+    rdfs:range air:ChargingPoint .
+
+air:hasCostGBP a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "has cost GBP"@en ;
+    rdfs:comment "A cost value expressed in GBP."@en ;
+    rdfs:domain air:FlightCost ;
+    rdfs:range xsd:decimal .
+
+air:hasCutTimeValue a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "has cut time value"@en ;
+    rdfs:comment "The date and time of a cargo cut-off."@en ;
+    rdfs:domain air:CutTime ;
+    rdfs:range xsd:dateTime .
+
+air:hasDestination a owl:ObjectProperty ;
+    rdfs:label "has destination"@en ;
+    rdfs:comment "Connects a shipment to its delivery location."@en ;
+    rdfs:domain air:Consignment .
+
+air:hasDispatchSchedule a owl:ObjectProperty ;
+    rdfs:label "has dispatch schedule"@en ;
+    rdfs:comment "Associates a shipment with its planned dispatch date and time."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:DispatchSchedule .
+
+air:hasExporter a owl:ObjectProperty ;
+    rdfs:label "has exporter"@en ;
+    rdfs:comment "Relates a shipment to the exporter responsible for dispatching it."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:Exporter ;
+    rdfs:subPropertyOf air:hasParty .
+
+air:hasFlightNumber a owl:DatatypeProperty ;
+    rdfs:label "has flight number"@en ;
+    rdfs:comment "The designator/flight number assigned to a flight."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range xsd:string .
+
+air:hasFlightSchedule a owl:ObjectProperty ;
+    rdfs:label "has flight schedule"@en ;
+    rdfs:comment "Relates an airline to its flight schedule."@en ;
+    rdfs:domain air:Airline ;
+    rdfs:range air:FlightSchedule .
+
+air:hasIATACodeValue a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "has IATA code value"@en ;
+    rdfs:comment "The literal 3-letter IATA code value."@en ;
+    rdfs:domain air:IATACode ;
+    rdfs:range xsd:string .
+
+air:hasICAOCodeValue a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "has ICAO code value"@en ;
+    rdfs:comment "The literal 4-character ICAO code value."@en ;
+    rdfs:domain air:ICAOCode ;
+    rdfs:range xsd:string .
+
+air:hasImporter a owl:ObjectProperty ;
+    rdfs:label "has importer"@en ;
+    rdfs:comment "Relates a shipment to the importer receiving the goods."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:Importer ;
+    rdfs:subPropertyOf air:hasParty .
+
+air:hasInvoice a owl:ObjectProperty ;
+    rdfs:label "has invoice"@en ;
+    rdfs:comment "Connects a shipment to its invoice for value declaration."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:Invoice .
+
+air:hasLabel a owl:ObjectProperty ;
+    rdfs:label "has label"@en ;
+    rdfs:comment "Connects cargo to a label containing flight and safety information."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range air:Label .
+
+air:hasName a owl:DatatypeProperty ;
+    rdfs:label "has name"@en ;
+    rdfs:comment "The name of a person or organization."@en ;
+    rdfs:domain air:Agent ;
+    rdfs:range xsd:string .
+
+air:hasOrigin a owl:ObjectProperty ;
+    rdfs:label "has origin"@en ;
+    rdfs:comment "Connects a shipment to its starting point."@en ;
+    rdfs:domain air:Consignment .
+
+air:hasPackingCompany a owl:ObjectProperty ;
+    rdfs:label "has packing company"@en ;
+    rdfs:comment "Associates the cargo with the company responsible for packing."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:PackingCompany ;
+    rdfs:subPropertyOf air:hasParty .
+
+air:hasPackingList a owl:ObjectProperty ;
+    rdfs:label "has packing list"@en ;
+    rdfs:comment "Links a shipment to the packing list outlining its contents."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:PackingList .
+
+air:hasScheduledArrivalTime a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "has scheduled arrival time"@en ;
+    rdfs:comment "The scheduled on-block/arrival date and time of a flight."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range xsd:dateTime ;
+    rdfs:subPropertyOf air:hasScheduledDateTime .
+
+air:hasScheduledDepartureTime a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "has scheduled departure time"@en ;
+    rdfs:comment "The scheduled off-block/departure date and time of a flight."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range xsd:dateTime ;
+    rdfs:subPropertyOf air:hasScheduledDateTime .
+
+air:hasShippingInstruction a owl:ObjectProperty ;
+    rdfs:label "has shipping instruction"@en ;
+    rdfs:comment "Connects the export request to the shipping instructions."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:ShippingInstruction .
+
+air:hasTypeCertificate a owl:ObjectProperty ;
+    rdfs:label "has type certificate"@en ;
+    rdfs:comment "Relates an aircraft type to its type certificate."@en ;
+    rdfs:domain air:AircraftType ;
+    rdfs:range air:TypeCertificate .
+
+air:hasTypeRating a owl:ObjectProperty ;
+    rdfs:label "has type rating"@en ;
+    rdfs:comment "Relates a pilot to a type rating they hold."@en ;
+    rdfs:domain air:FlightCrew ;
+    rdfs:range air:TypeRating .
+
+air:hasWarehouse a owl:ObjectProperty ;
+    rdfs:label "has warehouse"@en ;
+    rdfs:comment "Indicates the warehouse where the cargo is stored."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:Warehouse .
+
+air:hasWeightKg a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "has weight kg"@en ;
+    rdfs:comment "The weight of an item of cargo in kilograms."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range xsd:decimal .
+
+air:holdsRoleOf a owl:ObjectProperty ;
+    rdfs:label "holds role of"@en ;
+    rdfs:comment "Relates a person to a stakeholder role they hold in an operation."@en ;
+    rdfs:domain air:Person ;
+    rdfs:range air:Stakeholder .
+
+air:includesULD a owl:ObjectProperty ;
+    rdfs:label "includes ULD"@en ;
+    rdfs:comment "Connects a shipment to the ULD in which it is consolidated."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:ULD .
+
+air:insuredBy a owl:ObjectProperty ;
+    rdfs:label "insured by"@en ;
+    rdfs:comment "Relates an aircraft to the organization providing its insurance cover."@en ;
+    rdfs:domain air:Aircraft ;
+    rdfs:range air:InsuranceProvider .
+
+air:interlinkedWithRoad a owl:ObjectProperty ;
+    rdfs:label "interlinked with road"@en ;
+    rdfs:comment "Relates an air network to an interlinked road network."@en ;
+    rdfs:domain air:AirNetwork ;
+    rdfs:range air:RoadNetwork .
+
+air:issuesAirwayBill a owl:ObjectProperty ;
+    rdfs:label "issues airway bill"@en ;
+    rdfs:comment "Relates a freight forwarder to an airway bill it issues."@en ;
+    rdfs:domain air:FreightForwarder ;
+    rdfs:range air:AirwayBill .
+
+air:issuesNOTAM a owl:ObjectProperty ;
+    rdfs:label "issues NOTAM"@en ;
+    rdfs:comment "Relates an ANSP or authority to a NOTAM it issues."@en ;
+    rdfs:domain air:AirNavigationServiceProvider ;
+    rdfs:range air:NOTAM .
+
+air:listedInManifest a owl:ObjectProperty ;
+    rdfs:label "listed in manifest"@en ;
+    rdfs:comment "Relates cargo to the flight manifest it is listed in."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range air:FlightManifest .
+
+air:loadedIn a owl:ObjectProperty ;
+    rdfs:label "loaded in"@en ;
+    rdfs:comment "Relates baggage to the cargo hold it is loaded in."@en ;
+    rdfs:domain air:Baggage ;
+    rdfs:range air:CargoHold .
+
+air:loadedOnFlight a owl:ObjectProperty ;
+    rdfs:label "loaded on flight"@en ;
+    rdfs:comment "Indicates the specific flight carrying the cargo."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range air:Flight ;
+    owl:inverseOf air:carriesCargo .
+
+air:loadedOnTruckForDelivery a owl:ObjectProperty ;
+    rdfs:label "loaded on truck for delivery"@en ;
+    rdfs:comment "Shows that cargo is moved to truck transport after import clearance."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range air:GroundVehicle .
+
+air:locatedAt a owl:ObjectProperty ;
+    rdfs:label "located at"@en ;
+    rdfs:comment "Relates a facility or item of equipment to the airport where it is located."@en ;
+    rdfs:domain air:PhysicalObject ;
+    rdfs:range air:Airport .
+
+air:maintainedBy a owl:ObjectProperty ;
+    rdfs:label "maintained by"@en ;
+    rdfs:comment "Relates an aircraft to the organization that maintains it."@en ;
+    rdfs:domain air:Aircraft ;
+    rdfs:range air:MROOrganization .
+
+air:managesAirport a owl:ObjectProperty ;
+    rdfs:label "manages airport"@en ;
+    rdfs:comment "Relates an airport operator to the airport it manages."@en ;
+    rdfs:domain air:AirportOperator ;
+    rdfs:range air:Airport .
+
+air:managesCargo a owl:ObjectProperty ;
+    rdfs:label "manages cargo"@en ;
+    rdfs:comment "Relates an air warehouse to cargo it manages."@en ;
+    rdfs:domain air:AirWarehouse ;
+    rdfs:range air:Cargo .
+
+air:manufacturedBy a owl:ObjectProperty ;
+    rdfs:label "manufactured by"@en ;
+    rdfs:comment "Relates an aircraft to the manufacturer that produced it."@en ;
+    rdfs:domain air:Aircraft ;
+    rdfs:range air:AircraftManufacturer .
+
+air:monitoredByCustomsAgency a owl:ObjectProperty ;
+    rdfs:label "monitored by customs agency"@en ;
+    rdfs:comment "Connects the cargo to the agency managing customs compliance."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range air:CustomsClearanceAgency .
+
+air:monitorsAirportOperations a owl:ObjectProperty ;
+    rdfs:label "monitors airport operations"@en ;
+    rdfs:comment "Relates a monitoring service to the airport operations it monitors."@en ;
+    rdfs:domain air:MonitorService ;
+    rdfs:range air:Airport .
+
+air:occupiesPassengerClass a owl:ObjectProperty ;
+    rdfs:label "occupies passenger class"@en ;
+    rdfs:comment "Relates a passenger to the class of service they occupy."@en ;
+    rdfs:domain air:Passenger ;
+    rdfs:range air:PassengerClass .
+
+air:occursInAirspace a owl:ObjectProperty ;
+    rdfs:label "occurs in airspace"@en ;
+    rdfs:comment "Relates a flight to the airspace in which it takes place."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:Airspace .
+
+air:ofAircraftType a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "of aircraft type"@en ;
+    rdfs:comment "Relates an individual aircraft to its certificated aircraft type."@en ;
+    rdfs:domain air:Aircraft ;
+    rdfs:range air:AircraftType .
+
+air:offsetUnderScheme a owl:ObjectProperty ;
+    rdfs:label "offset under scheme"@en ;
+    rdfs:comment "Relates carbon emissions to the offsetting scheme under which they are addressed."@en ;
+    rdfs:domain air:CarbonEmission ;
+    rdfs:range air:EnvironmentalRegulation .
+
+air:operatedBy a owl:ObjectProperty ;
+    rdfs:label "operated by"@en ;
+    rdfs:comment "Relates an aircraft to the airline that operates it."@en ;
+    rdfs:domain air:Aircraft ;
+    rdfs:range air:Airline .
+
+air:packedIntoULD a owl:ObjectProperty ;
+    rdfs:label "packed into ULD"@en ;
+    rdfs:comment "Connects individual cargo units to the ULD they are consolidated into."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range air:ULD .
+
+air:partOfAirNetwork a owl:ObjectProperty ;
+    rdfs:label "part of air network"@en ;
+    rdfs:comment "Relates an airport to the air network it is part of."@en ;
+    rdfs:domain air:Airport ;
+    rdfs:range air:AirNetwork .
+
+air:performsMaintenanceActivity a owl:ObjectProperty ;
+    rdfs:label "performs maintenance activity"@en ;
+    rdfs:comment "Relates an MRO organization to a maintenance activity it performs."@en ;
+    rdfs:domain air:MROOrganization ;
+    rdfs:range air:MaintenanceActivity .
+
+air:poweredBy a owl:ObjectProperty ;
+    rdfs:label "powered by"@en ;
+    rdfs:comment "Relates an aircraft to the type of energy source that powers it."@en ;
+    rdfs:domain air:Aircraft ;
+    rdfs:range air:EnergySource .
+
+air:providesAirNavigationService a owl:ObjectProperty ;
+    rdfs:label "provides air navigation service"@en ;
+    rdfs:comment "Relates an ANSP to an air traffic service it provides."@en ;
+    rdfs:domain air:AirNavigationServiceProvider ;
+    rdfs:range air:AirTrafficService .
+
+air:providesGroundHandlingService a owl:ObjectProperty ;
+    rdfs:label "provides ground handling service"@en ;
+    rdfs:comment "Relates a ground handling agent to a service it provides."@en ;
+    rdfs:domain air:GroundHandlingAgent ;
+    rdfs:range air:GroundHandlingService .
+
+air:receivesGroundHandlingService a owl:ObjectProperty ;
+    rdfs:label "receives ground handling service"@en ;
+    rdfs:comment "Relates a flight to a ground handling service it receives during turnaround."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:GroundHandlingService .
+
+air:regulatedBy a owl:ObjectProperty ;
+    rdfs:label "regulated by"@en ;
+    rdfs:comment "Relates an entity (e.g. a flight, operation or organisation) to a policy or regulation that applies to it."@en ;
+    rdfs:range air:PolicyOrRegulation .
+
+air:regulatedByAuthority a owl:ObjectProperty ;
+    rdfs:label "regulated by authority"@en ;
+    rdfs:comment "Relates an airport to the regulatory authority overseeing it."@en ;
+    rdfs:domain air:Airport ;
+    rdfs:range air:RegulatoryAuthority .
+
+air:reportsSafetyIncident a owl:ObjectProperty ;
+    rdfs:label "reports safety incident"@en ;
+    rdfs:comment "Relates a crew member to a safety incident they report."@en ;
+    rdfs:domain air:CrewMember ;
+    rdfs:range air:SafetyIncident .
+
+air:requiresCustomsClearance a owl:ObjectProperty ;
+    rdfs:label "requires customs clearance"@en ;
+    rdfs:comment "Marks that a shipment needs clearance for export or import."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:CustomsClearance .
+
+air:requiresDeclaration a owl:ObjectProperty ;
+    rdfs:label "requires declaration"@en ;
+    rdfs:comment "Relates a consignment to a required customs declaration."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:CustomsDeclaration .
+
+air:requiresPacking a owl:DatatypeProperty ;
+    rdfs:label "requires packing"@en ;
+    rdfs:comment "Marks that the cargo needs packaging before transport."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range xsd:boolean .
+
+air:scheduledBeforeCutTime a owl:ObjectProperty ;
+    rdfs:label "scheduled before cut time"@en ;
+    rdfs:comment "Ensures cargo is processed before the airline's cut-off time."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:CutTime .
+
+air:servedBy a owl:ObjectProperty ;
+    rdfs:label "served by"@en ;
+    rdfs:comment "Relates a flight to its cabin crew."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:CabinCrew ;
+    rdfs:subPropertyOf air:hasCrewMember .
+
+air:splitByBreakBulkProcess a owl:ObjectProperty ;
+    rdfs:label "split by break bulk process"@en ;
+    rdfs:comment "Links a ULD to the break-bulk process that decomposes it."@en ;
+    rdfs:domain air:ULD ;
+    rdfs:range air:BreakBulk .
+
+air:storedInStorageShed a owl:ObjectProperty ;
+    rdfs:label "stored in storage shed"@en ;
+    rdfs:comment "Shows where the cargo is held before or after aircraft loading."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range air:StorageShed .
+
+air:subjectToAirworthinessDirective a owl:ObjectProperty ;
+    rdfs:label "subject to airworthiness directive"@en ;
+    rdfs:comment "Relates an aircraft type to an airworthiness directive that applies to it."@en ;
+    rdfs:domain air:AircraftType ;
+    rdfs:range air:AirworthinessDirective .
+
+air:suppliesCatering a owl:ObjectProperty ;
+    rdfs:label "supplies catering"@en ;
+    rdfs:comment "Relates a catering company to a catering service it supplies."@en ;
+    rdfs:domain air:CateringCompany ;
+    rdfs:range air:CateringService .
+
+air:travelsOn a owl:ObjectProperty ;
+    rdfs:label "travels on"@en ;
+    rdfs:comment "Relates a passenger to the flight they travel on."@en ;
+    rdfs:domain air:Passenger ;
+    rdfs:range air:Flight ;
+    owl:inverseOf air:carriesPassenger .
+
+air:undergoesExplosiveInspection a owl:ObjectProperty ;
+    rdfs:label "undergoes explosive inspection"@en ;
+    rdfs:comment "Indicates that cargo has passed through an explosive security check."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range air:ExplosiveInspection .
+
+air:updatesOperationsCentre a owl:ObjectProperty ;
+    rdfs:label "updates operations centre"@en ;
+    rdfs:comment "Relates a performance service to the operations centre it updates."@en ;
+    rdfs:domain air:PerformanceService ;
+    rdfs:range air:AirportOperationsCentre .
+
+air:usesAirline a owl:ObjectProperty ;
+    rdfs:label "uses airline"@en ;
+    rdfs:comment "Links a shipment to the airline responsible for its transport."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:Airline ;
+    rdfs:subPropertyOf air:hasParty .
+
+air:usesIATACode a owl:ObjectProperty ;
+    rdfs:label "uses IATA code"@en ;
+    rdfs:comment "Relates an airport or airline to its IATA code."@en ;
+    rdfs:range air:IATACode .
+
+air:usesICAOCode a owl:ObjectProperty ;
+    rdfs:label "uses ICAO code"@en ;
+    rdfs:comment "Relates an airport, airline, or aircraft to its ICAO code."@en ;
+    rdfs:range air:ICAOCode .
+
+air:usesKPI a owl:ObjectProperty ;
+    rdfs:label "uses KPI"@en ;
+    rdfs:comment "Relates an airport operations centre to a KPI it uses to measure performance."@en ;
+    rdfs:domain air:AirportOperationsCentre ;
+    rdfs:range air:KPI .
+
+air:usesRunway a owl:ObjectProperty ;
+    rdfs:label "uses runway"@en ;
+    rdfs:comment "Relates a flight to the runway it uses."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:Runway .
+
+air:usesSustainableAviationFuel a owl:ObjectProperty ;
+    rdfs:label "uses sustainable aviation fuel"@en ;
+    rdfs:comment "Relates a flight to sustainable aviation fuel used in its operation."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:SustainableAviationFuel .
+
+skos:altLabel a owl:AnnotationProperty .
+
+skos:changeNote a owl:AnnotationProperty .
+
+skos:editorialNote a owl:AnnotationProperty .
+
+air:AirDepot a owl:Class ;
+    rdfs:label "Air Depot"@en ;
+    rdfs:comment "A ground logistics depot facility associated with air cargo operations, such as a charging or staging depot."@en ;
+    rdfs:subClassOf air:Infrastructure .
+
+air:AirTrafficControl a owl:Class ;
+    rdfs:label "Air Traffic Control"@en ;
+    rdfs:comment "The service provided to manage aircraft movement in airspace and on the ground at an airport, in order to prevent collisions and expedite traffic."@en ;
+    rdfs:subClassOf air:Process ;
+    skos:altLabel "ATC"@en .
+
+air:AirTrafficService a owl:Class ;
+    rdfs:label "Air Traffic Service"@en ;
+    rdfs:comment "A service provided to promote the safe, orderly, and expeditious flow of air traffic."@en ;
+    rdfs:subClassOf air:Service ;
+    skos:altLabel "ATS"@en .
+
+air:AirWarehouse a owl:Class ;
+    rdfs:label "Air Warehouse"@en ;
+    rdfs:comment "A storage facility at or near an airport for freight or goods."@en ;
+    rdfs:subClassOf air:Warehouse .
+
+air:AircraftManufacturer a owl:Class ;
+    rdfs:label "Aircraft Manufacturer"@en ;
+    rdfs:comment "An organization that designs and manufactures aircraft or aircraft components."@en ;
+    rdfs:subClassOf air:Organization .
+
+air:AirportOperator a owl:Class ;
+    rdfs:label "Airport Operator"@en ;
+    rdfs:comment "The organization responsible for managing and operating an airport."@en ;
+    rdfs:subClassOf air:Organization .
+
+air:AirworthinessDirective a owl:Class ;
+    rdfs:label "Airworthiness Directive"@en ;
+    rdfs:comment "A legally enforceable regulation issued by a regulatory authority to correct an unsafe condition in an aircraft product."@en ;
+    rdfs:subClassOf air:PolicyOrRegulation ;
+    skos:altLabel "AD"@en .
+
+air:Approach a owl:Class ;
+    rdfs:label "Approach"@en ;
+    rdfs:comment "The phase of flight in which an aircraft descends and manoeuvres to land."@en ;
+    rdfs:subClassOf air:FlightPhase .
+
+air:ArrivalGate a owl:Class ;
+    rdfs:label "Arrival Gate"@en ;
+    rdfs:comment "An area where passengers disembark from an aircraft."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:partOf ;
+            owl:someValuesFrom air:Terminal ],
+        air:Infrastructure .
+
+air:ArrivalNotice a owl:Class ;
+    rdfs:label "Arrival Notice"@en ;
+    rdfs:comment "Notification issued by the airline or freight forwarder indicating the cargo has arrived."@en ;
+    rdfs:subClassOf air:Document .
+
+air:Baggage a owl:Class ;
+    rdfs:label "Baggage"@en ;
+    rdfs:comment "Personal belongings of passengers transported separately."@en ;
+    rdfs:subClassOf air:PhysicalObject .
+
+air:BaseMaintenance a owl:Class ;
+    rdfs:label "Base Maintenance"@en ;
+    rdfs:comment "More extensive scheduled maintenance performed at a maintenance base, typically involving hangar time."@en ;
+    rdfs:subClassOf air:MaintenanceActivity .
+
+air:BoardingPass a owl:Class ;
+    rdfs:label "Boarding Pass"@en ;
+    rdfs:comment "A document provided to a passenger to access the aircraft."@en ;
+    rdfs:subClassOf air:Document .
+
+air:BreakBulk a owl:Class ;
+    rdfs:label "Break Bulk"@en ;
+    rdfs:comment "The process of deconsolidating cargo from a ULD into individual shipments at the destination."@en ;
+    rdfs:subClassOf air:CargoHandlingOperation .
+
+air:CargoContainer a owl:Class ;
+    rdfs:label "Cargo Container"@en ;
+    rdfs:comment "A container used to hold and transport cargo."@en ;
+    rdfs:subClassOf air:Equipment .
+
+air:CateringCompany a owl:Class ;
+    rdfs:label "Catering Company"@en ;
+    rdfs:comment "A company that prepares and supplies food and beverages for flights."@en ;
+    rdfs:subClassOf air:Organization .
+
+air:CateringService a owl:Class ;
+    rdfs:label "Catering Service"@en ;
+    rdfs:comment "The provision and loading of food and beverages onto an aircraft."@en ;
+    rdfs:subClassOf air:GroundHandlingService .
+
+air:CertificateOfAirworthiness a owl:Class ;
+    rdfs:label "Certificate of Airworthiness"@en ;
+    rdfs:comment "A certificate confirming that an aircraft conforms to its approved design and is safe for operation."@en ;
+    rdfs:subClassOf air:Certificate ;
+    skos:altLabel "CofA"@en .
+
+air:ChargingPoint a owl:Class ;
+    rdfs:label "Charging Point"@en ;
+    rdfs:comment "An individual connection point at a charging station used to charge a vehicle or aircraft."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:partOf ;
+            owl:someValuesFrom air:ChargingStation ],
+        air:Equipment .
+
+air:ChargingStation a owl:Class ;
+    rdfs:label "Charging Station"@en ;
+    rdfs:comment "A facility for charging electric ground handling equipment or electric aircraft."@en ;
+    rdfs:subClassOf air:Infrastructure .
+
+air:CheckInCounter a owl:Class ;
+    rdfs:label "Check-In Counter"@en ;
+    rdfs:comment "A location at an airport where passengers confirm their presence for a flight."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:partOf ;
+            owl:someValuesFrom air:Terminal ],
+        air:Infrastructure .
+
+air:CommercialAirTransportOperation a owl:Class ;
+    rdfs:label "Commercial Air Transport Operation"@en ;
+    rdfs:comment "An aircraft operation involving the transport of passengers, cargo, or mail for remuneration or hire."@en ;
+    rdfs:subClassOf air:FlightOperation ;
+    owl:disjointWith air:NonCommercialOperation,
+        air:SpecialisedOperation .
+
+air:Cruise a owl:Class ;
+    rdfs:label "Cruise"@en ;
+    rdfs:comment "The phase of flight at a stable altitude and speed between climb and descent."@en ;
+    rdfs:subClassOf air:FlightPhase .
+
+air:CustomsClearanceAgency a owl:Class ;
+    rdfs:label "Customs Clearance Agency"@en ;
+    rdfs:comment "An authorised service provider responsible for processing customs declarations."@en ;
+    rdfs:subClassOf air:Organization .
+
+air:DangerousGoods a owl:Class ;
+    rdfs:label "Dangerous Goods"@en ;
+    rdfs:comment "Items classified as hazardous for air transport, requiring special handling and labelling."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:requiresHazardLabel ;
+            owl:someValuesFrom air:Label ],
+        air:Cargo ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( air:Cargo [ a owl:Restriction ;
+                        owl:hasValue air:DangerousGoodsCargoType ;
+                        owl:onProperty air:classifiedAs ] ) ] ;
+    skos:altLabel "DG"@en .
+
+air:DangerousGoodsCargoType a air:CargoType,
+        owl:NamedIndividual ;
+    rdfs:label "Dangerous goods (cargo type)"@en ;
+    rdfs:comment "The cargo-type value for goods classified as dangerous under the ICAO Technical Instructions / IATA DGR."@en .
+
+air:DepartureGate a owl:Class ;
+    rdfs:label "Departure Gate"@en ;
+    rdfs:comment "An airport terminal section where passengers wait before boarding."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:partOf ;
+            owl:someValuesFrom air:Terminal ],
+        air:Infrastructure .
+
+air:DispatchSchedule a owl:Class ;
+    rdfs:label "Dispatch Schedule"@en ;
+    rdfs:comment "The planned timing for shipping goods from the origin."@en ;
+    rdfs:subClassOf air:InformationObject .
+
+air:EDISystem a owl:Class ;
+    rdfs:label "EDI System"@en ;
+    rdfs:comment "An Electronic Data Interchange system used to submit shipping documents digitally."@en ;
+    rdfs:subClassOf air:InformationObject .
+
+air:EnergyUnit a owl:Class ;
+    rdfs:label "Energy Unit"@en ;
+    rdfs:comment "A quantity of energy consumed, expressed in a defined unit (e.g. litres of fuel, kWh)."@en ;
+    rdfs:subClassOf air:Measurement .
+
+air:ExplosiveInspection a owl:Class ;
+    rdfs:label "Explosive Inspection"@en ;
+    rdfs:comment "A security screening process to ensure cargo does not contain explosives."@en ;
+    rdfs:subClassOf air:SecurityScreening ;
+    skos:altLabel "Explosive Trace Detection"@en .
+
+air:ExportCustomsClearance a owl:Class ;
+    rdfs:label "Export Customs Clearance"@en ;
+    rdfs:comment "Customs clearance conducted for goods leaving the country of origin."@en ;
+    rdfs:subClassOf air:CustomsClearance .
+
+air:Exporter a owl:Class ;
+    rdfs:label "Exporter"@en ;
+    rdfs:comment "The party (person or organisation) that dispatches goods from the country of origin to a foreign country."@en ;
+    rdfs:subClassOf air:Agent .
+
+air:FlightCost a owl:Class ;
+    rdfs:label "Flight Cost"@en ;
+    rdfs:comment "The financial cost associated with operating a flight."@en ;
+    rdfs:subClassOf air:Measurement .
+
+air:FlightManifest a owl:Class ;
+    rdfs:label "Flight Manifest"@en ;
+    rdfs:comment "A list of passengers or cargo aboard a particular flight."@en ;
+    rdfs:subClassOf air:Document .
+
+air:FlightSchedule a owl:Class ;
+    rdfs:label "Flight Schedule"@en ;
+    rdfs:comment "A timetable showing the planned flights of an airline."@en ;
+    rdfs:subClassOf air:Document .
+
+air:FreighterAircraft a owl:Class ;
+    rdfs:label "Freighter Aircraft"@en ;
+    rdfs:comment "An aircraft designed specifically to carry freight or cargo, with no passenger cabin."@en ;
+    rdfs:subClassOf air:Aircraft ;
+    skos:altLabel "Cargo Aircraft"@en .
+
+air:GroundHandlingAgent a owl:Class ;
+    rdfs:label "Ground Handling Agent"@en ;
+    rdfs:comment "A company contracted to provide ground handling services (baggage, ramp, catering, etc.) to airlines at an airport."@en ;
+    rdfs:subClassOf air:Organization .
+
+air:GroundVehicle a owl:Class ;
+    rdfs:label "Ground Vehicle"@en ;
+    rdfs:comment "A road vehicle (e.g. a truck or van) used to move cargo or passengers to or from an airport."@en ;
+    rdfs:subClassOf air:PhysicalObject .
+
+air:InsuranceProvider a owl:Class ;
+    rdfs:label "Insurance Provider"@en ;
+    rdfs:comment "An organization that provides insurance cover for aircraft, cargo, or aviation liability."@en ;
+    rdfs:subClassOf air:Organization .
+
+air:Invoice a owl:Class ;
+    rdfs:label "Invoice"@en ;
+    rdfs:comment "A commercial document stating the value of the goods and transaction details."@en ;
+    rdfs:subClassOf air:Document .
+
+air:KPI a owl:Class ;
+    rdfs:label "KPI"@en ;
+    rdfs:comment "A Key Performance Indicator used to measure airport or airline operational performance."@en ;
+    rdfs:subClassOf air:Measurement .
+
+air:Landing a owl:Class ;
+    rdfs:label "Landing"@en ;
+    rdfs:comment "The phase in which an aircraft transitions from flight to ground movement."@en ;
+    rdfs:subClassOf air:FlightPhase .
+
+air:METAR a owl:Class ;
+    rdfs:label "METAR"@en ;
+    rdfs:comment "A routine, coded surface weather observation report used in aviation."@en ;
+    rdfs:subClassOf air:Document .
+
+air:ManualScanning a owl:Class ;
+    rdfs:label "Manual Scanning"@en ;
+    rdfs:comment "Manual scanning of a shipment identifier by an operator."@en ;
+    rdfs:subClassOf air:SecurityScreening .
+
+air:MasterAirwayBill a owl:Class ;
+    rdfs:label "Master Airway Bill"@en ;
+    rdfs:comment "A shipment document issued by the airline to the freight forwarder for consolidated cargo."@en ;
+    rdfs:subClassOf air:AirwayBill ;
+    skos:altLabel "MAWB"@en .
+
+air:MonitorService a owl:Class ;
+    rdfs:label "Monitor Service"@en ;
+    rdfs:comment "A service that monitors current airport or flight operations in real time."@en ;
+    rdfs:subClassOf air:Service .
+
+air:NOTAM a owl:Class ;
+    rdfs:label "NOTAM"@en ;
+    rdfs:comment "A Notice to Airmen, distributed to alert pilots of potential hazards or changes to facilities, services, or procedures."@en ;
+    rdfs:subClassOf air:Document .
+
+air:OperationalData a owl:Class ;
+    rdfs:label "Operational Data"@en ;
+    rdfs:comment "Data describing the current or historical state of airport or flight operations."@en ;
+    rdfs:subClassOf air:InformationObject .
+
+air:PackingCompany a owl:Class ;
+    rdfs:label "Packing Company"@en ;
+    rdfs:comment "A service provider responsible for securely packing cargo before shipment."@en ;
+    rdfs:subClassOf air:Organization .
+
+air:PackingList a owl:Class ;
+    rdfs:label "Packing List"@en ;
+    rdfs:comment "A detailed list of the contents of the shipment."@en ;
+    rdfs:subClassOf air:Document .
+
+air:Parcel a owl:Class ;
+    rdfs:label "Parcel"@en ;
+    rdfs:comment "An individual shipment."@en ;
+    rdfs:subClassOf air:Cargo .
+
+air:PassengerClass a owl:Class ;
+    rdfs:label "Passenger Class"@en ;
+    rdfs:comment "The category of service assigned to a passenger (e.g. economy, business)."@en ;
+    rdfs:subClassOf air:Category .
+
+air:PerformanceService a owl:Class ;
+    rdfs:label "Performance Service"@en ;
+    rdfs:comment "A service that measures and reports on airport or airline operational performance."@en ;
+    rdfs:subClassOf air:Service .
+
+air:RoadNetwork a owl:Class ;
+    rdfs:label "Road Network"@en ;
+    rdfs:comment "The interconnected system of roads serving an airport."@en ;
+    rdfs:subClassOf air:Infrastructure .
+
+air:Route a owl:Class ;
+    rdfs:label "Route"@en ;
+    rdfs:comment "A designated air corridor between two airports. Infrastructure rather than a location: it is a defined way along which aircraft fly."@en ;
+    rdfs:subClassOf air:Infrastructure .
+
+air:Runway a owl:Class ;
+    rdfs:label "Runway"@en ;
+    rdfs:comment "A strip of land at an airport on which aircraft can take off and land."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:partOf ;
+            owl:someValuesFrom air:Aerodrome ],
+        air:Infrastructure .
+
+air:SafetyReport a owl:Class ;
+    rdfs:label "Safety Report"@en ;
+    rdfs:comment "A report documenting a safety occurrence, hazard, or concern for review by safety management."@en ;
+    rdfs:subClassOf air:Document .
+
+air:SeriousIncident a owl:Class ;
+    rdfs:label "Serious Incident"@en ;
+    rdfs:comment "An occurrence, other than an accident, associated with the operation of an aircraft in which safety was seriously compromised."@en ;
+    rdfs:subClassOf air:SafetyIncident .
+
+air:ShippingInstruction a owl:Class ;
+    rdfs:label "Shipping Instruction"@en ;
+    rdfs:comment "A document outlining the exporter's request to arrange shipment."@en ;
+    rdfs:subClassOf air:Document ;
+    skos:altLabel "SI"@en .
+
+air:Slot a owl:Class ;
+    rdfs:label "Slot"@en ;
+    rdfs:comment "An authorisation to use the full range of airport infrastructure necessary to arrive or depart at an airport on a specific date and time."@en ;
+    rdfs:subClassOf air:InformationObject .
+
+air:StorageShed a owl:Class ;
+    rdfs:label "Storage Shed"@en ;
+    rdfs:comment "A bonded holding area at the airport for cargo before loading or after unloading."@en ;
+    rdfs:subClassOf air:Warehouse ;
+    skos:altLabel "Airside Storage Shed"@en .
+
+air:SustainableAviationFuel a owl:Class ;
+    rdfs:label "Sustainable Aviation Fuel"@en ;
+    rdfs:comment "An aviation fuel derived from non-petroleum feedstocks that reduces lifecycle carbon emissions relative to conventional jet fuel."@en ;
+    rdfs:subClassOf air:EnergySource ;
+    skos:altLabel "SAF"@en .
+
+air:TAF a owl:Class ;
+    rdfs:label "TAF"@en ;
+    rdfs:comment "A coded aerodrome weather forecast used in aviation."@en ;
+    rdfs:subClassOf air:Document ;
+    skos:altLabel "Terminal Aerodrome Forecast"@en .
+
+air:Takeoff a owl:Class ;
+    rdfs:label "Takeoff"@en ;
+    rdfs:comment "The phase in which an aircraft transitions from ground movement to flight."@en ;
+    rdfs:subClassOf air:FlightPhase .
+
+air:Taxiing a owl:Class ;
+    rdfs:label "Taxiing"@en ;
+    rdfs:comment "The movement of an aircraft on the ground under its own power."@en ;
+    rdfs:subClassOf air:FlightPhase .
+
+air:TradeAssociation a owl:Class ;
+    rdfs:label "Trade Association"@en ;
+    rdfs:comment "An industry body representing member organisations and setting non-binding commercial or operational standards."@en ;
+    rdfs:subClassOf air:Organization .
+
+air:Training a owl:Class ;
+    rdfs:label "Training"@en ;
+    rdfs:comment "An activity intended to develop or maintain the competence of aviation personnel."@en ;
+    rdfs:subClassOf air:Process .
+
+air:TransitFlight a owl:Class ;
+    rdfs:label "Transit Flight"@en ;
+    rdfs:comment "A flight that includes one or more stops before reaching the final destination."@en ;
+    rdfs:subClassOf air:Flight ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( air:Flight [ a owl:Restriction ;
+                        owl:onProperty air:hasIntermediateStop ;
+                        owl:someValuesFrom air:Aerodrome ] ) ] .
+
+air:TypeCertificate a owl:Class ;
+    rdfs:label "Type Certificate"@en ;
+    rdfs:comment "A certificate issued by a regulatory authority approving the design of an aircraft type as meeting applicable safety standards."@en ;
+    rdfs:subClassOf air:Certificate .
+
+air:TypeRating a owl:Class ;
+    rdfs:label "Type Rating"@en ;
+    rdfs:comment "A qualification, endorsed on a pilot's licence, permitting them to operate a specific aircraft type."@en ;
+    rdfs:subClassOf air:Certificate .
+
+air:arrivedAt a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "arrived at"@en ;
+    rdfs:comment "Relates a flight to the airport it arrived at."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:Aerodrome .
+
+air:carriesCargo a owl:ObjectProperty ;
+    rdfs:label "carries cargo"@en ;
+    rdfs:comment "Relates a flight to cargo it carries."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:Cargo .
+
+air:carriesPassenger a owl:ObjectProperty ;
+    rdfs:label "carries passenger"@en ;
+    rdfs:comment "Relates a flight to a passenger it carries."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:Passenger .
+
+air:classifiedAs a owl:ObjectProperty ;
+    rdfs:label "classified as"@en ;
+    rdfs:comment "Relates cargo to its cargo type classification."@en ;
+    rdfs:domain air:Cargo ;
+    rdfs:range air:CargoType .
+
+air:departedFrom a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "departed from"@en ;
+    rdfs:comment "Relates a flight to the airport it departed from."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:Aerodrome .
+
+air:hasAirOperatorCertificate a owl:ObjectProperty ;
+    rdfs:label "has air operator certificate"@en ;
+    rdfs:comment "Relates an airline to its air operator certificate."@en ;
+    rdfs:domain air:Airline ;
+    rdfs:range air:AirOperatorCertificate .
+
+air:hasConsignee a owl:ObjectProperty ;
+    rdfs:label "has consignee"@en ;
+    rdfs:comment "Relates a consignment to its consignee."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:Consignee ;
+    rdfs:subPropertyOf air:hasParty .
+
+air:hasMedicalCertificate a owl:ObjectProperty ;
+    rdfs:label "has medical certificate"@en ;
+    rdfs:comment "Relates a crew member to their medical certificate."@en ;
+    rdfs:domain air:CrewMember ;
+    rdfs:range air:MedicalCertificate .
+
+air:hasPart a owl:ObjectProperty,
+        owl:TransitiveProperty ;
+    rdfs:label "has part"@en ;
+    rdfs:comment "Relates a whole to one of its parts. Transitive: a part of a part is a part of the whole."@en ;
+    owl:inverseOf air:partOf .
+
+air:hasShipper a owl:ObjectProperty ;
+    rdfs:label "has shipper"@en ;
+    rdfs:comment "Relates a consignment to its shipper."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:Shipper ;
+    rdfs:subPropertyOf air:hasParty .
+
+air:includesCargoItem a owl:ObjectProperty ;
+    rdfs:label "includes cargo item"@en ;
+    rdfs:comment "Associates a shipment with its individual cargo items."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:Cargo ;
+    rdfs:subPropertyOf air:hasPart .
+
+air:leasedUnder a owl:ObjectProperty ;
+    rdfs:label "leased under"@en ;
+    rdfs:comment "Relates an aircraft to the lease agreement under which it is operated."@en ;
+    rdfs:domain air:Aircraft ;
+    rdfs:range air:LeaseAgreement .
+
+air:operatesFlight a owl:ObjectProperty ;
+    rdfs:label "operates flight"@en ;
+    rdfs:comment "Relates an airline to a flight it operates."@en ;
+    rdfs:domain air:Airline ;
+    rdfs:range air:Flight .
+
+air:requiresHazardLabel a owl:ObjectProperty ;
+    rdfs:label "requires hazard label"@en ;
+    rdfs:comment "Indicates the need for a hazard label based on cargo classification."@en ;
+    rdfs:domain air:DangerousGoods ;
+    rdfs:range air:Label .
+
+air:usesAircraft a owl:ObjectProperty ;
+    rdfs:label "uses aircraft"@en ;
+    rdfs:comment "Relates a flight to the aircraft that performs it."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:Aircraft .
+
+air:usesAirwayBill a owl:ObjectProperty ;
+    rdfs:label "uses airway bill"@en ;
+    rdfs:comment "Indicates that an airway bill is associated with the shipment."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:AirwayBill .
+
+air:AirNavigationServiceProvider a owl:Class ;
+    rdfs:label "Air Navigation Service Provider"@en ;
+    rdfs:comment "An organization that provides air traffic management and air navigation services within a defined airspace."@en ;
+    rdfs:subClassOf air:Organization ;
+    skos:altLabel "ANSP"@en .
+
+air:AirNetwork a owl:Class ;
+    rdfs:label "Air Network"@en ;
+    rdfs:comment "The interconnected system of air routes and airports."@en ;
+    rdfs:subClassOf air:Infrastructure .
+
+air:AirOperatorCertificate a owl:Class ;
+    rdfs:label "Air Operator Certificate"@en ;
+    rdfs:comment "A certificate issued by a competent authority confirming an operator's capability to conduct specified aircraft operations."@en ;
+    rdfs:subClassOf air:Certificate ;
+    skos:altLabel "AOC"@en .
+
+air:CabinCrew a owl:Class ;
+    rdfs:label "Cabin Crew"@en ;
+    rdfs:comment "Personnel responsible for passenger safety and service during a flight."@en ;
+    rdfs:subClassOf air:CrewMember .
+
+air:Capacity a owl:Class ;
+    rdfs:label "Capacity"@en ;
+    rdfs:comment "The maximum throughput of an airport resource (e.g. runway, terminal, apron) in a given period."@en ;
+    rdfs:subClassOf air:Measurement .
+
+air:CargoHold a owl:Class ;
+    rdfs:label "Cargo Hold"@en ;
+    rdfs:comment "The section of an aircraft designated for carrying cargo."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:partOf ;
+            owl:someValuesFrom air:Aircraft ],
+        air:AircraftComponent .
+
+air:CargoType a owl:Class ;
+    rdfs:label "Cargo Type"@en ;
+    rdfs:comment "The classification of cargo based on content and handling needs."@en ;
+    rdfs:subClassOf air:Category .
+
+air:Consignee a owl:Class ;
+    rdfs:label "Consignee"@en ;
+    rdfs:comment "The person or company to whom the goods are to be delivered."@en ;
+    rdfs:subClassOf air:Agent .
+
+air:CustomsWarehouse a owl:Class ;
+    rdfs:label "Customs Warehouse"@en ;
+    rdfs:comment "An authorised location for storing cargo awaiting customs clearance."@en ;
+    rdfs:subClassOf air:Warehouse .
+
+air:CutTime a owl:Class ;
+    rdfs:label "Cut Time"@en ;
+    rdfs:comment "The latest time by which cargo must be delivered to the airline for loading onto a scheduled flight."@en ;
+    rdfs:subClassOf air:Measurement .
+
+air:EnergySource a owl:Class ;
+    rdfs:label "Energy Source"@en ;
+    rdfs:comment "A classification of the type of energy used to power an aircraft or ground equipment (e.g. jet fuel, electricity, sustainable aviation fuel)."@en ;
+    rdfs:subClassOf air:Category .
+
+air:GroundSupportEquipment a owl:Class ;
+    rdfs:label "Ground Support Equipment"@en ;
+    rdfs:comment "Vehicles and equipment used to service aircraft while on the ground."@en ;
+    rdfs:subClassOf air:Equipment ;
+    skos:altLabel "GSE"@en .
+
+air:IATACode a owl:Class ;
+    rdfs:label "IATA Code"@en ;
+    rdfs:comment "A unique 3-letter identifier for airlines and airports issued by IATA."@en ;
+    rdfs:subClassOf air:Identifier .
+
+air:ICAOCode a owl:Class ;
+    rdfs:label "ICAO Code"@en ;
+    rdfs:comment "A 4-letter or alphanumeric code designating airports, airlines, or aircraft, issued by ICAO."@en ;
+    rdfs:subClassOf air:Identifier .
+
+air:Importer a owl:Class ;
+    rdfs:label "Importer"@en ;
+    rdfs:comment "The party (person or organisation) that receives goods in the destination country after import clearance."@en ;
+    rdfs:subClassOf air:Agent .
+
+air:LeaseAgreement a owl:Class ;
+    rdfs:label "Lease Agreement"@en ;
+    rdfs:comment "A contract under which an aircraft owner grants an airline the right to operate the aircraft for a defined period."@en ;
+    rdfs:subClassOf air:Document .
+
+air:MROOrganization a owl:Class ;
+    rdfs:label "MRO Organization"@en ;
+    rdfs:comment "An organization approved to perform aircraft Maintenance, Repair, and Overhaul (MRO)."@en ;
+    rdfs:subClassOf air:Organization ;
+    skos:altLabel "MRO"@en .
+
+air:MedicalCertificate a owl:Class ;
+    rdfs:label "Medical Certificate"@en ;
+    rdfs:comment "A certificate confirming that a crew member meets the medical fitness requirements for their role."@en ;
+    rdfs:subClassOf air:Certificate .
+
+air:NonCommercialOperation a owl:Class ;
+    rdfs:label "Non-Commercial Operation"@en ;
+    rdfs:comment "An aircraft operation other than commercial air transport, not undertaken for remuneration or hire."@en ;
+    rdfs:subClassOf air:FlightOperation .
+
+air:OperationalDisruption a owl:Class ;
+    rdfs:label "Operational Disruption"@en ;
+    rdfs:comment "An unexpected disruption to planned operations."@en ;
+    rdfs:subClassOf air:Occurrence .
+
+air:Shipper a owl:Class ;
+    rdfs:label "Shipper"@en ;
+    rdfs:comment "The party that tenders goods for carriage and is named as such on the airway bill."@en ;
+    rdfs:subClassOf air:Agent ;
+    skos:altLabel "Consignor"@en .
+
+air:SpecialisedOperation a owl:Class ;
+    rdfs:label "Specialised Operation"@en ;
+    rdfs:comment "An aircraft operation involving specialised activities such as aerial survey, agriculture, or construction."@en ;
+    rdfs:subClassOf air:FlightOperation .
+
+air:Stakeholder a owl:Class ;
+    rdfs:label "Stakeholder"@en ;
+    rdfs:comment "Any organization, role, or individual who contributes to, is affected by, or has an interest in airport or airline operations."@en ;
+    rdfs:subClassOf air:Agent .
+
+air:TransportMode a owl:Class ;
+    rdfs:label "Transport Mode"@en ;
+    rdfs:comment "A classification of the mode used to move goods or passengers."@en ;
+    rdfs:subClassOf air:Category .
+
+air:hasCrewMember a owl:ObjectProperty ;
+    rdfs:label "has crew member"@en ;
+    rdfs:comment "Relates a flight to any member of its crew. Super-property of crewedBy (flight crew) and servedBy (cabin crew)."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:CrewMember .
+
+air:hasIntermediateStop a owl:ObjectProperty ;
+    rdfs:label "has intermediate stop"@en ;
+    rdfs:comment "Relates a flight to an aerodrome at which it stops between departure and final arrival."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range air:Aerodrome .
+
+air:hasScheduledDateTime a owl:DatatypeProperty ;
+    rdfs:label "has scheduled date time"@en ;
+    rdfs:comment "The scheduled date and time of a flight event."@en ;
+    rdfs:domain air:Flight ;
+    rdfs:range xsd:dateTime .
+
+air:AircraftComponent a owl:Class ;
+    rdfs:label "Aircraft Component"@en ;
+    rdfs:comment "A part or subsystem fitted to or carried aboard an aircraft."@en ;
+    rdfs:subClassOf air:PhysicalObject .
+
+air:AircraftType a owl:Class ;
+    rdfs:label "Aircraft Type"@en ;
+    rdfs:comment "The certificated type/model classification of an aircraft (e.g. Boeing 777, Airbus A320)."@en ;
+    rdfs:subClassOf air:Category .
+
+air:Airspace a owl:Class ;
+    rdfs:label "Airspace"@en ;
+    rdfs:comment "A defined three-dimensional portion of the atmosphere within which specific rules or air traffic services apply."@en ;
+    rdfs:subClassOf air:Location .
+
+air:CarbonEmission a owl:Class ;
+    rdfs:label "Carbon Emission"@en ;
+    rdfs:comment "The amount of carbon dioxide released during a flight or logistics operation."@en ;
+    rdfs:subClassOf air:Measurement .
+
+air:CustomsClearance a owl:Class ;
+    rdfs:label "Customs Clearance"@en ;
+    rdfs:comment "A formal process of obtaining government permission to export or import goods."@en ;
+    rdfs:subClassOf air:Process .
+
+air:CustomsDeclaration a owl:Class ;
+    rdfs:label "Customs Declaration"@en ;
+    rdfs:comment "A form listing the details of goods being transported across borders."@en ;
+    rdfs:subClassOf air:Document .
+
+air:EnvironmentalRegulation a owl:Class ;
+    rdfs:label "Environmental Regulation"@en ;
+    rdfs:comment "A regulation governing the environmental impact of aviation operations."@en ;
+    rdfs:subClassOf air:PolicyOrRegulation .
+
+air:FlightOperation a owl:Class ;
+    rdfs:label "Flight Operation"@en ;
+    rdfs:comment "The conduct of a flight or series of flights under a defined operational category."@en ;
+    rdfs:subClassOf air:Process ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:unionOf ( air:CommercialAirTransportOperation air:NonCommercialOperation air:SpecialisedOperation ) ] .
+
+air:FreightForwarder a owl:Class ;
+    rdfs:label "Freight Forwarder"@en ;
+    rdfs:comment "A logistics service provider that arranges cargo transport, documentation, and compliance on behalf of exporters/importers."@en ;
+    rdfs:subClassOf air:Organization .
+
+air:GroundPersonnel a owl:Class ;
+    rdfs:label "Ground Personnel"@en ;
+    rdfs:comment "Staff who perform operational duties on the ground rather than aboard an aircraft."@en ;
+    rdfs:subClassOf air:Person .
+
+air:Identifier a owl:Class ;
+    rdfs:label "Identifier"@en ;
+    rdfs:comment "A code or designator that uniquely identifies an entity within an identification scheme (e.g. IATA or ICAO codes)."@en ;
+    rdfs:subClassOf air:InformationObject .
+
+air:Label a owl:Class ;
+    rdfs:label "Label"@en ;
+    rdfs:comment "A tag placed on cargo to identify flight, destination, and handling instructions."@en ;
+    rdfs:subClassOf air:Document .
+
+air:PilotLicense a owl:Class ;
+    rdfs:label "Pilot License"@en ;
+    rdfs:comment "A licence issued by a competent authority certifying that a pilot is qualified to act in a specified capacity."@en ;
+    rdfs:subClassOf air:Licence .
+
+air:ScreeningEquipment a owl:Class ;
+    rdfs:label "Screening Equipment"@en ;
+    rdfs:comment "Equipment used to inspect passengers, baggage, or cargo for prohibited or dangerous items."@en ;
+    rdfs:subClassOf air:Equipment .
+
+air:Terminal a owl:Class ;
+    rdfs:label "Terminal"@en ;
+    rdfs:comment "A building at an airport where passengers transfer between ground transport and their aircraft."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:partOf ;
+            owl:someValuesFrom air:Aerodrome ],
+        air:Infrastructure .
+
+air:ULD a owl:Class ;
+    rdfs:label "ULD"@en ;
+    rdfs:comment "A container or pallet used to consolidate cargo for easier handling and loading onto an aircraft."@en ;
+    rdfs:subClassOf air:CargoContainer ;
+    skos:altLabel "Unit Load Device"@en .
+
+air:CargoHandlingEquipment a owl:Class ;
+    rdfs:label "Cargo Handling Equipment"@en ;
+    rdfs:comment "Equipment used to move, sort, or consolidate cargo within a handling facility."@en ;
+    rdfs:subClassOf air:Equipment .
+
+air:Occurrence a owl:Class ;
+    rdfs:label "Occurrence"@en ;
+    rdfs:comment "An unplanned event that affects, or could affect, normal operations. Safety incidents are one kind of occurrence; operational disruptions and shipment exceptions are others."@en ;
+    rdfs:subClassOf air:Process .
+
+air:ShipmentException a owl:Class ;
+    rdfs:label "Shipment Exception"@en ;
+    rdfs:comment "An unplanned event that interrupts the normal handling of a shipment."@en ;
+    rdfs:subClassOf air:Occurrence .
+
+air:Warehouse a owl:Class ;
+    rdfs:label "Warehouse"@en ;
+    rdfs:comment "A facility for storing goods before or after transportation."@en ;
+    rdfs:subClassOf air:Infrastructure .
+
+air:Airport a owl:Class ;
+    rdfs:label "Airport"@en ;
+    rdfs:comment "An aerodrome equipped with facilities for commercial air transport, such as passenger terminals and cargo handling."@en ;
+    rdfs:subClassOf air:Aerodrome .
+
+air:AirwayBill a owl:Class ;
+    rdfs:label "Airway Bill"@en ;
+    rdfs:comment "A document that acts as a contract of carriage between the shipper and airline."@en ;
+    rdfs:subClassOf air:Document ;
+    skos:altLabel "AWB"@en .
+
+air:FlightCrew a owl:Class ;
+    rdfs:label "Flight Crew"@en ;
+    rdfs:comment "Personnel responsible for operating the aircraft."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:holdsLicense ;
+            owl:someValuesFrom air:Licence ],
+        [ a owl:Restriction ;
+            owl:onProperty air:hasMedicalCertificate ;
+            owl:someValuesFrom air:MedicalCertificate ],
+        air:CrewMember ;
+    owl:disjointWith air:CabinCrew .
+
+air:FlightPhase a owl:Class ;
+    rdfs:label "Flight Phase"@en ;
+    rdfs:comment "A distinct stage within the conduct of a flight."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:partOf ;
+            owl:someValuesFrom air:Flight ],
+        air:Process .
+
+air:Licence a owl:Class ;
+    rdfs:label "Licence"@en ;
+    rdfs:comment "A certificate issued to a person authorising them to exercise specified privileges (e.g. pilot, ATCO or engineer licence)."@en ;
+    rdfs:subClassOf air:Certificate ;
+    skos:altLabel "License"@en .
+
+air:Location a owl:Class ;
+    rdfs:label "Location"@en ;
+    rdfs:comment "A geographic, spatial, or airspace entity relevant to air transport."@en .
+
+air:MaintenanceActivity a owl:Class ;
+    rdfs:label "Maintenance Activity"@en ;
+    rdfs:comment "An activity performed to inspect, service, or repair an aircraft or its components."@en ;
+    rdfs:subClassOf air:Process .
+
+air:SafetyIncident a owl:Class ;
+    rdfs:label "Safety Incident"@en ;
+    rdfs:comment "An occurrence involving an aircraft or aviation operation that affects or could affect safety."@en ;
+    rdfs:subClassOf air:Occurrence .
+
+air:SecurityScreening a owl:Class ;
+    rdfs:label "Security Screening"@en ;
+    rdfs:comment "A process to inspect passengers, baggage, or cargo before boarding or onward transport."@en ;
+    rdfs:subClassOf air:Process .
+
+air:Airline a owl:Class ;
+    rdfs:label "Airline"@en ;
+    rdfs:comment "An organization providing air transport services for passengers or goods."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:hasAirOperatorCertificate ;
+            owl:someValuesFrom air:AirOperatorCertificate ],
+        air:Organization .
+
+air:AirportOperationsCentre a owl:Class ;
+    rdfs:label "Airport Operations Centre"@en ;
+    rdfs:comment "A centralised facility from which airport stakeholders jointly monitor and manage day-to-day airport operations."@en ;
+    rdfs:subClassOf air:Infrastructure ;
+    skos:altLabel "APOC"@en .
+
+air:Certificate a owl:Class ;
+    rdfs:label "Certificate"@en ;
+    rdfs:comment "A document issued by a competent authority attesting that an entity meets specified requirements."@en ;
+    rdfs:subClassOf air:Document .
+
+air:CrewMember a owl:Class ;
+    rdfs:label "Crew Member"@en ;
+    rdfs:comment "A person assigned to operational or service duties aboard an aircraft."@en ;
+    rdfs:subClassOf air:Person .
+
+air:Passenger a owl:Class ;
+    rdfs:label "Passenger"@en ;
+    rdfs:comment "An individual who travels in an aircraft but is not part of the crew."@en ;
+    rdfs:subClassOf air:Person .
+
+air:PolicyOrRegulation a owl:Class ;
+    rdfs:label "Policy or Regulation"@en ;
+    rdfs:comment "A rule, standard, directive, or regulatory instrument governing air transport."@en ;
+    rdfs:subClassOf air:InformationObject .
+
+air:holdsLicense a owl:ObjectProperty ;
+    rdfs:label "holds license"@en ;
+    rdfs:comment "Relates a person to a licence they hold."@en ;
+    rdfs:domain air:Person ;
+    rdfs:range air:Licence .
+
+air:Equipment a owl:Class ;
+    rdfs:label "Equipment"@en ;
+    rdfs:comment "A physical item of apparatus or machinery used to support air transport operations."@en ;
+    rdfs:subClassOf air:PhysicalObject .
+
+air:RegulatoryAuthority a owl:Class ;
+    rdfs:label "Regulatory Authority"@en ;
+    rdfs:comment "A governmental or international body responsible for setting and enforcing aviation rules and standards."@en ;
+    rdfs:subClassOf air:Organization .
+
+air:hasParty a owl:ObjectProperty ;
+    rdfs:label "has party"@en ;
+    rdfs:comment "Relates a consignment to any agent involved in it. Super-property of shipper, consignee, exporter, importer, forwarder, packer and carrier relations, so 'who is involved in this shipment?' is one query."@en ;
+    rdfs:domain air:Consignment ;
+    rdfs:range air:Agent .
+
+air:CargoHandlingOperation a owl:Class ;
+    rdfs:label "Cargo Handling Operation"@en ;
+    rdfs:comment "An operational activity performed on cargo within a handling facility."@en ;
+    rdfs:subClassOf air:Process .
+
+air:Category a owl:Class ;
+    rdfs:label "Category"@en ;
+    rdfs:comment "A classification value or kind used to categorise other entities (e.g. aircraft type, cargo type, passenger class, energy source). Categories are not measurements: they are not quantities and carry no unit."@en .
+
+air:GroundHandlingService a owl:Class ;
+    rdfs:label "Ground Handling Service"@en ;
+    rdfs:comment "A service performed to support an aircraft's turnaround at an airport."@en ;
+    rdfs:subClassOf air:Process .
+
+air:Person a owl:Class ;
+    rdfs:label "Person"@en ;
+    rdfs:comment "An individual human being."@en ;
+    rdfs:subClassOf air:Agent ;
+    owl:disjointWith air:Organization .
+
+air:Measurement a owl:Class ;
+    rdfs:label "Measurement"@en ;
+    rdfs:comment "A quantity, metric, classification, or measured/assigned value used in air transport operations."@en .
+
+air:Service a owl:Class ;
+    rdfs:label "Service"@en ;
+    rdfs:comment "A defined capability or function offered by a system, facility, or organization."@en .
+
+air:Agent a owl:Class ;
+    rdfs:label "Agent"@en ;
+    rdfs:comment "An entity capable of acting within the air transport domain, either an organization or a person."@en .
+
+air:PhysicalObject a owl:Class ;
+    rdfs:label "Physical Object"@en ;
+    rdfs:comment "A material entity that occupies space, such as an aircraft, item of equipment, cargo, or piece of infrastructure."@en .
+
+air:InformationObject a owl:Class ;
+    rdfs:label "Information Object"@en ;
+    rdfs:comment "A document, record, code, message, or digital artefact that carries information within air transport operations."@en .
+
+air:partOf a owl:ObjectProperty,
+        owl:TransitiveProperty ;
+    rdfs:label "part of"@en ;
+    rdfs:comment "Relates a part to the whole it belongs to (e.g. runway to aerodrome, flight phase to flight, cargo hold to aircraft)."@en .
+
+air:Aerodrome a owl:Class ;
+    rdfs:label "Aerodrome"@en ;
+    rdfs:comment "A defined area on land or water (including any buildings, installations and equipment) intended to be used wholly or in part for the arrival, departure and surface movement of aircraft (ICAO Annex 14). Airport is a kind of aerodrome."@en ;
+    rdfs:subClassOf air:Infrastructure .
+
+air:Process a owl:Class ;
+    rdfs:label "Process"@en ;
+    rdfs:comment "An activity, operation, or event that occurs over time within air transport operations."@en .
+
+air:Aircraft a owl:Class ;
+    rdfs:label "Aircraft"@en ;
+    rdfs:comment "A vehicle capable of atmospheric flight used to transport passengers or goods."@en ;
+    rdfs:subClassOf air:PhysicalObject .
+
+air:Organization a owl:Class ;
+    rdfs:label "Organization"@en ;
+    rdfs:comment "A formally structured group that acts as a single entity within air transport."@en ;
+    rdfs:subClassOf air:Agent .
+
+air:Cargo a owl:Class ;
+    rdfs:label "Cargo"@en ;
+    rdfs:comment "Goods or merchandise transported in an aircraft."@en ;
+    rdfs:subClassOf air:PhysicalObject .
+
+air:Infrastructure a owl:Class ;
+    rdfs:label "Infrastructure"@en ;
+    rdfs:comment "A fixed facility or structure that supports air transport operations."@en ;
+    rdfs:subClassOf air:PhysicalObject .
+
+air:Consignment a owl:Class ;
+    rdfs:label "Consignment"@en ;
+    rdfs:comment "A shipment of one or more cargo items tendered by one shipper and transported under one air waybill. A consignment is an aggregate of cargo items, not itself a cargo item."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty air:hasShipper ;
+            owl:someValuesFrom air:Shipper ],
+        [ a owl:Restriction ;
+            owl:onProperty air:hasConsignee ;
+            owl:someValuesFrom air:Consignee ],
+        [ a owl:Restriction ;
+            owl:onProperty air:includesCargoItem ;
+            owl:someValuesFrom air:Cargo ],
+        [ a owl:Restriction ;
+            owl:onProperty air:usesAirwayBill ;
+            owl:someValuesFrom air:AirwayBill ],
+        air:PhysicalObject .
+
+air:Document a owl:Class ;
+    rdfs:label "Document"@en ;
+    rdfs:comment "A record, form, or certificate that carries information for legal, operational, or logistical purposes."@en ;
+    rdfs:subClassOf air:InformationObject ;
+    owl:disjointWith air:Identifier .
+
+air:Flight a owl:Class ;
+    rdfs:label "Flight"@en ;
+    rdfs:comment "A single journey (leg) of an aircraft from a departure aerodrome to an arrival aerodrome, whether scheduled or not."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onClass air:Aerodrome ;
+            owl:onProperty air:departedFrom ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ],
+        [ a owl:Restriction ;
+            owl:onClass air:Aerodrome ;
+            owl:onProperty air:arrivedAt ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ],
+        [ a owl:Restriction ;
+            owl:onProperty air:usesAircraft ;
+            owl:someValuesFrom air:Aircraft ],
+        air:Process .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( air:PhysicalObject air:InformationObject air:Process air:Location air:Measurement air:Service air:Category ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( air:Agent air:InformationObject air:Process air:Location air:Measurement air:Service air:Category ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( air:Taxiing air:Takeoff air:Cruise air:Approach air:Landing ) .
+

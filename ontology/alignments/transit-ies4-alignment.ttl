@@ -1,0 +1,54 @@
+@prefix : <https://www.cranfield.ac.uk/transit/alignments/ies4#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix road: <https://www.cranfield.ac.uk/transit/road#> .
+@prefix rail: <https://www.cranfield.ac.uk/transit/rail#> .
+@prefix air: <https://www.cranfield.ac.uk/transit/air#> .
+@prefix maritime: <https://www.cranfield.ac.uk/transit/maritime#> .
+@prefix ies: <http://ies.data.gov.uk/ontology/ies4#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# Alignment between TransiT terms and the IES4 terms they were adapted from.
+#
+# This file is NOT imported by any TransiT module and must stay out of the
+# owl:imports closure: IES4 is a 4D ontology and TransiT is built on BFO, so
+# the two must never be merged for reasoning. Use this file only for data
+# exchange, e.g. to drive a SPARQL CONSTRUCT that translates IES4 records into
+# TransiT records. skos:closeMatch is declared as an annotation property so the
+# file stays in OWL 2 DL when loaded on its own.
+
+<https://www.cranfield.ac.uk/transit/alignments/ies4> a owl:Ontology ;
+    rdfs:label "TransiT to IES4 alignment"@en ;
+    owl:versionInfo "0.4.0" ;
+    dcterms:license <https://opensource.org/licenses/MIT> ;
+    rdfs:comment "Not part of the TransiT import closure. See the header comment."@en .
+
+skos:closeMatch a owl:AnnotationProperty .
+skos:broadMatch a owl:AnnotationProperty .
+
+# core
+transit:Device      skos:closeMatch ies:Device .
+transit:Vehicle     skos:closeMatch ies:Vehicle .
+transit:Location    skos:closeMatch ies:Location .
+transit:Movement    skos:closeMatch ies:Movement .
+transit:Journey     skos:closeMatch ies:Journey .
+transit:TravelLeg   skos:closeMatch ies:Transit .   # an individual transportation; IES4 TravelLeg is also close
+transit:TravelLeg   skos:closeMatch ies:TravelLeg .
+
+# road
+road:RoadVehicle    skos:closeMatch ies:RoadVehicle .
+road:RoadTravelLeg  skos:closeMatch ies:CarTravel .
+
+# rail
+rail:RailTravelLeg  skos:closeMatch ies:TrainTravel .
+
+# air
+air:Aircraft        skos:closeMatch ies:Aircraft .
+air:Airport         skos:closeMatch ies:Airport .
+air:Flight          skos:closeMatch ies:Flight .
+
+# maritime
+maritime:Ship       skos:closeMatch ies:Ship .
+maritime:Sailing    skos:closeMatch ies:Sailing .

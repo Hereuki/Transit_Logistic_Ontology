@@ -11,7 +11,7 @@
 
 <https://www.cranfield.ac.uk/transit/road> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/road/2025-11> ;
-    owl:versionInfo "0.3.0" ;
+    owl:versionInfo "0.4.0" ;
     owl:imports <https://www.cranfield.ac.uk/transit/core> ;
     rdfs:label "TransiT Road Module"@en ;
     dcterms:license <https://opensource.org/licenses/MIT> ;
@@ -49,7 +49,17 @@
     rdfs:label "Van"@en ;
     iof-av:naturalLanguageDefinition "A reduced-size truck that carries a small amount of payload, typically under 3.5 tonnes gross weight."@en .
 
-[] a owl:AllDisjointClasses ; owl:members ( :Car :Bus :Truck ) .
+:Motorcycle a owl:Class ;
+    rdfs:subClassOf :RoadVehicle ;
+    rdfs:label "Motorcycle"@en ;
+    iof-av:naturalLanguageDefinition "A two- or three-wheeled motorised road vehicle carrying one or two persons."@en .
+
+:Bicycle a owl:Class ;
+    rdfs:subClassOf :RoadVehicle ;
+    rdfs:label "Bicycle"@en ;
+    iof-av:naturalLanguageDefinition "A human-powered or electrically assisted two-wheeled road vehicle. Covers cargo bikes used for last-mile delivery."@en .
+
+[] a owl:AllDisjointClasses ; owl:members ( :Car :Bus :Truck :Motorcycle :Bicycle ) .
 
 :RoadVehicleIdentifier a owl:Class ;
     owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:VehicleIdentifier

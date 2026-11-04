@@ -11,7 +11,7 @@
 
 <https://www.cranfield.ac.uk/transit/rail> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/rail/2025-11> ;
-    owl:versionInfo "0.3.0" ;
+    owl:versionInfo "0.4.0" ;
     owl:imports <https://www.cranfield.ac.uk/transit/core> ;
     rdfs:label "TransiT Rail Module"@en ;
     dcterms:license <https://opensource.org/licenses/MIT> ;
@@ -42,7 +42,18 @@
     rdfs:label "Wagon"@en ;
     iof-av:naturalLanguageDefinition "A rail vehicle without its own motive power that carries payload as part of a train."@en .
 
-[] a owl:AllDisjointClasses ; owl:members ( :Train :Locomotive :Wagon ) .
+:Tram a owl:Class ;
+    rdfs:subClassOf :RailVehicle ;
+    rdfs:label "Tram"@en ;
+    iof-av:naturalLanguageDefinition "A rail vehicle for urban passenger transport that runs on tracks laid in or beside streets."@en .
+
+:Metro a owl:Class ;
+    rdfs:subClassOf :RailVehicle ;
+    rdfs:label "Metro"@en ;
+    iof-av:synonym "underground"@en , "subway"@en ;
+    iof-av:naturalLanguageDefinition "A rail vehicle for high-capacity urban passenger transport on a segregated, often underground, network."@en .
+
+[] a owl:AllDisjointClasses ; owl:members ( :Train :Locomotive :Wagon :Tram :Metro ) .
 
 #################################################################
 #    Infrastructure

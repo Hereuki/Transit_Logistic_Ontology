@@ -13,7 +13,7 @@
 
 <https://www.cranfield.ac.uk/transit/air-road> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/air-road/2025-11> ;
-    owl:versionInfo "0.3.0" ;
+    owl:versionInfo "0.4.0" ;
     owl:imports <https://www.cranfield.ac.uk/transit/air> , <https://www.cranfield.ac.uk/transit/road> ;
     rdfs:label "TransiT Air-Road Intersection Module"@en ;
     dcterms:license <https://opensource.org/licenses/MIT> ;

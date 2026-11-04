@@ -13,8 +13,8 @@
 
 <https://www.cranfield.ac.uk/transit/all> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/all/2025-11> ;
-    owl:versionInfo "0.3.0" ;
-    owl:imports <https://www.cranfield.ac.uk/transit/rail-road> , <https://www.cranfield.ac.uk/transit/air-road> , <https://www.cranfield.ac.uk/transit/rail-maritime> , <https://www.cranfield.ac.uk/transit/road-maritime> , <https://www.cranfield.ac.uk/transit/air-maritime> ;
+    owl:versionInfo "0.4.0" ;
+    owl:imports <https://www.cranfield.ac.uk/transit/rail-road> , <https://www.cranfield.ac.uk/transit/air-road> , <https://www.cranfield.ac.uk/transit/rail-maritime> , <https://www.cranfield.ac.uk/transit/road-maritime> , <https://www.cranfield.ac.uk/transit/air-maritime> , <https://www.cranfield.ac.uk/transit/air-rail> , <https://www.cranfield.ac.uk/transit/air-domain> ;
     rdfs:label "TransiT (all modules)"@en ;
     dcterms:license <https://opensource.org/licenses/MIT> ;
-    dcterms:abstract "Convenience module that imports every TransiT intersection module, and through them the four mode modules and the core. Load this file to work with the whole ontology."@en .
+    dcterms:abstract "Convenience module that imports every TransiT intersection module (and through them the four mode modules and the core) plus the air-domain bridge. Load this file to work with the whole ontology."@en .

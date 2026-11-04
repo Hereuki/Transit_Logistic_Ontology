@@ -1,0 +1,32 @@
+@prefix : <https://www.cranfield.ac.uk/transit/examples/air-domain-flight#> .
+@prefix ad: <http://www.cranfield.ac.uk/ontology/air-domain#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix air: <https://www.cranfield.ac.uk/transit/air#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# A flight described only with Air Domain Ontology terms. Through the
+# air-domain bridge a reasoner should classify
+#   flight   as air:Flight and transit:TravelLeg,
+#   lhr/cdg  as air:Airport and transit:Terminal,
+#   plane    as air:Aircraft and transit:Vehicle,
+#   pallet   as transit:Payload, and
+#   carrier  as transit:Carrier.
+
+<https://www.cranfield.ac.uk/transit/examples/air-domain-flight> a owl:Ontology ;
+    owl:imports <https://www.cranfield.ac.uk/transit/air-domain> ;
+    rdfs:label "Example: a flight from Air Domain Ontology data"@en .
+
+:carrier a owl:NamedIndividual , ad:Airline ; rdfs:label "example airline"@en .
+:plane a owl:NamedIndividual , ad:Aircraft ; rdfs:label "G-EXMP"@en ; ad:operatedBy :carrier .
+:lhr a owl:NamedIndividual , ad:Airport ; rdfs:label "London Heathrow"@en .
+:cdg a owl:NamedIndividual , ad:Airport ; rdfs:label "Paris Charles de Gaulle"@en .
+:pallet a owl:NamedIndividual , ad:Cargo ; rdfs:label "pallet of spare parts"@en .
+
+:flight a owl:NamedIndividual , ad:Flight ;
+    rdfs:label "EX123"@en ;
+    ad:usesAircraft :plane ;
+    ad:departedFrom :lhr ;
+    ad:arrivedAt :cdg ;
+    ad:carriesCargo :pallet .

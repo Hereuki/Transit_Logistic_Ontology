@@ -8,6 +8,8 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
 
 # A container travels by train from a port-side railway station to an inland
 # rail-road terminal, is transshipped onto a truck, and is delivered to a
@@ -41,7 +43,14 @@
     transit:departsAtOrigin :station ;
     transit:endsAtDestination :hub ;
     transit:startsAtTimeInstance "2025-11-04T06:00:00Z"^^xsd:dateTimeStamp ;
-    transit:endsAtTimeInstance "2025-11-04T10:30:00Z"^^xsd:dateTimeStamp .
+    transit:endsAtTimeInstance "2025-11-04T10:30:00Z"^^xsd:dateTimeStamp ;
+    transit:hasEnergyAmount :leg1Energy .
+
+# energy used by the rail leg, with a QUDT unit (no QUDT import needed)
+:leg1Energy a owl:NamedIndividual , transit:EnergyAmount ;
+    transit:hasNumericalValue "1850.0"^^xsd:double ;
+    transit:hasMeasurementUnit unit:KiloW-HR .
+unit:KiloW-HR a owl:NamedIndividual , qudt:Unit ; rdfs:label "kilowatt-hour"@en .
 
 :leg2 a owl:NamedIndividual , transit:TravelLeg ;
     rdfs:label "road leg"@en ;
