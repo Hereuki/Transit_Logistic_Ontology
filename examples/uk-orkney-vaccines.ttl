@@ -37,8 +37,19 @@
 # tools/footprint.py computes the consignment's carbon footprint from this file.
 
 <https://www.cranfield.ac.uk/transit/examples/uk-orkney-vaccines> a owl:Ontology ;
-    owl:imports <https://www.cranfield.ac.uk/transit/all> ;
-    rdfs:label "Demo: vaccines from Daventry to North Ronaldsay by rail, road, sea and air"@en .
+    owl:versionInfo "0.7.0" ;
+    # every module this file uses; the mode modules pull in the core, and the core pulls in IOF Core and BFO
+    owl:imports <https://www.cranfield.ac.uk/transit/core> ,
+                <https://www.cranfield.ac.uk/transit/freight> ,
+                <https://www.cranfield.ac.uk/transit/road> ,
+                <https://www.cranfield.ac.uk/transit/rail> ,
+                <https://www.cranfield.ac.uk/transit/air> ,
+                <https://www.cranfield.ac.uk/transit/maritime> ,
+                <https://www.cranfield.ac.uk/transit/rail-road> ,
+                <https://www.cranfield.ac.uk/transit/road-maritime> ,
+                <https://www.cranfield.ac.uk/transit/air-road> ;
+    rdfs:label "Demo: vaccines from Daventry to North Ronaldsay by rail, road, sea and air"@en ;
+    rdfs:comment "Open this file in Protégé from the examples folder: examples/catalog-v001.xml maps every import to the local files under ontology/ and imports/."@en .
 
 #################################################################
 #    Units (QUDT IRIs, declared locally; no QUDT import)

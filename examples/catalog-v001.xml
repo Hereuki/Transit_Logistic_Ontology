@@ -1,4 +1,52 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Protégé / OWL API import catalog for the example files.
+  Keep it next to the examples so that their owl:imports resolve to the local
+  module files under ../ontology/ and the third-party ontologies under ../imports/
+  instead of being fetched online.
+-->
 <catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base=""/>
+    <group id="TransiT modules" prefer="public" xml:base="">
+        <uri name="https://www.cranfield.ac.uk/transit/core" uri="../ontology/transit-core.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/core/2025-11" uri="../ontology/transit-core.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/road" uri="../ontology/transit-road.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/road/2025-11" uri="../ontology/transit-road.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/rail" uri="../ontology/transit-rail.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/rail/2025-11" uri="../ontology/transit-rail.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air" uri="../ontology/transit-air.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air/2025-11" uri="../ontology/transit-air.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/maritime" uri="../ontology/transit-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/maritime/2025-11" uri="../ontology/transit-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/freight" uri="../ontology/transit-freight.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/freight/2025-11" uri="../ontology/transit-freight.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/passenger" uri="../ontology/transit-passenger.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/passenger/2025-11" uri="../ontology/transit-passenger.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/rail-road" uri="../ontology/transit-rail-road.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/rail-road/2025-11" uri="../ontology/transit-rail-road.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-road" uri="../ontology/transit-air-road.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-road/2025-11" uri="../ontology/transit-air-road.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-rail" uri="../ontology/transit-air-rail.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-rail/2025-11" uri="../ontology/transit-air-rail.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/rail-maritime" uri="../ontology/transit-rail-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/rail-maritime/2025-11" uri="../ontology/transit-rail-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/road-maritime" uri="../ontology/transit-road-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/road-maritime/2025-11" uri="../ontology/transit-road-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-maritime" uri="../ontology/transit-air-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-maritime/2025-11" uri="../ontology/transit-air-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-domain" uri="../ontology/transit-air-domain.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-domain/2025-11" uri="../ontology/transit-air-domain.ttl"/>
+        <uri name="http://www.cranfield.ac.uk/ontology/air-domain" uri="../ontology/air-domain.ttl"/>
+        <uri name="http://www.cranfield.ac.uk/ontology/air-domain/0.3.1" uri="../ontology/air-domain.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/all" uri="../ontology/transit-all.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/all/2025-11" uri="../ontology/transit-all.ttl"/>
+    </group>
+    <group id="Third-party imports" prefer="public" xml:base="">
+        <uri name="https://spec.industrialontologies.org/ontology/core/Core/" uri="../imports/iof-core.rdf"/>
+        <uri name="https://spec.industrialontologies.org/ontology/202401/core/Core/" uri="../imports/iof-core.rdf"/>
+        <uri name="https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/" uri="../imports/iof-annotation-vocabulary.rdf"/>
+        <uri name="https://spec.industrialontologies.org/ontology/202401/core/meta/AnnotationVocabulary/" uri="../imports/iof-annotation-vocabulary.rdf"/>
+        <uri name="http://purl.obolibrary.org/obo/bfo.owl" uri="../imports/bfo.owl"/>
+        <uri name="http://purl.obolibrary.org/obo/bfo/2020/bfo.owl" uri="../imports/bfo.owl"/>
+        <uri name="http://purl.obolibrary.org/obo/bfo-temporalized-relations.owl/" uri="../imports/bfo.owl"/>
+    </group>
 </catalog>
