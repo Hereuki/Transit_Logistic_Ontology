@@ -96,8 +96,7 @@ are in [docs/design-decisions.md](docs/design-decisions.md).
 │   └── validate.py                      Structural checks and HermiT reasoning over all modules
 ├── docs/
 │   ├── design-decisions.md              Why the modules look the way they do; renames; open issues
-│   ├── figures/                         Diagrams from version 0.2 (class names predate the split)
-│   └── owldoc-html-export-2025-03-24.zip  Generated HTML documentation of version 0.2
+│   └── figures/                         Diagrams from version 0.2 (class names predate the split)
 ├── LICENSE
 └── README.md
 ```
