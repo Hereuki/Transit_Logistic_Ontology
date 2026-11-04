@@ -101,8 +101,6 @@
 
 :ChargingPoint a owl:Class ;
     rdfs:label "Charging Point"@en ;
-    rdfs:comment """A charging station can have one or multilpe charging point, and a charging point have 1+charger.\r\r\r\r
-Each charging point belongs to a specific energy provider, e.g. tesla, total""" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:onProperty iof:hasComponentPartAtSomeTime ;
             owl:someValuesFrom :EnergyCharger ],
@@ -136,18 +134,18 @@ Each charging point belongs to a specific energy provider, e.g. tesla, total""" 
     iof-av:naturalLanguageDefinition "An agent that bears a consignee role."@en .
 
 :ConsolidationStation a owl:Class ;
-    rdfs:label "Consolidaion Station"@en ;
+    rdfs:label "Consolidation Station"@en ;
     rdfs:comment "Previously named switch station"@en ;
     rdfs:subClassOf :TransferNode ;
     skos:example "A distribution center"@en ;
     iof-av:naturalLanguageDefinition "A transfer node at which payload from several movements is consolidated into, or deconsolidated from, one vehicle or cargo unit."@en ;
-    iof-av:synonym "Consolidation Hub" .
+    iof-av:synonym "Consolidation Hub"@en .
 
 :CorrosionProcess a owl:Class ;
     rdfs:label "Corrosion Process"@en ;
-    rdfs:comment "Corrosion often accompanies industrial, manufacturing, or service operations, even though it is not part of the intended or planned function." ;
+    rdfs:comment "Corrosion often accompanies industrial, manufacturing, or service operations, even though it is not part of the intended or planned function."@en ;
     rdfs:subClassOf :InherentProcess ;
-    iof-av:naturalLanguageDefinition "A spontaneous degradation process in which a material, typically a metal, deteriorates due to chemical or electrochemical reactions with its environment. This process occurs unintentionally during the operation or lifespan of equipment or components"@en .
+    iof-av:naturalLanguageDefinition "A spontaneous degradation process in which a material, typically a metal, deteriorates due to chemical or electrochemical reactions with its environment. This process occurs unintentionally during the operation or lifespan of equipment or components."@en .
 
 :CrewMember a owl:Class ;
     rdfs:label "Crew Member"@en ;
@@ -185,9 +183,9 @@ Each charging point belongs to a specific energy provider, e.g. tesla, total""" 
     iof-av:naturalLanguageDefinition "A vehicle that applies an electricity supply, i.e. is powered at least in part by electricity delivered through a charger or a catenary. A bi-mode vehicle is both an electric vehicle and a fuel-burning one."@en .
 
 :ElectricVehicleCharger a owl:Class ;
-    rdfs:label "Electric vehicle charger"@en ;
+    rdfs:label "Electric Vehicle Charger"@en ;
     rdfs:subClassOf :ElectricityCharger ;
-    iof-av:naturalLanguageDefinition "A specialized electricity charger that delivers electrical energy to a electric vehicle"@en .
+    iof-av:naturalLanguageDefinition "A specialised electricity charger that delivers electrical energy to an electric vehicle."@en .
 
 :ElectricityChargerRole a owl:Class ;
     rdfs:label "Electricity Charger Role"@en ;
@@ -202,8 +200,8 @@ Each charging point belongs to a specific energy provider, e.g. tesla, total""" 
     owl:disjointWith :EnergyChargerRole ;
     skos:example "A battery being charged in a power system,  a vehicle whose tank is being fueled in a gaz station, a capacitor in an electronic circuit"@en ;
     iof-av:naturalLanguageDefinition "A role assumed by an entity that receives energy."@en ;
-    iof-av:synonym """Powered Device Role\r\r\r\r
-Receiving device role""" .
+    iof-av:synonym """Powered Device Role\r\r\r\r\r
+Receiving device role"""@en .
 
 :EnergyGenerationProcess a owl:Class ;
     rdfs:label "Energy Generation Process"@en ;
@@ -240,13 +238,13 @@ Receiving device role""" .
     iof-av:naturalLanguageDefinition "An energy supply station at which fuel is dispensed into vehicles."@en .
 
 :GHGSink a owl:Class ;
-    rdfs:label "GHG sink"@en ;
+    rdfs:label "GHG Sink"@en ;
     owl:equivalentClass [ a owl:Class ;
             owl:intersectionOf ( obo:BFO_0000040 [ a owl:Restriction ;
                         owl:onProperty iof:hasRole ;
                         owl:someValuesFrom :GHGSinkRole ] ) ] ;
-    iof-av:naturalLanguageDefinition "An entity that removes greenhouse gases from the atmosphere through physical, chemical, or biological means. GHG sinks mitigate climate change by reducing the net concentration of GHGs"@en ;
-    iof-av:synonym "GHG remover" .
+    iof-av:naturalLanguageDefinition "An entity that removes greenhouse gases from the atmosphere through physical, chemical, or biological means. GHG sinks mitigate climate change by reducing the net concentration of GHGs."@en ;
+    iof-av:synonym "GHG remover"@en .
 
 :Hydrogen a owl:Class ;
     rdfs:label "Hydrogen"@en ;
@@ -323,10 +321,9 @@ Receiving device role""" .
     iof-av:naturalLanguageDefinition "An agent that bears a shipper role."@en .
 
 :Terminal a owl:Class ;
-    rdfs:label "Correspondence Port"@en ;
+    rdfs:label "Terminal"@en ;
     rdfs:subClassOf :TransferNode ;
-    iof-av:naturalLanguageDefinition "A CorrespondencePort is a specialized correspondence equipped with facilities for mode transitions, cargo handling, or passenger services, typically hosting more complex operations than a simple rest stop."@en,
-        "A transfer node equipped with facilities for mode transitions, cargo handling or passenger services. Mode modules add airports, seaports, railway stations and road terminals; intersection modules define the terminals that connect two modes. Replaces the earlier class CorrespondencePort."@en .
+    iof-av:naturalLanguageDefinition "A transfer node equipped with facilities for mode transitions, cargo handling or passenger services. Mode modules add airports, seaports, railway stations and road terminals; intersection modules define the terminals that connect two modes. Replaces the earlier class CorrespondencePort."@en .
 
 :TimeSlot a owl:Class ;
     rdfs:label "Time Slot"@en ;
@@ -343,14 +340,14 @@ Receiving device role""" .
     iof-av:synonym "Payload specification"@en .
 
 :TransportMonetaryCostSpecification a owl:Class ;
-    rdfs:label "MoneytaryCostSpecification"@en ;
+    rdfs:label "Transport Monetary Cost Specification"@en ;
     rdfs:subClassOf :TransportDesignSpecification ;
     iof-av:naturalLanguageDefinition "A transport design specification prescribing the financial cost, in a currency, of a process, item or service."@en .
 
 :TransportPowerSpecification a owl:Class ;
     rdfs:label "Transport Power Specification"@en ;
     rdfs:subClassOf :TransportDesignSpecification ;
-    iof-av:naturalLanguageDefinition "Transport design specification that describes the power used, e.g., Watt"@en .
+    iof-av:naturalLanguageDefinition "A transport design specification that prescribes the power a transport system or vehicle uses or delivers, e.g. in watts."@en .
 
 :TransportWay a owl:Class ;
     rdfs:label "Transport Way"@en ;
@@ -481,7 +478,6 @@ Receiving device role""" .
 
 :hasPayload a owl:ObjectProperty ;
     rdfs:label "has Payload"@en ;
-    rdfs:comment "put under is carrier of" ;
     rdfs:domain :Movement ;
     rdfs:range :Payload ;
     rdfs:subPropertyOf :hasParticipantsInMovement ;
@@ -608,14 +604,14 @@ Receiving device role""" .
     rdfs:subClassOf :Vehicle ;
     iof-av:naturalLanguageDefinition "A road vehicle operating autonomously without real-time human control or a human driver."@en,
         "A vehicle that operates without real-time human control. Orthogonal to transport mode."@en ;
-    iof-av:synonym "AVs" .
+    iof-av:synonym "AVs"@en .
 
 :CarbonDioxide a owl:Class ;
     rdfs:label "Carbon Dioxide"@en ;
     rdfs:subClassOf :GreenhouseGas ;
     owl:disjointWith :Methane ;
-    iof-av:naturalLanguageDefinition "A colorless, odorless greenhouse gas composed of one carbon atom and two oxygen atoms (CO₂). It is a major product of combustion and respiration, and the primary anthropogenic contributor to global warming"@en ;
-    iof-av:synonym "CO2" .
+    iof-av:naturalLanguageDefinition "A colorless, odorless greenhouse gas composed of one carbon atom and two oxygen atoms (CO₂). It is a major product of combustion and respiration, and the primary anthropogenic contributor to global warming."@en ;
+    iof-av:synonym "CO2"@en .
 
 :CarrierRole a owl:Class ;
     rdfs:label "Carrier Role"@en ;
@@ -681,8 +677,7 @@ Receiving device role""" .
     iof-av:naturalLanguageDefinition "A value expression of the mass of greenhouse gas (in CO2 equivalent) released per unit of energy carrier used or per unit of transport work performed, e.g. kilograms per litre of diesel, per kilowatt-hour of electricity, or per tonne-kilometre. For electricity the basis states whether the factor is the location-based grid average or the market-based factor of the contracted supply."@en .
 
 :EmissionUnitProcess a owl:Class ;
-    rdfs:label "EmissionLeg"@en ;
-    rdfs:comment "This is for modeling and mapping purpose. Each main emission process has at least 1 Unit process. A unit process has exactly one emitted gaz and one emitter." ;
+    rdfs:label "Emission Unit Process"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:onClass :GreenhouseGasEmission ;
             owl:onProperty :hasEmission ;
@@ -693,7 +688,7 @@ Receiving device role""" .
             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ],
         :EmissionProcess ;
     iof-av:naturalLanguageDefinition "An emission process that releases exactly one kind of emission from exactly one emitter. Used to decompose a real emission process, which usually releases several gases, into units that can be quantified separately."@en ;
-    iof-av:synonym "Emission Unit Process" .
+    iof-av:synonym "emission leg"@en .
 
 :EnergyChargingProcess a owl:Class ;
     rdfs:label "Energy Charging Process"@en ;
@@ -704,7 +699,7 @@ Receiving device role""" .
 :EnergyProviderRole a owl:Class ;
     rdfs:label "Energy Provider Role"@en ;
     rdfs:subClassOf iof:SupplierRole ;
-    iof-av:naturalLanguageDefinition "supplier role held by a person (less likely) or organization when it offers to sell or provide a energy service"@en .
+    iof-av:naturalLanguageDefinition "A supplier role held by an organization (or, less often, a person) that offers to sell or provide an energy carrier."@en .
 
 :EnergyStorageProcess a owl:Class ;
     rdfs:label "Energy Storage Process"@en ;
@@ -729,13 +724,13 @@ Receiving device role""" .
     iof-av:naturalLanguageDefinition "A role held by a material entity that removes greenhouse gas from the atmosphere."@en .
 
 :GHGSource a owl:Class ;
-    rdfs:label "GHG source"@en ;
+    rdfs:label "GHG Source"@en ;
     owl:equivalentClass [ a owl:Class ;
             owl:intersectionOf ( obo:BFO_0000040 [ a owl:Restriction ;
                         owl:onProperty iof:hasRole ;
                         owl:someValuesFrom :GHGSourceRole ] ) ] ;
     iof-av:naturalLanguageDefinition "An entity that releases one or more greenhouse gases into the atmosphere. GHG sources may be natural or anthropogenic, and are typically associated with emission processes."@en ;
-    iof-av:synonym "GHG emitter" .
+    iof-av:synonym "GHG emitter"@en .
 
 :GHGSourceRole a owl:Class ;
     rdfs:label "GHG source role"@en ;
@@ -791,7 +786,7 @@ Receiving device role""" .
                                 owl:complementOf iof:Person ] ) ] ],
         :TransportRole ;
     skos:example "A shipping container on a cargo ship, a package in a delivery truck, bulk goods in a freight train." ;
-    iof-av:naturalLanguageDefinition "A role associated with non-human cargo being transported.e"@en .
+    iof-av:naturalLanguageDefinition "A role associated with non-human cargo being transported."@en .
 
 :PhysicalQuality a owl:Class ;
     rdfs:label "Physical Quality"@en ;
@@ -809,23 +804,20 @@ Receiving device role""" .
 :Scope1 a owl:NamedIndividual,
         :GHGProtocolScope ;
     rdfs:label "scope 1"@en ;
-    iof-av:naturalLanguageDefinition """Scope 1 includes all direct emissions that are generated from sources that are directly owned or controlled by an organisation. These include the use of natural gas at local or international sites, using liquid fuels to run a fleet of owned vehicles, or gases leaking from air-conditioning and refrigeration units.  \r\r\r\r
-\r\r\r\r
-Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/"""@en .
+    rdfs:seeAlso <https://ghgprotocol.org/corporate-standard> ;
+    iof-av:naturalLanguageDefinition "Scope 1 covers all direct emissions from sources that the reporting organisation owns or controls, e.g. natural gas burnt at its sites, liquid fuels used by its own fleet, or refrigerant gases leaking from its air-conditioning units."@en .
 
 :Scope2 a owl:NamedIndividual,
         :GHGProtocolScope ;
     rdfs:label "scope 2"@en ;
-    iof-av:naturalLanguageDefinition """Scope 2 includes all indirect emissions from the generation of the electricity purchased and used by an organisation at local or international sites. These emissions can be measured as location-based or market-based. \r\r\r\r
-\r\r\r\r
-Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/"""@en .
+    rdfs:seeAlso <https://ghgprotocol.org/corporate-standard> ;
+    iof-av:naturalLanguageDefinition "Scope 2 covers the indirect emissions from the generation of the electricity, heat or steam that the reporting organisation purchases and uses. It can be measured location-based or market-based."@en .
 
 :Scope3 a owl:NamedIndividual,
         :GHGProtocolScope ;
     rdfs:label "scope 3"@en ;
-    iof-av:naturalLanguageDefinition """Scope 3 includes all indirect emissions that occur in an organisation’s value chain – so activities that they do not own or control. These are usually the greatest share of an organisation’s carbon footprint, covering emissions associated with the following 15 categories. There are also additional categories you can measure, such as home working emissions.  \r\r\r\r
-\r\r\r\r
-Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/"""@en .
+    rdfs:seeAlso <https://ghgprotocol.org/corporate-standard> ;
+    iof-av:naturalLanguageDefinition "Scope 3 covers all other indirect emissions that occur in the reporting organisation's value chain, in activities it does not own or control, across the fifteen categories defined by the GHG Protocol. It is usually the largest share of an organisation's footprint; transport purchased from carriers falls here."@en .
 
 :ShipperRole a owl:Class ;
     rdfs:label "Shipper Role"@en ;
@@ -857,18 +849,18 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     iof-av:naturalLanguageDefinition "An information content entity that accompanies or evidences a transport: a ticket, a waybill, a bill of lading, a proof of delivery, a customs declaration."@en .
 
 :TransportEmissionDesignSpecification a owl:Class ;
-    rdfs:label "TransportEmissionDesignSpecification"@en ;
+    rdfs:label "Transport Emission Design Specification"@en ;
     rdfs:subClassOf :TransportDesignSpecification ;
-    iof-av:naturalLanguageDefinition "A TransportEmissionDesignSpecification is a transport design specification that prescribes emission amounts and limits for a transport system or vehicle, potentially contains also control measure, or related environmental impact  ."@en .
+    iof-av:naturalLanguageDefinition "A transport design specification that prescribes emission amounts and limits for a transport system or vehicle, and may also contain control measures or related environmental impact."@en .
 
 :TransportFuelDesignSpecification a owl:Class ;
-    rdfs:label "TransportFuelDesignSpecification"@en ;
+    rdfs:label "Transport Fuel Design Specification"@en ;
     rdfs:comment "It could specify fuel types (e.g., diesel, electric, hydrogen), fuel efficiency, average consumption."@en ;
     rdfs:subClassOf :TransportDesignSpecification ;
     iof-av:naturalLanguageDefinition "A TransportFuelDesignSpecification is a transport design specification that prescribes the type, characteristics, or usage parameters of fuel in a transport system or vehicle."@en .
 
 :TransportSpeedDesignSpecification a owl:Class ;
-    rdfs:label "TransportSpeedDesignSpecification"@en ;
+    rdfs:label "Transport Speed Design Specification"@en ;
     rdfs:subClassOf :TransportDesignSpecification ;
     iof-av:naturalLanguageDefinition "A TransportSpeedDesignSpecification is a transport design specification that prescribes speed constraints, performance envelopes, or operational velocity guidelines for a transport system or vehicle."@en .
 
@@ -921,7 +913,6 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
 
 :endsAtTimeInstance a owl:DatatypeProperty ;
     rdfs:label "ends At Time Instance"@en ;
-    rdfs:comment "This is to provide a shortcut to the IOF time expression. May add equivalent to that later" ;
     rdfs:domain obo:BFO_0000015 ;
     rdfs:range xsd:dateTimeStamp ;
     iof-av:naturalLanguageDefinition "The time stamp at which a process ends."@en .
@@ -1123,12 +1114,12 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     owl:disjointWith :AutonomousVehicle ;
     iof-av:naturalLanguageDefinition "A road vehicle requiring a human operator to navigate and control its movement."@en,
         "A vehicle that requires a human operator on board to navigate and control its movement. Orthogonal to transport mode: a human-driven vehicle may be a car, a train or a ship."@en ;
-    iof-av:synonym "HDVs" .
+    iof-av:synonym "HDVs"@en .
 
 :Methane a owl:Class ;
     rdfs:label "Methane"@en ;
     rdfs:subClassOf :GreenhouseGas ;
-    iof-av:naturalLanguageDefinition "A potent greenhouse gas composed of one carbon atom and four hydrogen atoms (CH₄). It is emitted during the production and transport of coal, oil, and natural gas, and from biological sources such as livestock and wetlands"@en .
+    iof-av:naturalLanguageDefinition "A potent greenhouse gas composed of one carbon atom and four hydrogen atoms (CH₄). It is emitted during the production and transport of coal, oil, and natural gas, and from biological sources such as livestock and wetlands."@en .
 
 :PassengerRole a owl:Class ;
     rdfs:label "Passenger Role"@en ;
@@ -1201,16 +1192,15 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     iof-av:naturalLanguageDefinition "An energy carrier that is a material resource releasing energy through combustion or another chemical reaction, e.g. diesel, kerosene, hydrogen."@en .
 
 :GreenhouseGas a owl:Class ;
-    rdfs:label "GHG"@en ;
+    rdfs:label "Greenhouse Gas"@en ;
     rdfs:subClassOf :Gas ;
-    iof-av:naturalLanguageDefinition "A gaseous substance that contributes to the greenhouse effect by absorbing and emitting infrared radiation in the atmosphere. Greenhouse gases play a significant role in regulating Earth’s temperature"@en ;
-    iof-av:synonym "Greenhouse Gas" .
+    iof-av:naturalLanguageDefinition "A gaseous substance that contributes to the greenhouse effect by absorbing and emitting infrared radiation in the atmosphere. Greenhouse gases play a significant role in regulating Earth’s temperature."@en ;
+    iof-av:synonym "GHG"@en .
 
 :InherentProcess a owl:Class ;
     rdfs:label "Inherent Process"@en ;
-    rdfs:comment "This is a complementary notion to the \"planned process\". An inherent process is a process that happens along with the planned process, however the process itself is not planned/instructed. E.g., the gaz emission during energy consumption, the corrosion of gear during production. In many cases, it is accompnied with a main planned process."@en ;
     rdfs:subClassOf obo:BFO_0000015 ;
-    iof-av:naturalLanguageDefinition "An inherent process is a process which is accompnied with a main planned process.  It  happens along with the planned process, however the process itself is not planned/instructed. E.g., the gaz emission during energy consumption, the corrosion of gear during production."@en .
+    iof-av:naturalLanguageDefinition "A process that accompanies a main planned process without itself being planned or instructed, e.g. the gas emission during energy consumption or the corrosion of gear during production."@en .
 
 :Journey a owl:Class ;
     rdfs:label "Journey"@en ;
@@ -1292,7 +1282,6 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
 
 :operatedByVehicle a owl:ObjectProperty ;
     rdfs:label "operated By Vehicle"@en ;
-    rdfs:comment "put under hasParticipant" ;
     rdfs:domain :Movement ;
     rdfs:range :Vehicle ;
     rdfs:subPropertyOf :hasParticipantsInMovement ;
@@ -1344,7 +1333,7 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
 
 :Route a owl:Class ;
     rdfs:label "Route"@en ;
-    rdfs:comment "Route is to describe a possible solution from starting point a to end point b. There can be multiple routes from a to b, each one of them has different travel legs."@en ;
+    rdfs:comment "There can be several routes from an origin A to a destination B, each with a different sequence of travel legs."@en ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:onProperty iof:prescribes ;
             owl:someValuesFrom :Journey ],
@@ -1364,14 +1353,13 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
         "A realizable entity describing a possible solution for traveling from a starting point (A) to an endpoint (B). The realization of a route occurs when a traveler follows a specific sequence of movements (or travel legs), which is influenced by the physical environment and available transport options."@en .
 
 :TransferNode a owl:Class ;
-    rdfs:label "Correspondence"@en ;
+    rdfs:label "Transfer Node"@en ;
     rdfs:subClassOf :Infrastructure ;
-    iof-av:naturalLanguageDefinition "A Correspondence is a object that functions as a break point or pause location in a journey. Example: bus stop, highway rest zone, charging station"@en,
-        "Infrastructure at which travel legs begin, end or connect and where payload or passengers can be transferred between vehicles, e.g. a bus stop, a station, a port. Replaces the earlier class Correspondence."@en .
+    iof-av:naturalLanguageDefinition "Infrastructure at which travel legs begin, end or connect and where payload or passengers can be transferred between vehicles, e.g. a bus stop, a station, a port. Replaces the earlier class Correspondence."@en .
 
 :TransportRole a owl:Class ;
     rdfs:label "Transport Role"@en ;
-    rdfs:comment "This is created to annotate person and goods in transit"@en ;
+    rdfs:comment "Created to annotate the persons and goods taking part in a movement."@en ;
     rdfs:subClassOf obo:BFO_0000023 ;
     iof-av:naturalLanguageDefinition "A role associated with entities participating in the movement of goods, people, or other materials."@en .
 
@@ -1383,7 +1371,7 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
 
 :EmissionProcess a owl:Class ;
     rdfs:label "Emission Process"@en ;
-    rdfs:comment "The emission is not the goal of the main planned process such as production, but it inherently occurs alongside it." ;
+    rdfs:comment "The emission is not the goal of the main planned process such as production, but it inherently occurs alongside it."@en ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:onProperty :hasEmission ;
             owl:someValuesFrom :Emission ],
@@ -1402,15 +1390,14 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     iof-av:naturalLanguageDefinition "A value expression that classifies an emission, relative to a reporting organisation, as scope 1, 2 or 3 of the Greenhouse Gas Protocol. Scope is not an intrinsic kind of emission process: the same combustion is scope 1 for the carrier and scope 3 for the shipper."@en .
 
 :GreenhouseGasEmission a owl:Class ;
-    rdfs:label "GHG Emission"@en ;
+    rdfs:label "Greenhouse Gas Emission"@en ;
     rdfs:subClassOf :Emission ;
     owl:equivalentClass [ a owl:Class ;
             owl:intersectionOf ( :Emission [ a owl:Restriction ;
                         owl:onProperty :hasSubstance ;
                         owl:someValuesFrom :GreenhouseGas ] ) ] ;
     iof-av:naturalLanguageDefinition "A gaseous residual emitted as a result of industrial or biological processes, which contributes to the greenhouse effect and global warming. Common examples include carbon dioxide, methane, and nitrous oxide."@en ;
-    iof-av:synonym "GHG",
-        "Greenhouse Gas Emission" .
+    iof-av:synonym "GHG emission"@en .
 
 :Payload a owl:Class ;
     rdfs:label "Payload"@en ;
@@ -1474,7 +1461,7 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
 
 :EnergyCharger a owl:Class ;
     rdfs:label "Energy Charger"@en ;
-    rdfs:comment "Energy charger is a device that provides energy to another devices, and charge them if they have a chargable battery"@en ;
+    rdfs:comment "An energy charger provides energy to other devices and charges those that have a chargeable battery."@en ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:onProperty iof:prescribedBy ;
             owl:someValuesFrom :ChargerDesignSpecification ],
@@ -1507,11 +1494,7 @@ qudt:Unit a owl:Class ;
 
 :TravelLeg a owl:Class ;
     rdfs:label "Travel Leg"@en ;
-    rdfs:comment """A Journey/Transit can consist of multiple travel legs. \r\r\r\r
-E.g., you go from home to departure airport by car, then take the plane, then from arrival airport to the hotel by taxi. It is one journey with three legs of travel.\r\r\r\r
-\r\r\r\r
-TravelLeg is also considered the minimum travel "unit" that is not dividable. Inside a optimal  travelLeg it is a point-to-point relation, there is no pause or switch or change of payload or passenger.\r\r\r\r
-This one originates from IES4 TravelLeg"""@en ;
+    rdfs:comment "A journey can consist of several travel legs, e.g. home to the departure airport by car, then the flight, then airport to hotel by taxi: one journey with three legs. A travel leg is the minimum unit of travel: point to point, with no change of vehicle, payload or passengers in between. Adapted from the IES4 TravelLeg."@en ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
             owl:onClass :Vehicle ;
@@ -1538,7 +1521,7 @@ This one originates from IES4 TravelLeg"""@en ;
             owl:onProperty :endsAtTimeInstance ],
         :Movement ;
     iof-av:naturalLanguageDefinition "A movement in exactly one transport mode, from one origin to one destination, operated by at most one vehicle (none for a pedestrian leg), with no transfer of payload or passengers in between. A travel leg is either a vehicle run (the vehicle's own movement) or the leg of a passenger or consignment carried by a vehicle run."@en ;
-    iof-av:synonym "Jouney leg" .
+    iof-av:synonym "journey leg"@en .
 
 :Infrastructure a owl:Class ;
     rdfs:label "Infrastructure"@en ;
