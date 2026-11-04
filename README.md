@@ -5,9 +5,10 @@ University with the Université de Technologie Tarbes Occitanie Pyrénées (UTTO
 
 TransiT gives a shared vocabulary for the things that take part in a transport scenario:
 journeys and travel legs, vehicles, payload and passengers, infrastructure and terminals,
-energy (fuel and electricity) and charging, and the greenhouse-gas emissions that result.
-The goal is a consistent semantic model that downstream analysis and optimisation tools can
-build on, for example to compute the carbon footprint of an intermodal journey.
+energy carriers and charging, schedules and disruptions, and the greenhouse-gas emissions
+that result. The goal is a consistent semantic model that downstream analysis and
+optimisation tools can build on, for example to compute the carbon footprint of an
+intermodal journey.
 
 The ontology is built on the **Basic Formal Ontology (BFO 2020)** as top-level ontology
 and the **Industrial Ontologies Foundry Core (IOF Core, 2024-01)** as mid-level ontology.
@@ -17,17 +18,18 @@ Standard 4 (IES4)**; they are TransiT's own terms and IES4 is not imported (see
 
 | | |
 |---|---|
-| Version | 0.3.0 (2025-11) |
+| Version | 0.4.0 (2025-11) |
 | Core IRI | `https://www.cranfield.ac.uk/transit/core` (prefix `transit:` = `.../core#`) |
 | Format | Turtle, one file per module under [ontology/](ontology/) |
-| Size | 148 classes across all modules, 104 of them in the core |
+| Size | 167 TransiT classes across all modules, 110 of them in the core, plus the 254-class Air Domain Ontology |
 | Licence | MIT (see [LICENSE](LICENSE)) |
 
 ## Modules
 
-The ontology is a mode-neutral **core** plus one module per transport **mode** and one
-thin module per **intersection** of two modes. Each module imports what it needs, has its
-own namespace, and can be loaded on its own.
+The ontology is a mode-neutral **core**, one module per transport **mode**, one thin module
+per **intersection** of two modes, and a **bridge** that hangs the separately developed Air
+Domain Ontology under the core. Each module imports what it needs, has its own namespace,
+and can be loaded on its own.
 
 ```mermaid
 graph BT
@@ -40,41 +42,51 @@ graph BT
     rr --> road
     ar[air-road] --> air
     ar --> road
+    arl[air-rail] --> air
+    arl --> rail
     rm[rail-maritime] --> rail
     rm --> maritime
     rdm[road-maritime] --> road
     rdm --> maritime
     am[air-maritime] --> air
     am --> maritime
+    adb[air-domain bridge] --> air
+    adb --> road
+    adb --> ado[Air Domain Ontology]
     all --> rr
     all --> ar
+    all --> arl
     all --> rm
     all --> rdm
     all --> am
+    all --> adb
 ```
 
 | File | Namespace | Holds |
 |---|---|---|
-| [transit-core.ttl](ontology/transit-core.ttl) | `transit:` | movement, journey, travel leg, transshipment, vehicle, payload, infrastructure, energy, emissions, roles, specifications, the four transport-mode individuals |
-| [transit-road.ttl](ontology/transit-road.ttl) | `road:` | RoadVehicle (Car, Bus, Truck, Van), Road, RoadTerminal, ServiceStation, RoadTravelLeg |
-| [transit-rail.ttl](ontology/transit-rail.ttl) | `rail:` | RailVehicle (Train, Locomotive, Wagon), Railway, RailwayStation, RailTravelLeg |
-| [transit-air.ttl](ontology/transit-air.ttl) | `air:` | Aircraft, Airway, Airport, Flight, SustainableAviationFuel |
-| [transit-maritime.ttl](ontology/transit-maritime.ttl) | `maritime:` | Ship, Waterway, Seaport, Sailing |
-| transit-rail-road.ttl, transit-air-road.ttl, transit-rail-maritime.ttl, transit-road-maritime.ttl, transit-air-maritime.ttl | one each | `<A><B>Terminal`, `<A><B>Journey`, `<A><B>Transshipment`, and disjointness of the two vehicle kinds |
+| [transit-core.ttl](ontology/transit-core.ttl) | `transit:` | movement, journey, travel leg, transshipment, vehicle, payload, infrastructure, energy carriers and amounts, charger specifications, emissions, schedules and disruptions, roles, the transport-mode individuals |
+| [transit-road.ttl](ontology/transit-road.ttl) | `road:` | RoadVehicle (Car, Bus, Truck, Van, Motorcycle, Bicycle), Road, RoadTerminal, BusStation, ServiceStation, RoadTravelLeg |
+| [transit-rail.ttl](ontology/transit-rail.ttl) | `rail:` | RailVehicle (Train, Locomotive, Wagon, Tram, Metro), Railway, RailwayStation, RailTravelLeg |
+| [transit-air.ttl](ontology/transit-air.ttl) | `air:` | Aircraft (Aeroplane, Helicopter, UnmannedAircraft), Airway, Airport, Flight, SustainableAviationFuel |
+| [transit-maritime.ttl](ontology/transit-maritime.ttl) | `maritime:` | Ship (Ferry, Barge, ContainerShip), Waterway, Seaport, Sailing |
+| transit-rail-road, transit-air-road, transit-air-rail, transit-rail-maritime, transit-road-maritime, transit-air-maritime | one each | `<A><B>Terminal`, `<A><B>Journey`, `<A><B>Transshipment`, and disjointness of the two vehicle kinds |
+| [air-domain.ttl](ontology/air-domain.ttl) | `ad:` | the Air Domain Ontology (airports, aircraft, airworthiness, flight operations, crew, cargo handling, regulation, safety), version 0.3.0, own IRI |
+| [transit-air-domain.ttl](ontology/transit-air-domain.ttl) | | the bridge: subclass and sub-property axioms that place the air ontology's top level under BFO and IOF and its key classes under the TransiT core and air module |
 | [transit-all.ttl](ontology/transit-all.ttl) | | imports everything; open this to load the whole ontology |
 
 **How a mode module plugs in.** The core offers a handful of extension points: `Vehicle`,
 `TravelLeg`, `Infrastructure`, `TransportWay`, `TransferNode`, `Terminal`, the
-`TransportMode` individuals (`RoadMode`, `RailMode`, `AirMode`, `MaritimeMode`) and the
-property `hasTransportMode`. A mode module subclasses those, defines its leg as a travel leg
-operated by its vehicle kind, and tags every class with its mode. A travel leg has exactly
-one mode; a terminal may have several, which is what makes an intermodal terminal
-definable. The intersection modules are then a few axioms each: a rail-road terminal is a
-terminal with both modes, a rail-road journey is a journey with a rail leg and a road leg,
-and a rail-road transshipment is a transshipment between the two.
+`TransportMode` individuals (`RoadMode`, `RailMode`, `AirMode`, `MaritimeMode`,
+`WalkingMode`) and the property `hasTransportMode`. A mode module subclasses those, defines
+its leg as a travel leg operated by its vehicle kind, and tags every class with its mode. A
+travel leg has exactly one mode; a terminal may have several, which is what makes an
+intermodal terminal definable. The intersection modules are then a few axioms each: a
+rail-road terminal is a terminal with both modes, a rail-road journey is a journey with a
+rail leg and a road leg, and a rail-road transshipment is a transshipment between the two.
 
-The reasoning behind every modelling choice and the full list of renames from version 0.2
-are in [docs/design-decisions.md](docs/design-decisions.md).
+The reasoning behind every modelling choice, the renames from earlier versions, the
+assessment of the Air Domain Ontology and the open issues are in
+[docs/design-decisions.md](docs/design-decisions.md).
 
 ## Repository layout
 
@@ -83,15 +95,20 @@ are in [docs/design-decisions.md](docs/design-decisions.md).
 ├── ontology/
 │   ├── transit-core.ttl                 The mode-neutral core
 │   ├── transit-{road,rail,air,maritime}.ttl
-│   ├── transit-{rail-road,air-road,rail-maritime,road-maritime,air-maritime}.ttl
+│   ├── transit-{rail-road,air-road,air-rail,rail-maritime,road-maritime,air-maritime}.ttl
+│   ├── air-domain.ttl                   Air Domain Ontology (own IRI)
+│   ├── transit-air-domain.ttl           Bridge from the Air Domain Ontology to TransiT
 │   ├── transit-all.ttl                  Imports every module
-│   └── catalog-v001.xml                 Protégé / OWL API catalog mapping every import to a local file
+│   ├── catalog-v001.xml                 Protégé / OWL API catalog mapping every import to a local file
+│   └── alignments/
+│       └── transit-ies4-alignment.ttl   skos:closeMatch links to IES4; never imported
 ├── imports/
 │   ├── bfo.owl                          BFO 2020 (top-level ontology)
 │   ├── iof-core.rdf                     IOF Core 2024-01 (mid-level ontology)
 │   └── iof-annotation-vocabulary.rdf    IOF Annotation Vocabulary (imported by IOF Core)
 ├── examples/
-│   └── rail-road-journey.ttl            A container moved by train, transshipped, delivered by truck
+│   ├── rail-road-journey.ttl            A container moved by train, transshipped, delivered by truck
+│   └── air-domain-flight.ttl            A flight described in Air Domain Ontology terms only
 ├── tools/
 │   └── validate.py                      Structural checks and HermiT reasoning over all modules
 ├── docs/
@@ -107,15 +124,19 @@ ontology loads offline and everyone works against the same versions.
 ## What the core covers
 
 - **Movement.** `Movement` is an IOF planned process from one origin to one destination.
-  A `Journey` is made of one or more `TravelLeg`s; a travel leg is operated by exactly one
-  vehicle in exactly one transport mode. `IntermodalJourney` is a journey whose legs use
-  different modes. `Transshipment` is the planned process at a `TransferNode` that moves
-  payload from the vehicle of one leg to the vehicle of the next. Properties:
-  `hasTravelLeg`, `operatedByVehicle`, `departsAtOrigin`, `endsAtDestination`, `passesBy`,
-  `hasPayload`, `followsTravelLeg`, `precedesTravelLeg`.
-- **Vehicles.** `Vehicle` is a `Device` (an IOF assembly). `HumanDrivenVehicle` and
-  `AutonomousVehicle` are mode-neutral and disjoint. The kinds of vehicle live in the mode
-  modules.
+  A `Journey` is made of one or more `TravelLeg`s; a travel leg is in exactly one transport
+  mode and operated by at most one vehicle (`PedestrianLeg` has none). `IntermodalJourney`
+  is a journey whose legs use different modes. `Transshipment` is the planned process at a
+  `TransferNode` that moves payload from the vehicle of one leg to the vehicle of the next.
+  Properties: `hasTravelLeg`, `operatedByVehicle`, `departsAtOrigin`, `endsAtDestination`,
+  `passesBy`, `hasPayload`, `followsTravelLeg`, `precedesTravelLeg`.
+- **Plans and disruptions.** `Route` is an IOF plan specification that prescribes a journey,
+  made of `RouteSegment`s. `Schedule` prescribes movements with `plannedStartTime` and
+  `plannedEndTime`; actual times are on the movement. `Disruption`, `Delay` and `Incident`
+  are inherent processes that `disrupt` a movement.
+- **Vehicles.** `Vehicle` is a `Device` (an IOF assembly) that applies some energy carrier.
+  `HumanDrivenVehicle` and `AutonomousVehicle` are mode-neutral and disjoint. The kinds of
+  vehicle live in the mode modules.
 - **Payload and parties.** `Payload` is any material entity bearing a `PayloadRole`;
   `CargoUnit` covers containers, pallets and parcels. `Passenger` and `Driver` are persons
   with the matching role. `CarrierRole`, `ShipperRole` and `ConsigneeRole` identify the
@@ -124,32 +145,36 @@ ontology loads offline and everyone works against the same versions.
   `Location` (a BFO site). `TransportWay` is the path vehicles move on, `TransferNode` is
   where legs start, end or connect, `Terminal` is a transfer node with facilities, and
   `EnergySupplyStation` (charging and fuel stations) supplies vehicles with energy.
-- **Plans.** `Route` is an IOF plan specification that prescribes a journey, made of
-  `RouteSegment`s. `Schedule` prescribes the planned times of movements.
-- **Energy.** `Energy` is an IOF material resource specialised into `Fuel` and
-  `Electricity`. `EnergyProcess` covers generation, storage, transmission and charging.
-  `EnergyCharger`, `ElectricityCharger`, `ElectricVehicleCharger` and `FuelDispenser` are
-  devices with `DesignedChargerFunction`s. Properties: `usesEnergy`, `chargesEnergy`.
+- **Energy.** `EnergyCarrier` is an IOF material resource: `Fuel` (with `Hydrogen`) and
+  `Electricity`, which are disjoint. The quantity of energy is a separate `EnergyAmount`
+  value expression with a numerical value and a QUDT unit, attached with `hasEnergyAmount`.
+  `EnergyProcess` covers generation, storage, transmission and charging. `EnergyCharger`,
+  `ElectricityCharger`, `ElectricVehicleCharger` and `FuelDispenser` are devices prescribed
+  by `ChargerDesignSpecification`s (current, voltage, power, frequency, phase, connector,
+  communication protocol).
+- **Units.** `hasMeasurementUnit` links any value expression to a QUDT unit individual
+  such as `unit:KiloW-HR`. The class `qudt:Unit` is declared locally so QUDT does not have
+  to be imported. The string property `hasUnit` is deprecated.
 - **Emissions.** `Emission` is a material residual released by an `EmissionProcess`, an
-  inherent (unplanned) process that accompanies a planned one. `GreenhouseGasEmission`,
+  inherent process that accompanies a planned one. `GreenhouseGasEmission`,
   `CarbonDioxideEmission` and `MethaneEmission` are defined by the substance emitted.
-  `EmissionUnitProcess` decomposes a process into single-gas, single-emitter units.
   `GHGSource` and `GHGSink` are material entities bearing the matching role. GHG Protocol
   scopes are not kinds of process: `EmissionScopeAssignment` assigns `Scope1`, `Scope2` or
   `Scope3` to an emission process for one reporting organisation. `CarbonFootprint` is a
   value expression.
 - **Specifications and measurements.** `TransportDesignSpecification` (capacity, fuel,
   emission, power, speed, monetary cost) prescribes design values; measured values go
-  through IOF `ValueExpression` with `hasNumericalValue` and `hasUnit`. Time stamps use
-  `startsAtTimeInstance` and `endsAtTimeInstance`.
+  through IOF `ValueExpression` with `hasNumericalValue` and `hasMeasurementUnit`. Time
+  stamps use `startsAtTimeInstance` and `endsAtTimeInstance`.
 
 ## Using the ontology
 
 ### Protégé
 
 Open `ontology/transit-all.ttl` (or any single module) in Protégé. The `catalog-v001.xml`
-file in the same folder maps every import, including BFO and IOF Core, to the local copies,
-so no network access is needed. Run HermiT or Pellet to see the inferred hierarchy.
+file in the same folder maps every import, including BFO, IOF Core and the Air Domain
+Ontology, to the local copies, so no network access is needed. Run HermiT or Pellet to see
+the inferred hierarchy.
 
 ### Validation
 
@@ -157,12 +182,16 @@ so no network access is needed. Run HermiT or Pellet to see the inferred hierarc
 python tools/validate.py                      # parse, references, labels, definitions, OWL 2 DL check
 python tools/validate.py --reason             # + consistency and satisfiability with HermiT
 python tools/validate.py --reason --example examples/rail-road-journey.ttl
+python tools/validate.py --reason --example examples/air-domain-flight.ttl
 ```
 
-The last form also classifies the individuals of the example. Reasoning needs Python with
-`rdflib` and `owlready2`, and a Java runtime. The example asserts only that one leg is
-operated by a train and the next by a truck; the reasoner then infers the rail leg, the
-road leg, the rail-road terminal, the rail-road journey and the rail-road transshipment.
+The example forms also classify the individuals of the example. Reasoning needs Python
+with `rdflib` and `owlready2`, and a Java runtime. The rail-road example asserts only that
+one leg is operated by a train and the next by a truck; the reasoner infers the rail leg,
+the road leg, the rail-road terminal, the rail-road journey and the rail-road
+transshipment. The air-domain example uses Air Domain Ontology terms only; through the
+bridge the reasoner infers that the flight is a TransiT travel leg, the airports are
+terminals, the aircraft is a vehicle, the pallet is payload and the airline is a carrier.
 
 ### Python (rdflib)
 
@@ -183,6 +212,21 @@ SELECT ?cls ?label WHERE { ?cls rdfs:subClassOf* transit:Infrastructure ; rdfs:l
 for row in g.query(q):
     print(row.cls, row.label)
 ```
+
+## Air Domain Ontology
+
+[ontology/air-domain.ttl](ontology/air-domain.ttl) is the Air Domain Ontology developed at
+Cranfield: 254 classes covering passenger and cargo operations, airports, aircraft and
+airworthiness, flight operations and crew, air traffic management, ground handling,
+regulation, safety and environmental sustainability. It has its own pragmatic top level
+and its own IRI, and remains usable on its own. Version 0.3.0 fixes four misfiled classes
+and asserts `LeasedAircraft` under `Aircraft`; everything else is as the authors wrote it.
+
+The bridge [ontology/transit-air-domain.ttl](ontology/transit-air-domain.ttl) maps its nine
+top-level classes to BFO and IOF, its key classes to the TransiT core and air module, and
+nine of its properties to TransiT properties. The whole closure is consistent under HermiT.
+Three things are deliberately not aligned, and the reasons are in the bridge header and in
+the design notes.
 
 ## Figures
 
@@ -206,15 +250,9 @@ temporal parts, whereas in BFO it is a continuant wholly present at each instant
 therefore defines these classes itself (`Device`, `Vehicle`, `Location`, `Movement`,
 `Journey`, `RoadVehicle`, `Aircraft`, `Ship`, `Airport`, `Flight`, `Sailing` and others),
 each carrying an `iof-av:adaptedFrom` annotation and an `rdfs:seeAlso` link to the IES4
-IRI it was adapted from. No IES4 axioms are loaded. If data exchange with IES4 systems is
-ever needed, add a separate alignment file using `skos:closeMatch` and keep it out of the
-`owl:imports` closure.
-
-## Related work
-
-The `air-ontology` branch holds a separate **Air Domain Ontology** (254 classes) with its
-own upper level. It is a candidate for extending the air module once its top classes are
-aligned with BFO, IOF Core and the TransiT core.
+IRI it was adapted from. No IES4 axioms are loaded. The alignment file
+[ontology/alignments/transit-ies4-alignment.ttl](ontology/alignments/transit-ies4-alignment.ttl)
+records the correspondences as `skos:closeMatch` for data exchange; it is never imported.
 
 ## Authors
 
