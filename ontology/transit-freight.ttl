@@ -11,7 +11,7 @@
 
 <https://www.cranfield.ac.uk/transit/freight> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/freight/2025-11> ;
-    owl:versionInfo "0.5.0" ;
+    owl:versionInfo "0.6.0" ;
     owl:imports <https://www.cranfield.ac.uk/transit/core> ;
     rdfs:label "TransiT Freight Module"@en ;
     dcterms:license <https://opensource.org/licenses/MIT> ;
@@ -174,6 +174,14 @@
     iof-av:naturalLanguageDefinition "A service provider role held by an organization that prepares and lodges customs declarations on behalf of importers and exporters."@en .
 :WarehouseOperatorRole a owl:Class ; rdfs:subClassOf iof:ServiceProviderRole ; rdfs:label "Warehouse Operator Role"@en ;
     iof-av:naturalLanguageDefinition "A service provider role held by an organization that stores and handles goods in a warehouse."@en .
+:ExporterRole a owl:Class ; rdfs:subClassOf iof:AgentRole ; rdfs:label "Exporter Role"@en ;
+    iof-av:naturalLanguageDefinition "An agent role held by the party that sends goods out of a customs territory."@en .
+:ImporterRole a owl:Class ; rdfs:subClassOf iof:AgentRole ; rdfs:label "Importer Role"@en ;
+    iof-av:naturalLanguageDefinition "An agent role held by the party that brings goods into a customs territory and is liable for duties."@en .
+:Exporter a owl:Class ; owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( iof:Agent [ a owl:Restriction ; owl:onProperty iof:hasRole ; owl:someValuesFrom :ExporterRole ] ) ] ;
+    rdfs:label "Exporter"@en ; iof-av:naturalLanguageDefinition "An agent that bears an exporter role."@en .
+:Importer a owl:Class ; owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( iof:Agent [ a owl:Restriction ; owl:onProperty iof:hasRole ; owl:someValuesFrom :ImporterRole ] ) ] ;
+    rdfs:label "Importer"@en ; iof-av:naturalLanguageDefinition "An agent that bears an importer role."@en .
 :FreightForwarder a owl:Class ; owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( iof:Agent [ a owl:Restriction ; owl:onProperty iof:hasRole ; owl:someValuesFrom :FreightForwarderRole ] ) ] ;
     rdfs:label "Freight Forwarder"@en ; iof-av:naturalLanguageDefinition "An agent that bears a freight forwarder role."@en .
 :LogisticsServiceProvider a owl:Class ; owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( iof:Agent [ a owl:Restriction ; owl:onProperty iof:hasRole ; owl:someValuesFrom :LogisticsServiceProviderRole ] ) ] ;

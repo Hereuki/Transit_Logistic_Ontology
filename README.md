@@ -19,10 +19,10 @@ Standard 4 (IES4)**; they are TransiT's own terms and IES4 is not imported (see
 
 | | |
 |---|---|
-| Version | 0.5.0 (2025-11) |
+| Version | 0.6.0 (2025-11) |
 | Core IRI | `https://www.cranfield.ac.uk/transit/core` (prefix `transit:` = `.../core#`) |
 | Format | Turtle, one file per module under [ontology/](ontology/) |
-| Size | 277 TransiT classes across all modules, 129 of them in the core, plus the 254-class Air Domain Ontology |
+| Size | 281 TransiT classes across all modules, 129 of them in the core, plus the 255-class Air Domain Ontology |
 | Licence | MIT (see [LICENSE](LICENSE)) |
 
 ## Modules
@@ -135,7 +135,7 @@ assessment of the Air Domain Ontology and the open issues are in
 │   └── validate.py                      Structural checks and HermiT reasoning over all modules
 ├── docs/
 │   ├── design-decisions.md              Why the modules look the way they do; renames; open issues
-│   └── figures/                         Diagrams from version 0.2 (class names predate the split)
+│   └── figures/                         SVG diagrams for the current version; v0.2/ keeps the original PNGs
 ├── LICENSE
 └── README.md
 ```
@@ -178,9 +178,11 @@ ontology loads offline and everyone works against the same versions.
   `Location` (a BFO site). `TransportWay` is the path vehicles move on, `TransferNode` is
   where legs start, end or connect, `Terminal` is a transfer node with facilities, and
   `EnergySupplyStation` (charging and fuel stations) supplies vehicles with energy.
-- **Energy.** `EnergyCarrier` is an IOF material resource: `Fuel` (with `Hydrogen`) and
-  `Electricity`, which are disjoint. The quantity of energy is a separate `EnergyAmount`
-  value expression with a numerical value and a QUDT unit, attached with `hasEnergyAmount`.
+- **Energy.** `EnergyCarrier` is the union of `Fuel` (a material resource, with
+  `Hydrogen`) and `ElectricitySupply` (a process in which charge flows to a device through
+  a charger). A vehicle applies one or the other. The quantity of energy is a separate
+  `EnergyAmount` value expression with a numerical value and a QUDT unit, attached with
+  `hasEnergyAmount` to a run, a supply process or a fuel portion.
   `EnergyProcess` covers generation, storage, transmission and charging. `EnergyCharger`,
   `ElectricityCharger`, `ElectricVehicleCharger` and `FuelDispenser` are devices prescribed
   by `ChargerDesignSpecification`s (current, voltage, power, frequency, phase, connector,
@@ -265,17 +267,17 @@ the design notes.
 
 ## Figures
 
-The diagrams in [docs/figures/](docs/figures/) were drawn for version 0.2 and still show
-the earlier class names (for example `ies:Journey`, `transit:Correspondence`). They remain
-useful for the intent of the emission scenes.
+The diagrams in [docs/figures/](docs/figures/) are SVG files generated for the current
+version. The original version 0.2 drawings are kept under
+[docs/figures/v0.2/](docs/figures/v0.2/) for the record; their class names predate the
+modular split.
 
 | Figure | Shows |
 |---|---|
-| [Class hierarchy](docs/figures/fig1-class-hierarchy.png) | How TransiT classes attach to BFO and IOF: gases, residuals and energy under *material entity*; emission processes under *process*; journeys and travel legs under *planned process*. |
-| [Emission scene](docs/figures/fig2-emission-scene.png) | Scenario where the emission process and emitted amount are recorded directly. |
-| [Transport scene](docs/figures/fig3-transport-scene.png) | Scenario where the emission must be calculated from a journey, its vehicle, fuel and the fuel design specification. |
-| [Transport scene (corrected)](docs/figures/transport-scene-demo.png) | Revised transport scene with the TransiT-specific properties highlighted. |
-| [Demo graph](docs/figures/demo-graph.png) | Protégé OntoGraf view of version 0.2. |
+| [Modules](docs/figures/fig1-modules.svg) | The core, the four mode modules, the six intersections, the freight and passenger modules, the air-domain bridge and the all module, with their import arrows. |
+| [Core hierarchy](docs/figures/fig2-core-hierarchy.svg) | Where the core classes sit under BFO and IOF Core: material entities, sites and roles; processes; information content entities and value expressions. |
+| [Emission scene](docs/figures/fig3-emission-scene.svg) | An emission process accompanying a truck run: emitter, emission, substance, mass, and the scope assignment for one reporting organisation. |
+| [Transport scene](docs/figures/fig4-transport-scene.svg) | A consignment's journey with a rail leg and a road leg carried by two vehicle runs, the transshipment between them, the energy of each run, and how allocation works. |
 
 ## Provenance from IES4
 

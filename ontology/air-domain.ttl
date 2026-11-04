@@ -27,10 +27,11 @@ vann:preferredNamespaceUri a owl:AnnotationProperty .
     vann:preferredNamespaceUri "http://www.cranfield.ac.uk/ontology/air-domain#" ;
     rdfs:comment "A comprehensive ontology of the civil air transport domain, covering air passenger and cargo/freight operations, airport infrastructure and operations, aircraft and airworthiness, flight operations and crew, air traffic management, ground handling, regulatory/certification instruments, safety and security, and environmental sustainability. Consolidated from the project's existing class/relationship tables (Air_Freight_and_Passenger_Ontology, Sheet3 organisational/regulatory layers, the cargo-handling 'Category' breakdown, and the Airport Operations Plan / APOC concepts) and extended with generally-recognised air-domain concepts not yet captured there. No upper ontology (e.g. BFO) is imported; a small set of pragmatic top-level classes (Agent, PhysicalObject, InformationObject, Process, Location, PolicyOrRegulation, Measurement, Service, Category) organises the hierarchy instead."@en ;
     rdfs:seeAlso <https://www.cranfield.ac.uk/transit/air-domain> ;
-    owl:versionIRI <http://www.cranfield.ac.uk/ontology/air-domain/0.3.0> ;
-    owl:versionInfo "0.3.0" ;
+    owl:versionIRI <http://www.cranfield.ac.uk/ontology/air-domain/0.3.1> ;
+    owl:versionInfo "0.3.1" ;
     skos:changeNote "0.2.0: fixed inverted/part-of subclass links (Aerodrome/Airport, AerodromeOperatingSite, ChargingPoint, Consignment); converted EASA, FAA, ICAO, IATA, CORSIA from classes to individuals; moved classifications out of Measurement into a new Category branch; added Identifier, Certificate, Licence, Occurrence, TradeAssociation, GroundVehicle; fixed IATAcode/ICAOcode range typos and over-narrow domains/ranges; added part-of, property hierarchy, inverses, functional properties, existential and cardinality restrictions, defined classes and disjointness axioms."@en,
-        "0.3.0: moved Route, MultimodalLink, AirNetwork and RoadNetwork from Location to Infrastructure (they are built ways, nodes and networks, not places); asserted LeasedAircraft as a subclass of Aircraft; no other content change. This version is aligned with the TransiT Core Ontology through the separate bridge module https://www.cranfield.ac.uk/transit/air-domain, which maps the pragmatic top-level classes to BFO and IOF Core."@en .
+        "0.3.0: moved Route, MultimodalLink, AirNetwork and RoadNetwork from Location to Infrastructure (they are built ways, nodes and networks, not places); asserted LeasedAircraft as a subclass of Aircraft; no other content change. This version is aligned with the TransiT Core Ontology through the separate bridge module https://www.cranfield.ac.uk/transit/air-domain, which maps the pragmatic top-level classes to BFO and IOF Core."@en,
+        "0.3.1: added InformationSystem under PhysicalObject and moved EDISystem and OperationalControlSystem to it (they are systems, not information objects)."@en .
 
 air:Accident a owl:Class ;
     rdfs:label "Accident"@en ;
@@ -472,7 +473,7 @@ air:Offloading a owl:Class ;
 air:OperationalControlSystem a owl:Class ;
     rdfs:label "Operational Control System"@en ;
     rdfs:comment "A system used by an operator to exercise control over the initiation, continuation, diversion, or termination of a flight."@en ;
-    rdfs:subClassOf air:InformationObject .
+    rdfs:subClassOf air:InformationSystem .
 
 air:OperationsManual a owl:Class ;
     rdfs:label "Operations Manual"@en ;
@@ -1478,7 +1479,7 @@ air:DispatchSchedule a owl:Class ;
 air:EDISystem a owl:Class ;
     rdfs:label "EDI System"@en ;
     rdfs:comment "An Electronic Data Interchange system used to submit shipping documents digitally."@en ;
-    rdfs:subClassOf air:InformationObject .
+    rdfs:subClassOf air:InformationSystem .
 
 air:EnergyUnit a owl:Class ;
     rdfs:label "Energy Unit"@en ;
@@ -1886,6 +1887,11 @@ air:Importer a owl:Class ;
     rdfs:comment "The party (person or organisation) that receives goods in the destination country after import clearance."@en ;
     rdfs:subClassOf air:Agent .
 
+air:InformationSystem a owl:Class ;
+    rdfs:label "Information System"@en ;
+    rdfs:comment "An engineered system of hardware, software and procedures that processes operational information. A system is a physical object; the information it holds belongs under InformationObject."@en ;
+    rdfs:subClassOf air:PhysicalObject .
+
 air:LeaseAgreement a owl:Class ;
     rdfs:label "Lease Agreement"@en ;
     rdfs:comment "A contract under which an aircraft owner grants an airline the right to operate the aircraft for a defined period."@en ;
@@ -2201,13 +2207,13 @@ air:Agent a owl:Class ;
     rdfs:label "Agent"@en ;
     rdfs:comment "An entity capable of acting within the air transport domain, either an organization or a person."@en .
 
-air:PhysicalObject a owl:Class ;
-    rdfs:label "Physical Object"@en ;
-    rdfs:comment "A material entity that occupies space, such as an aircraft, item of equipment, cargo, or piece of infrastructure."@en .
-
 air:InformationObject a owl:Class ;
     rdfs:label "Information Object"@en ;
     rdfs:comment "A document, record, code, message, or digital artefact that carries information within air transport operations."@en .
+
+air:PhysicalObject a owl:Class ;
+    rdfs:label "Physical Object"@en ;
+    rdfs:comment "A material entity that occupies space, such as an aircraft, item of equipment, cargo, or piece of infrastructure."@en .
 
 air:partOf a owl:ObjectProperty,
         owl:TransitiveProperty ;

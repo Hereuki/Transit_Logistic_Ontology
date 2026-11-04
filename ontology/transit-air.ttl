@@ -11,7 +11,7 @@
 
 <https://www.cranfield.ac.uk/transit/air> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/air/2025-11> ;
-    owl:versionInfo "0.5.0" ;
+    owl:versionInfo "0.6.0" ;
     owl:imports <https://www.cranfield.ac.uk/transit/core> ;
     rdfs:label "TransiT Air Module"@en ;
     dcterms:license <https://opensource.org/licenses/MIT> ;

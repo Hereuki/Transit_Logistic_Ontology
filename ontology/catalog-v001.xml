@@ -32,7 +32,7 @@
         <uri name="https://www.cranfield.ac.uk/transit/air-domain" uri="transit-air-domain.ttl"/>
         <uri name="https://www.cranfield.ac.uk/transit/air-domain/2025-11" uri="transit-air-domain.ttl"/>
         <uri name="http://www.cranfield.ac.uk/ontology/air-domain" uri="air-domain.ttl"/>
-        <uri name="http://www.cranfield.ac.uk/ontology/air-domain/0.3.0" uri="air-domain.ttl"/>
+        <uri name="http://www.cranfield.ac.uk/ontology/air-domain/0.3.1" uri="air-domain.ttl"/>
         <uri name="https://www.cranfield.ac.uk/transit/freight" uri="transit-freight.ttl"/>
         <uri name="https://www.cranfield.ac.uk/transit/freight/2025-11" uri="transit-freight.ttl"/>
         <uri name="https://www.cranfield.ac.uk/transit/passenger" uri="transit-passenger.ttl"/>

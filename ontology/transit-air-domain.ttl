@@ -2,6 +2,7 @@
 @prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
 @prefix air: <https://www.cranfield.ac.uk/transit/air#> .
 @prefix road: <https://www.cranfield.ac.uk/transit/road#> .
+@prefix freight: <https://www.cranfield.ac.uk/transit/freight#> .
 @prefix ad: <http://www.cranfield.ac.uk/ontology/air-domain#> .
 @prefix iof: <https://spec.industrialontologies.org/ontology/core/Core/> .
 @prefix obo: <http://purl.obolibrary.org/obo/> .
@@ -11,14 +12,15 @@
 
 <https://www.cranfield.ac.uk/transit/air-domain> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/air-domain/2025-11> ;
-    owl:versionInfo "0.5.0" ;
+    owl:versionInfo "0.6.0" ;
     owl:imports <https://www.cranfield.ac.uk/transit/air> ,
                 <https://www.cranfield.ac.uk/transit/road> ,
+                <https://www.cranfield.ac.uk/transit/freight> ,
                 <http://www.cranfield.ac.uk/ontology/air-domain> ;
     rdfs:label "TransiT Air Domain Bridge"@en ;
     dcterms:license <https://opensource.org/licenses/MIT> ;
-    dcterms:abstract "Bridge that hangs the Air Domain Ontology (254 classes, its own pragmatic top level) under the TransiT core and air module, and through them under BFO and IOF Core. It contains only subclass and sub-property axioms; the Air Domain Ontology itself is unchanged by it and stays usable on its own. The road module is imported because the air ontology's GroundVehicle is a road vehicle."@en ;
-    rdfs:comment "Not aligned on purpose: ad:SustainableAviationFuel is a classification value (an EnergySource category) in the air ontology, whereas air:SustainableAviationFuel in the TransiT air module is a material fuel; ad:Terminal is an airport terminal building, whereas transit:Terminal is a transfer node; ad:hasPart and ad:partOf are used for both continuants and occurrents and are not mapped to the BFO part relations."@en .
+    dcterms:abstract "Bridge that hangs the Air Domain Ontology (its own pragmatic top level) under the TransiT core, air, road and freight modules, and through them under BFO and IOF Core. It contains only subclass, equivalence and sub-property axioms; the Air Domain Ontology itself is unchanged by it and stays usable on its own. The parties the air ontology models as agent subclasses (shipper, consignee, exporter, importer) are made equivalent to agents bearing the matching TransiT role, so both readings coincide."@en ;
+    rdfs:comment "Not aligned on purpose: ad:SustainableAviationFuel is a classification value (an EnergySource category) in the air ontology, whereas air:SustainableAviationFuel in the TransiT air module is a material fuel; ad:Terminal is an airport terminal building, whereas transit:Terminal is a transfer node; ad:hasPart and ad:partOf are used for both continuants and occurrents and are not mapped to the BFO part relations; ad:ULD is a cargo unit but not an ISO container."@en .
 
 #################################################################
 #    Top level: pragmatic air classes -> BFO / IOF
@@ -31,6 +33,7 @@ ad:PhysicalObject      rdfs:subClassOf obo:BFO_0000040 .          # material ent
 ad:Process             rdfs:subClassOf obo:BFO_0000015 .          # process
 ad:Location            rdfs:subClassOf transit:Location .         # BFO site
 ad:InformationObject   rdfs:subClassOf iof:InformationContentEntity .
+ad:InformationSystem   rdfs:subClassOf iof:EngineeredSystem .
 ad:Measurement         rdfs:subClassOf iof:ValueExpression .
 ad:Category            rdfs:subClassOf iof:ValueExpression .
 ad:Service             rdfs:subClassOf iof:Capability .           # a capability offered by a system or organization
@@ -44,7 +47,8 @@ ad:GroundVehicle       rdfs:subClassOf road:RoadVehicle .
 ad:Equipment           rdfs:subClassOf iof:MaterialArtifact .
 ad:CargoContainer      rdfs:subClassOf transit:CargoUnit .
 ad:Cargo               rdfs:subClassOf transit:Payload .
-ad:Consignment         rdfs:subClassOf transit:Payload .
+ad:Consignment         rdfs:subClassOf freight:Consignment .
+ad:DangerousGoods      rdfs:subClassOf freight:DangerousGoods .
 
 ad:Infrastructure      rdfs:subClassOf transit:Infrastructure .
 ad:Airport             rdfs:subClassOf air:Airport .
@@ -53,22 +57,28 @@ ad:MultimodalLink      rdfs:subClassOf transit:TransferNode .
 ad:Route               rdfs:subClassOf air:Airway .
 ad:ChargingStation     rdfs:subClassOf transit:ChargingStation .
 ad:ChargingPoint       rdfs:subClassOf transit:ChargingPoint .
+ad:Warehouse           rdfs:subClassOf freight:Warehouse .
 
 #################################################################
-#    Movements and events
+#    Movements, handling and events
 #################################################################
 
-ad:Flight              rdfs:subClassOf air:Flight .
+ad:Flight              rdfs:subClassOf air:Flight , transit:VehicleRun .
+ad:CargoHandlingOperation rdfs:subClassOf freight:HandlingProcess .
+ad:CustomsClearance    rdfs:subClassOf freight:CustomsClearance .
 ad:OperationalDisruption rdfs:subClassOf transit:Disruption .
 
 #################################################################
-#    Parties and people
+#    Parties: agent subclasses in the air ontology, roles in TransiT
 #################################################################
 
 ad:Airline             rdfs:subClassOf transit:Carrier .
-ad:Shipper             rdfs:subClassOf transit:Shipper .
-ad:Consignee           rdfs:subClassOf transit:Consignee .
+ad:FreightForwarder    rdfs:subClassOf freight:FreightForwarder .
 ad:Passenger           rdfs:subClassOf transit:Passenger .
+ad:Shipper   owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( ad:Agent [ a owl:Restriction ; owl:onProperty iof:hasRole ; owl:someValuesFrom transit:ShipperRole ] ) ] .
+ad:Consignee owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( ad:Agent [ a owl:Restriction ; owl:onProperty iof:hasRole ; owl:someValuesFrom transit:ConsigneeRole ] ) ] .
+ad:Exporter  owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( ad:Agent [ a owl:Restriction ; owl:onProperty iof:hasRole ; owl:someValuesFrom freight:ExporterRole ] ) ] .
+ad:Importer  owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( ad:Agent [ a owl:Restriction ; owl:onProperty iof:hasRole ; owl:someValuesFrom freight:ImporterRole ] ) ] .
 
 #################################################################
 #    Information
@@ -77,6 +87,8 @@ ad:Passenger           rdfs:subClassOf transit:Passenger .
 ad:Identifier          rdfs:subClassOf iof:Identifier .
 ad:FlightSchedule      rdfs:subClassOf transit:Schedule .
 ad:DispatchSchedule    rdfs:subClassOf transit:Schedule .
+ad:Slot                rdfs:subClassOf transit:TimeSlot .
+ad:AirwayBill          rdfs:subClassOf freight:AirWaybill .
 ad:TransportMode       rdfs:subClassOf transit:TransportMode .
 ad:EnergyUnit          rdfs:subClassOf transit:EnergyAmount .
 ad:CarbonEmission      rdfs:subClassOf transit:CarbonFootprint .
@@ -95,3 +107,8 @@ ad:carriesPassenger    rdfs:subPropertyOf transit:hasParticipantsInMovement .
 ad:consumesEnergy      rdfs:subPropertyOf transit:hasEnergyAmount .
 ad:emitsCarbon         rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime .
 ad:hasName             rdfs:subPropertyOf transit:hasName .
+ad:hasShipper          rdfs:subPropertyOf freight:hasShipper .
+ad:hasConsignee        rdfs:subPropertyOf freight:hasConsignee .
+ad:usesAirline         rdfs:subPropertyOf freight:hasCarrier .
+ad:handledByFreightForwarder rdfs:subPropertyOf freight:hasFreightForwarder .
+ad:usesAirwayBill      rdfs:subPropertyOf [ owl:inverseOf transit:documents ] .   # sub-property of the inverse, so transit:documents keeps its own domain and range
