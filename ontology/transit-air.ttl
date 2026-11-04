@@ -1,0 +1,79 @@
+@prefix : <https://www.cranfield.ac.uk/transit/air#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iof: <https://spec.industrialontologies.org/ontology/core/Core/> .
+@prefix iof-av: <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+
+<https://www.cranfield.ac.uk/transit/air> a owl:Ontology ;
+    owl:versionIRI <https://www.cranfield.ac.uk/transit/air/2025-11> ;
+    owl:versionInfo "0.3.0" ;
+    owl:imports <https://www.cranfield.ac.uk/transit/core> ;
+    rdfs:label "TransiT Air Module"@en ;
+    dcterms:license <https://opensource.org/licenses/MIT> ;
+    dcterms:abstract "Air transport specialisations of the TransiT Core Ontology: aircraft, airports, airways, flights and sustainable aviation fuel. Every class carries the air transport mode. The separate Air Domain Ontology developed at Cranfield is a candidate for extending this module once its upper level is aligned with BFO and IOF."@en .
+
+#################################################################
+#    Vehicles
+#################################################################
+
+:Aircraft a owl:Class ;
+    rdfs:subClassOf transit:Vehicle ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:AirMode ] ;
+    rdfs:label "Aircraft"@en ;
+    iof-av:naturalLanguageDefinition "A vehicle that travels by air."@en ;
+    iof-av:adaptedFrom "http://ies.data.gov.uk/ontology/ies4#Aircraft" ;
+    rdfs:seeAlso <http://ies.data.gov.uk/ontology/ies4#Aircraft> .
+
+:AircraftIdentifier a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:VehicleIdentifier
+        [ a owl:Restriction ; owl:onProperty iof:designates ; owl:someValuesFrom :Aircraft ] ) ] ;
+    rdfs:subClassOf transit:VehicleIdentifier ;
+    rdfs:label "Aircraft Identifier"@en ;
+    iof-av:naturalLanguageDefinition "A vehicle identifier that designates an aircraft, e.g. a registration mark."@en .
+
+#################################################################
+#    Infrastructure
+#################################################################
+
+:Airway a owl:Class ;
+    rdfs:subClassOf transit:TransportWay ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:AirMode ] ;
+    rdfs:label "Airway"@en ;
+    iof-av:naturalLanguageDefinition "A transport way that is a designated corridor of airspace along which aircraft fly."@en .
+
+:Airport a owl:Class ;
+    rdfs:subClassOf transit:Terminal ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:AirMode ] ;
+    rdfs:label "Airport"@en ;
+    iof-av:naturalLanguageDefinition "A terminal at which aircraft take off, land and are serviced, and at which passengers and payload are transferred to and from aircraft."@en ;
+    iof-av:adaptedFrom "http://ies.data.gov.uk/ontology/ies4#Airport" ;
+    rdfs:seeAlso <http://ies.data.gov.uk/ontology/ies4#Airport> .
+
+#################################################################
+#    Movements
+#################################################################
+
+:Flight a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:TravelLeg
+        [ a owl:Restriction ; owl:onProperty transit:operatedByVehicle ; owl:someValuesFrom :Aircraft ] ) ] ;
+    rdfs:subClassOf transit:TravelLeg ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:AirMode ] ;
+    rdfs:label "Flight"@en ;
+    iof-av:naturalLanguageDefinition "A travel leg operated by an aircraft."@en ;
+    iof-av:adaptedFrom "http://ies.data.gov.uk/ontology/ies4#Flight" ;
+    rdfs:seeAlso <http://ies.data.gov.uk/ontology/ies4#Flight> .
+
+#################################################################
+#    Energy
+#################################################################
+
+:SustainableAviationFuel a owl:Class ;
+    rdfs:subClassOf transit:Fuel ;
+    rdfs:label "Sustainable Aviation Fuel"@en ;
+    iof-av:synonym "SAF"@en ;
+    iof-av:naturalLanguageDefinition "A fuel for aircraft produced from non-fossil feedstocks such as waste oils, biomass or synthetic processes, with lower life-cycle greenhouse gas emissions than conventional jet fuel. Replaces the earlier class SAF_Fuel."@en .

@@ -1,0 +1,98 @@
+@prefix : <https://www.cranfield.ac.uk/transit/road#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iof: <https://spec.industrialontologies.org/ontology/core/Core/> .
+@prefix iof-av: <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+
+<https://www.cranfield.ac.uk/transit/road> a owl:Ontology ;
+    owl:versionIRI <https://www.cranfield.ac.uk/transit/road/2025-11> ;
+    owl:versionInfo "0.3.0" ;
+    owl:imports <https://www.cranfield.ac.uk/transit/core> ;
+    rdfs:label "TransiT Road Module"@en ;
+    dcterms:license <https://opensource.org/licenses/MIT> ;
+    dcterms:abstract "Road transport specialisations of the TransiT Core Ontology: road vehicles (car, bus, truck, van), roads, road terminals and service stations, and road travel legs. Every class carries the road transport mode."@en .
+
+#################################################################
+#    Vehicles
+#################################################################
+
+:RoadVehicle a owl:Class ;
+    rdfs:subClassOf transit:Vehicle ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:RoadMode ] ;
+    rdfs:label "Road Vehicle"@en ;
+    iof-av:naturalLanguageDefinition "A vehicle that travels by road."@en ;
+    iof-av:adaptedFrom "http://ies.data.gov.uk/ontology/ies4#RoadVehicle" ;
+    rdfs:seeAlso <http://ies.data.gov.uk/ontology/ies4#RoadVehicle> .
+
+:Car a owl:Class ;
+    rdfs:subClassOf :RoadVehicle ;
+    rdfs:label "Car"@en ;
+    iof-av:naturalLanguageDefinition "A road vehicle with four wheels, typically powered by an internal combustion engine or an electric motor, designed to carry a small number of passengers."@en .
+
+:Bus a owl:Class ;
+    rdfs:subClassOf :RoadVehicle ;
+    rdfs:label "Bus"@en ;
+    iof-av:naturalLanguageDefinition "A large road vehicle designed to carry numerous passengers, usually operating along a fixed route or a planned travel."@en .
+
+:Truck a owl:Class ;
+    rdfs:subClassOf :RoadVehicle ;
+    rdfs:label "Truck"@en ;
+    iof-av:naturalLanguageDefinition "A road vehicle designed for transporting payload, usually with a separate cabin and cargo area."@en .
+
+:Van a owl:Class ;
+    rdfs:subClassOf :Truck ;
+    rdfs:label "Van"@en ;
+    iof-av:naturalLanguageDefinition "A reduced-size truck that carries a small amount of payload, typically under 3.5 tonnes gross weight."@en .
+
+[] a owl:AllDisjointClasses ; owl:members ( :Car :Bus :Truck ) .
+
+:RoadVehicleIdentifier a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:VehicleIdentifier
+        [ a owl:Restriction ; owl:onProperty iof:designates ; owl:someValuesFrom :RoadVehicle ] ) ] ;
+    rdfs:subClassOf transit:VehicleIdentifier ;
+    rdfs:label "Road Vehicle Identifier"@en ;
+    iof-av:naturalLanguageDefinition "A vehicle identifier that designates a road vehicle, e.g. a registration plate or a vehicle identification number."@en .
+
+#################################################################
+#    Infrastructure
+#################################################################
+
+:Road a owl:Class ;
+    rdfs:subClassOf transit:TransportWay ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:RoadMode ] ;
+    rdfs:label "Road"@en ;
+    iof-av:naturalLanguageDefinition "A transport way with a prepared surface on which road vehicles move."@en .
+
+:RoadTerminal a owl:Class ;
+    rdfs:subClassOf transit:Terminal ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:RoadMode ] ;
+    rdfs:label "Road Terminal"@en ;
+    iof-av:naturalLanguageDefinition "A terminal served by road vehicles, e.g. a bus station, a coach station or a truck depot."@en .
+
+:BusStation a owl:Class ;
+    rdfs:subClassOf :RoadTerminal ;
+    rdfs:label "Bus Station"@en ;
+    iof-av:naturalLanguageDefinition "A road terminal at which passengers board and alight from buses."@en .
+
+:ServiceStation a owl:Class ;
+    rdfs:subClassOf transit:Infrastructure ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:RoadMode ] ;
+    rdfs:label "Service Station"@en ;
+    iof-av:naturalLanguageDefinition "Road infrastructure used for short-duration stops, rest breaks, refuelling or minor maintenance during a road travel leg."@en .
+
+#################################################################
+#    Movements
+#################################################################
+
+:RoadTravelLeg a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:TravelLeg
+        [ a owl:Restriction ; owl:onProperty transit:operatedByVehicle ; owl:someValuesFrom :RoadVehicle ] ) ] ;
+    rdfs:subClassOf transit:TravelLeg ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:RoadMode ] ;
+    rdfs:label "Road Travel Leg"@en ;
+    iof-av:naturalLanguageDefinition "A travel leg operated by a road vehicle. Replaces the earlier class CarTravel."@en .

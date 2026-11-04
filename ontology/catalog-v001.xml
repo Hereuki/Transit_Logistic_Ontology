@@ -1,20 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Protégé / OWL API import catalog.
-  Keep this file next to transit.ttl so that the imported ontologies resolve
-  to the local copies in this repository instead of being fetched online.
+  Keep this file next to the TransiT module files so that every owl:imports
+  resolves to the local copy in this repository instead of being fetched online.
+  Open ontology/transit-all.ttl to load everything, or a single module.
 -->
 <catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <group id="TransiT local imports" prefer="public" xml:base="">
-
+    <group id="TransiT modules" prefer="public" xml:base="">
+        <uri name="https://www.cranfield.ac.uk/transit/core" uri="transit-core.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/core/2025-11" uri="transit-core.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/road" uri="transit-road.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/road/2025-11" uri="transit-road.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/rail" uri="transit-rail.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/rail/2025-11" uri="transit-rail.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air" uri="transit-air.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air/2025-11" uri="transit-air.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/maritime" uri="transit-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/maritime/2025-11" uri="transit-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/rail-road" uri="transit-rail-road.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/rail-road/2025-11" uri="transit-rail-road.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-road" uri="transit-air-road.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-road/2025-11" uri="transit-air-road.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/rail-maritime" uri="transit-rail-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/rail-maritime/2025-11" uri="transit-rail-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/road-maritime" uri="transit-road-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/road-maritime/2025-11" uri="transit-road-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-maritime" uri="transit-air-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/air-maritime/2025-11" uri="transit-air-maritime.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/all" uri="transit-all.ttl"/>
+        <uri name="https://www.cranfield.ac.uk/transit/all/2025-11" uri="transit-all.ttl"/>
+    </group>
+    <group id="Third-party imports" prefer="public" xml:base="">
         <!-- IOF Core (mid-level ontology) -->
         <uri name="https://spec.industrialontologies.org/ontology/core/Core/" uri="../imports/iof-core.rdf"/>
         <uri name="https://spec.industrialontologies.org/ontology/202401/core/Core/" uri="../imports/iof-core.rdf"/>
-
         <!-- IOF Annotation Vocabulary (imported by IOF Core) -->
         <uri name="https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/" uri="../imports/iof-annotation-vocabulary.rdf"/>
         <uri name="https://spec.industrialontologies.org/ontology/202401/core/meta/AnnotationVocabulary/" uri="../imports/iof-annotation-vocabulary.rdf"/>
-
         <!-- BFO 2020 (top-level ontology, imported by IOF Core) -->
         <uri name="http://purl.obolibrary.org/obo/bfo.owl" uri="../imports/bfo.owl"/>
         <uri name="http://purl.obolibrary.org/obo/bfo/2020/bfo.owl" uri="../imports/bfo.owl"/>

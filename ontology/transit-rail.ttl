@@ -1,0 +1,73 @@
+@prefix : <https://www.cranfield.ac.uk/transit/rail#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iof: <https://spec.industrialontologies.org/ontology/core/Core/> .
+@prefix iof-av: <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+
+<https://www.cranfield.ac.uk/transit/rail> a owl:Ontology ;
+    owl:versionIRI <https://www.cranfield.ac.uk/transit/rail/2025-11> ;
+    owl:versionInfo "0.3.0" ;
+    owl:imports <https://www.cranfield.ac.uk/transit/core> ;
+    rdfs:label "TransiT Rail Module"@en ;
+    dcterms:license <https://opensource.org/licenses/MIT> ;
+    dcterms:abstract "Rail transport specialisations of the TransiT Core Ontology: rail vehicles (train, locomotive, wagon), railways, railway stations and rail travel legs. Every class carries the rail transport mode."@en .
+
+#################################################################
+#    Vehicles
+#################################################################
+
+:RailVehicle a owl:Class ;
+    rdfs:subClassOf transit:Vehicle ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:RailMode ] ;
+    rdfs:label "Rail Vehicle"@en ;
+    iof-av:naturalLanguageDefinition "A vehicle that runs on railway tracks."@en .
+
+:Train a owl:Class ;
+    rdfs:subClassOf :RailVehicle ;
+    rdfs:label "Train"@en ;
+    iof-av:naturalLanguageDefinition "A rail vehicle made of one or more connected units that runs on railway tracks to transport passengers or payload. Replaces the earlier class HDV_Train, which was placed under road vehicle."@en .
+
+:Locomotive a owl:Class ;
+    rdfs:subClassOf :RailVehicle ;
+    rdfs:label "Locomotive"@en ;
+    iof-av:naturalLanguageDefinition "A rail vehicle that provides the motive power for a train and does not itself carry payload or passengers."@en .
+
+:Wagon a owl:Class ;
+    rdfs:subClassOf :RailVehicle ;
+    rdfs:label "Wagon"@en ;
+    iof-av:naturalLanguageDefinition "A rail vehicle without its own motive power that carries payload as part of a train."@en .
+
+[] a owl:AllDisjointClasses ; owl:members ( :Train :Locomotive :Wagon ) .
+
+#################################################################
+#    Infrastructure
+#################################################################
+
+:Railway a owl:Class ;
+    rdfs:subClassOf transit:TransportWay ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:RailMode ] ;
+    rdfs:label "Railway"@en ;
+    iof-av:naturalLanguageDefinition "A transport way consisting of tracks on which rail vehicles move."@en .
+
+:RailwayStation a owl:Class ;
+    rdfs:subClassOf transit:Terminal ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:RailMode ] ;
+    rdfs:label "Railway Station"@en ;
+    iof-av:naturalLanguageDefinition "A terminal served by rail vehicles at which passengers board and alight or payload is loaded and unloaded."@en .
+
+#################################################################
+#    Movements
+#################################################################
+
+:RailTravelLeg a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:TravelLeg
+        [ a owl:Restriction ; owl:onProperty transit:operatedByVehicle ; owl:someValuesFrom :RailVehicle ] ) ] ;
+    rdfs:subClassOf transit:TravelLeg ,
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:RailMode ] ;
+    rdfs:label "Rail Travel Leg"@en ;
+    iof-av:naturalLanguageDefinition "A travel leg operated by a rail vehicle. Replaces the earlier class TrainTravel."@en .

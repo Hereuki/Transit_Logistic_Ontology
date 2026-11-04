@@ -1,0 +1,67 @@
+@prefix : <https://www.cranfield.ac.uk/transit/examples/rail-road-journey#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix road: <https://www.cranfield.ac.uk/transit/road#> .
+@prefix rail: <https://www.cranfield.ac.uk/transit/rail#> .
+@prefix rr: <https://www.cranfield.ac.uk/transit/rail-road#> .
+@prefix iof: <https://spec.industrialontologies.org/ontology/core/Core/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# A container travels by train from a port-side railway station to an inland
+# rail-road terminal, is transshipped onto a truck, and is delivered to a
+# warehouse. Only the asserted facts are given; a reasoner should classify
+#   leg1  as rail:RailTravelLeg, leg2 as road:RoadTravelLeg,
+#   hub   as rr:RailRoadTerminal, journey as rr:RailRoadJourney and
+#   transit:IntermodalJourney, and the transfer as rr:RailRoadTransshipment.
+
+<https://www.cranfield.ac.uk/transit/examples/rail-road-journey> a owl:Ontology ;
+    owl:imports <https://www.cranfield.ac.uk/transit/rail-road> ;
+    rdfs:label "Example: rail-road container journey"@en .
+
+:container1 a owl:NamedIndividual , transit:CargoUnit ;
+    rdfs:label "40 ft container"@en ;
+    iof:hasRole :payloadRole1 .
+:payloadRole1 a owl:NamedIndividual , transit:PayloadRole .
+
+:train1 a owl:NamedIndividual , rail:Train ; rdfs:label "freight train 4711"@en .
+:truck1 a owl:NamedIndividual , road:Truck ; rdfs:label "truck AB-123-CD"@en .
+
+:station a owl:NamedIndividual , rail:RailwayStation ; rdfs:label "port railway station"@en .
+:hub a owl:NamedIndividual , transit:Terminal ;
+    rdfs:label "inland intermodal hub"@en ;
+    transit:hasTransportMode transit:RailMode , transit:RoadMode .
+:warehouse a owl:NamedIndividual , transit:Location ; rdfs:label "customer warehouse"@en .
+
+:leg1 a owl:NamedIndividual , transit:TravelLeg ;
+    rdfs:label "rail leg"@en ;
+    transit:operatedByVehicle :train1 ;
+    transit:hasPayload :container1 ;
+    transit:departsAtOrigin :station ;
+    transit:endsAtDestination :hub ;
+    transit:startsAtTimeInstance "2025-11-04T06:00:00Z"^^xsd:dateTimeStamp ;
+    transit:endsAtTimeInstance "2025-11-04T10:30:00Z"^^xsd:dateTimeStamp .
+
+:leg2 a owl:NamedIndividual , transit:TravelLeg ;
+    rdfs:label "road leg"@en ;
+    transit:operatedByVehicle :truck1 ;
+    transit:hasPayload :container1 ;
+    transit:departsAtOrigin :hub ;
+    transit:endsAtDestination :warehouse ;
+    transit:startsAtTimeInstance "2025-11-04T12:00:00Z"^^xsd:dateTimeStamp ;
+    transit:endsAtTimeInstance "2025-11-04T14:15:00Z"^^xsd:dateTimeStamp .
+
+:transfer a owl:NamedIndividual , transit:Transshipment ;
+    rdfs:label "container lift at the hub"@en ;
+    obo:BFO_0000066 :hub ;
+    transit:transfersPayload :container1 ;
+    transit:followsTravelLeg :leg1 ;
+    transit:precedesTravelLeg :leg2 .
+
+:journey a owl:NamedIndividual , transit:Journey ;
+    rdfs:label "container journey port to warehouse"@en ;
+    transit:hasTravelLeg :leg1 , :leg2 ;
+    transit:hasPayload :container1 ;
+    transit:departsAtOrigin :station ;
+    transit:endsAtDestination :warehouse .

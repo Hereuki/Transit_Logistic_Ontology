@@ -1,0 +1,52 @@
+@prefix : <https://www.cranfield.ac.uk/transit/road-maritime#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix road: <https://www.cranfield.ac.uk/transit/road#> .
+@prefix rail: <https://www.cranfield.ac.uk/transit/rail#> .
+@prefix air: <https://www.cranfield.ac.uk/transit/air#> .
+@prefix maritime: <https://www.cranfield.ac.uk/transit/maritime#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iof-av: <https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/> .
+
+<https://www.cranfield.ac.uk/transit/road-maritime> a owl:Ontology ;
+    owl:versionIRI <https://www.cranfield.ac.uk/transit/road-maritime/2025-11> ;
+    owl:versionInfo "0.3.0" ;
+    owl:imports <https://www.cranfield.ac.uk/transit/road> , <https://www.cranfield.ac.uk/transit/maritime> ;
+    rdfs:label "TransiT Road-Maritime Intersection Module"@en ;
+    dcterms:license <https://opensource.org/licenses/MIT> ;
+    dcterms:abstract "Intersection of the TransiT road and maritime modules: the terminals that connect the two modes, the journeys that use both, and the transshipments between them. Intentionally thin: everything mode-specific lives in the two mode modules, everything generic in the core."@en .
+
+:RoadMaritimeTerminal a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:Terminal
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:RoadMode ]
+        [ a owl:Restriction ; owl:onProperty transit:hasTransportMode ; owl:hasValue transit:MaritimeMode ] ) ] ;
+    rdfs:subClassOf transit:Terminal ;
+    rdfs:label "Road-Maritime Terminal"@en ;
+    iof-av:naturalLanguageDefinition "A terminal that serves both the road and the maritime transport modes, at which payload or passengers are transferred between road and maritime vehicles."@en .
+
+:RoadMaritimeJourney a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:Journey
+        [ a owl:Restriction ; owl:onProperty transit:hasTravelLeg ; owl:someValuesFrom road:RoadTravelLeg ]
+        [ a owl:Restriction ; owl:onProperty transit:hasTravelLeg ; owl:someValuesFrom maritime:Sailing ] ) ] ;
+    rdfs:subClassOf transit:IntermodalJourney ;
+    rdfs:label "Road-Maritime Journey"@en ;
+    iof-av:naturalLanguageDefinition "An intermodal journey that has at least one road travel leg and at least one maritime travel leg."@en .
+
+:RoadMaritimeTransshipment a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( transit:Transshipment
+        [ a owl:Class ; owl:unionOf (
+            [ a owl:Class ; owl:intersectionOf (
+                [ a owl:Restriction ; owl:onProperty transit:followsTravelLeg ; owl:someValuesFrom road:RoadTravelLeg ]
+                [ a owl:Restriction ; owl:onProperty transit:precedesTravelLeg ; owl:someValuesFrom maritime:Sailing ] ) ]
+            [ a owl:Class ; owl:intersectionOf (
+                [ a owl:Restriction ; owl:onProperty transit:followsTravelLeg ; owl:someValuesFrom maritime:Sailing ]
+                [ a owl:Restriction ; owl:onProperty transit:precedesTravelLeg ; owl:someValuesFrom road:RoadTravelLeg ] ) ] ) ] ) ] ;
+    rdfs:subClassOf transit:Transshipment ;
+    rdfs:label "Road-Maritime Transshipment"@en ;
+    iof-av:naturalLanguageDefinition "A transshipment between a road travel leg and a maritime travel leg, in either direction."@en .
+
+# vehicles of the two modes are disjoint
+road:RoadVehicle owl:disjointWith maritime:Ship .
