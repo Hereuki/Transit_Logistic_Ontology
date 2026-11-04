@@ -11,7 +11,7 @@
 
 <https://www.cranfield.ac.uk/transit/air> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/air/2025-11> ;
-    owl:versionInfo "0.6.0" ;
+    owl:versionInfo "0.7.0" ;
     owl:imports <https://www.cranfield.ac.uk/transit/core> ;
     rdfs:label "TransiT Air Module"@en ;
     dcterms:license <https://opensource.org/licenses/MIT> ;
@@ -45,6 +45,17 @@
     rdfs:label "Unmanned Aircraft"@en ;
     iof-av:synonym "drone"@en ;
     iof-av:naturalLanguageDefinition "An aircraft operated without a pilot on board, remotely or autonomously, e.g. a delivery drone."@en .
+
+:ElectricAircraft a owl:Class ;
+    rdfs:subClassOf :Aircraft ,
+        [ a owl:Restriction ; owl:onProperty transit:appliesEnergy ; owl:someValuesFrom transit:ElectricitySupply ] ;
+    rdfs:label "Electric Aircraft"@en ;
+    iof-av:naturalLanguageDefinition "An aircraft propelled by electric motors powered from batteries charged on the ground, hence an electric vehicle. Includes hybrid-electric aircraft that also burn fuel."@en .
+
+:AircraftCharger a owl:Class ;
+    rdfs:subClassOf transit:ElectricityCharger ;
+    rdfs:label "Aircraft Charger"@en ;
+    iof-av:naturalLanguageDefinition "An electricity charger designed to charge the batteries of an electric aircraft on the apron."@en .
 
 [] a owl:AllDisjointClasses ; owl:members ( :Aeroplane :Helicopter ) .
 

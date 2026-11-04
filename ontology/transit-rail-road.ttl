@@ -13,7 +13,7 @@
 
 <https://www.cranfield.ac.uk/transit/rail-road> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/rail-road/2025-11> ;
-    owl:versionInfo "0.6.0" ;
+    owl:versionInfo "0.7.0" ;
     owl:imports <https://www.cranfield.ac.uk/transit/rail> , <https://www.cranfield.ac.uk/transit/road> ;
     rdfs:label "TransiT Rail-Road Intersection Module"@en ;
     dcterms:license <https://opensource.org/licenses/MIT> ;

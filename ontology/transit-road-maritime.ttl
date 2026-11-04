@@ -13,7 +13,7 @@
 
 <https://www.cranfield.ac.uk/transit/road-maritime> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/road-maritime/2025-11> ;
-    owl:versionInfo "0.6.0" ;
+    owl:versionInfo "0.7.0" ;
     owl:imports <https://www.cranfield.ac.uk/transit/road> , <https://www.cranfield.ac.uk/transit/maritime> ;
     rdfs:label "TransiT Road-Maritime Intersection Module"@en ;
     dcterms:license <https://opensource.org/licenses/MIT> ;

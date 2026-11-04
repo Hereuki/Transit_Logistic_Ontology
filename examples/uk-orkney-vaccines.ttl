@@ -1,0 +1,403 @@
+@prefix : <https://www.cranfield.ac.uk/transit/examples/uk-orkney-vaccines#> .
+@prefix transit: <https://www.cranfield.ac.uk/transit/core#> .
+@prefix freight: <https://www.cranfield.ac.uk/transit/freight#> .
+@prefix road: <https://www.cranfield.ac.uk/transit/road#> .
+@prefix rail: <https://www.cranfield.ac.uk/transit/rail#> .
+@prefix air: <https://www.cranfield.ac.uk/transit/air#> .
+@prefix maritime: <https://www.cranfield.ac.uk/transit/maritime#> .
+@prefix iof: <https://spec.industrialontologies.org/ontology/core/Core/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+
+# DEMO DATA. Two roll cages of temperature-controlled vaccines (480 kg) travel
+# from the NHS distribution centre at Daventry (DIRFT) to the island surgery on
+# North Ronaldsay, Orkney: intermodal train to Inverness, diesel truck to
+# Scrabster, ro-ro ferry to Stromness (the truck stays with the goods), truck to
+# Kirkwall Airport, electric aircraft to North Ronaldsay, electric van to the
+# surgery. All figures are made up for the demonstration: scheduled and actual
+# times, energy amounts, emission factors, masses and distances.
+#
+# What a reasoner should infer from these facts (see tools/validate.py):
+#   trainRun -> rail:RailTravelLeg; truckRun1/2, vanRun -> road:RoadTravelLeg;
+#   ferryRun -> maritime:Sailing; flightRun -> air:Flight;
+#   aircraft, van, train -> transit:ElectricVehicle (the train is bi-mode);
+#   invernessTerminal -> RailRoadTerminal; scrabster, stromness ->
+#   RoadMaritimeTerminal; kirkwallAirport, northRonaldsayAirfield -> AirRoadTerminal;
+#   the lifts and ro-ro boardings -> the matching intermodal transshipments;
+#   journey -> RailRoadJourney, RoadMaritimeJourney, AirRoadJourney;
+#   truckA -> transit:Payload during the sailing (it bears a payload role);
+#   goods -> freight:PalletisedCargo; every vehicle -> transit:GHGSource;
+#   chargingAircraft, chargingVan -> transit:ChargingSession;
+#   the parties -> Shipper, Consignee, Carrier, FreightForwarder, TransportOperator;
+#   trainDriver, master, pilot -> transit:CrewMember; driverA, driverB -> transit:Driver.
+# tools/footprint.py computes the consignment's carbon footprint from this file.
+
+<https://www.cranfield.ac.uk/transit/examples/uk-orkney-vaccines> a owl:Ontology ;
+    owl:imports <https://www.cranfield.ac.uk/transit/all> ;
+    rdfs:label "Demo: vaccines from Daventry to North Ronaldsay by rail, road, sea and air"@en .
+
+#################################################################
+#    Units (QUDT IRIs, declared locally; no QUDT import)
+#################################################################
+unit:KiloGM a owl:NamedIndividual , qudt:Unit ; rdfs:label "kilogram"@en .
+unit:KiloM a owl:NamedIndividual , qudt:Unit ; rdfs:label "kilometre"@en .
+unit:L a owl:NamedIndividual , qudt:Unit ; rdfs:label "litre"@en .
+unit:KiloW-HR a owl:NamedIndividual , qudt:Unit ; rdfs:label "kilowatt-hour"@en .
+unit:KiloGM-PER-L a owl:NamedIndividual , qudt:Unit ; rdfs:label "kilogram per litre"@en .
+unit:KiloGM-PER-KiloW-HR a owl:NamedIndividual , qudt:Unit ; rdfs:label "kilogram per kilowatt-hour"@en .
+unit:GBP a owl:NamedIndividual , qudt:Unit ; rdfs:label "pound sterling"@en .
+
+#################################################################
+#    Parties and people
+#################################################################
+:nhs a owl:NamedIndividual , iof:Organization ; rdfs:label "NHS Supply Chain (shipper)"@en ; iof:hasRole :nhsShipperRole .
+:nhsShipperRole a owl:NamedIndividual , transit:ShipperRole .
+:surgery a owl:NamedIndividual , iof:Organization ; rdfs:label "North Ronaldsay surgery (consignee)"@en ; iof:hasRole :surgeryConsigneeRole .
+:surgeryConsigneeRole a owl:NamedIndividual , transit:ConsigneeRole .
+:forwarder a owl:NamedIndividual , iof:Organization ; rdfs:label "Northern Logistics Ltd (forwarder)"@en ; iof:hasRole :forwarderRole .
+:forwarderRole a owl:NamedIndividual , freight:FreightForwarderRole .
+:drs a owl:NamedIndividual , iof:Organization ; rdfs:label "Direct Rail Services (rail carrier)"@en ; iof:hasRole :drsCarrierRole .
+:drsCarrierRole a owl:NamedIndividual , transit:CarrierRole .
+:haulier a owl:NamedIndividual , iof:Organization ; rdfs:label "Highland Haulage (road carrier)"@en ; iof:hasRole :haulierCarrierRole .
+:haulierCarrierRole a owl:NamedIndividual , transit:CarrierRole .
+:northlink a owl:NamedIndividual , iof:Organization ; rdfs:label "NorthLink Ferries (ferry operator)"@en ; iof:hasRole :northlinkOperatorRole .
+:northlinkOperatorRole a owl:NamedIndividual , transit:TransportOperatorRole .
+:loganair a owl:NamedIndividual , iof:Organization ; rdfs:label "Loganair (air carrier)"@en ; iof:hasRole :loganairCarrierRole .
+:loganairCarrierRole a owl:NamedIndividual , transit:CarrierRole .
+:courier a owl:NamedIndividual , iof:Organization ; rdfs:label "North Ronaldsay community courier"@en ; iof:hasRole :courierCarrierRole .
+:courierCarrierRole a owl:NamedIndividual , transit:CarrierRole .
+:hial a owl:NamedIndividual , iof:Organization ; rdfs:label "Highlands and Islands Airports (airport operator, energy provider)"@en ; iof:hasRole :hialEnergyRole .
+:hialEnergyRole a owl:NamedIndividual , transit:EnergyProviderRole .
+:orkneyWindCoop a owl:NamedIndividual , iof:Organization ; rdfs:label "North Ronaldsay community wind turbine (energy provider)"@en ; iof:hasRole :coopEnergyRole .
+:coopEnergyRole a owl:NamedIndividual , transit:EnergyProviderRole .
+
+:trainDriver a owl:NamedIndividual , iof:Person ; rdfs:label "train driver"@en ; iof:hasRole :trainDriverCrewRole ; transit:crews :trainRun .
+:trainDriverCrewRole a owl:NamedIndividual , transit:CrewRole .
+:driverA a owl:NamedIndividual , iof:Person ; rdfs:label "driver A (Highland Haulage)"@en ; iof:hasRole :driverADriverRole ; transit:drives :truckA ; transit:crews :truckRun1 , :truckRun2 .
+:driverADriverRole a owl:NamedIndividual , transit:DriverRole .
+:master a owl:NamedIndividual , iof:Person ; rdfs:label "ship's master"@en ; iof:hasRole :masterCrewRole ; transit:crews :ferryRun .
+:masterCrewRole a owl:NamedIndividual , transit:CrewRole .
+:pilot a owl:NamedIndividual , iof:Person ; rdfs:label "pilot"@en ; iof:hasRole :pilotCrewRole ; transit:crews :flightRun .
+:pilotCrewRole a owl:NamedIndividual , transit:CrewRole .
+:driverB a owl:NamedIndividual , iof:Person ; rdfs:label "driver B (island courier)"@en ; iof:hasRole :driverBDriverRole ; transit:drives :van ; transit:crews :vanRun .
+:driverBDriverRole a owl:NamedIndividual , transit:DriverRole .
+
+#################################################################
+#    The consignment
+#################################################################
+:consignment a owl:NamedIndividual , freight:Consignment ;
+    rdfs:label "two roll cages of vaccines, 480 kg"@en ;
+    freight:hasShipper :nhs ; freight:hasConsignee :surgery ; freight:hasFreightForwarder :forwarder ;
+    freight:hasCarrier :drs , :haulier , :loganair , :courier ;
+    freight:hasDeliveryTerm freight:DAP ;
+    transit:hasMass :consignmentMass ;
+    transit:hasTransportStatus freight:Delivered .
+:consignmentMass a owl:NamedIndividual , transit:MassAmount ; transit:hasNumericalValue "480.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM .
+:goods a owl:NamedIndividual , freight:TemperatureControlledGoods ; rdfs:label "vaccine packs, 2 to 8 degrees C"@en ;
+    obo:BFO_0000176 :consignment , :rollCage1 .
+:rollCage1 a owl:NamedIndividual , freight:Pallet ; rdfs:label "roll cage 1"@en .
+:rollCage2 a owl:NamedIndividual , freight:Pallet ; rdfs:label "roll cage 2"@en .
+:reefer a owl:NamedIndividual , freight:Container ; rdfs:label "45 ft refrigerated container (rail legs)"@en .
+:consignmentId a owl:NamedIndividual , freight:ConsignmentIdentifier ; iof:designates :consignment ; transit:hasName "NHS-ORK-2025-1142" .
+
+:order a owl:NamedIndividual , freight:TransportOrder ; freight:orders :consignment .
+:booking a owl:NamedIndividual , transit:Booking ; transit:books :drsService ; iof:isAbout :consignment .
+:waybill a owl:NamedIndividual , freight:Waybill ; transit:documents :consignment .
+:pod a owl:NamedIndividual , freight:ProofOfDelivery ; transit:documents :consignment .
+:drsRate a owl:NamedIndividual , freight:FreightRate ; transit:hasMonetaryAmount :drsPrice .
+:drsPrice a owl:NamedIndividual , transit:MonetaryAmount ; transit:hasNumericalValue "640.0"^^xsd:double ; transit:hasCurrency unit:GBP .
+
+#################################################################
+#    Places and infrastructure
+#################################################################
+:dirft a owl:NamedIndividual , freight:DistributionCentre , transit:Terminal ; rdfs:label "DIRFT distribution centre and rail terminal, Daventry"@en ;
+    transit:hasTransportMode transit:RailMode , transit:RoadMode .
+:dirftDock a owl:NamedIndividual , freight:LoadingBay ; rdfs:label "DIRFT dock door 14"@en ; obo:BFO_0000176 :dirft .
+:wcml a owl:NamedIndividual , rail:Railway ; rdfs:label "West Coast Main Line (electrified)"@en .
+:highlandMainLine a owl:NamedIndividual , rail:Railway ; rdfs:label "Highland Main Line (not electrified)"@en .
+:mossend a owl:NamedIndividual , transit:Stop , rail:RailwayStation ; rdfs:label "Mossend yard (locomotive switches from electric to diesel)"@en .
+:invernessTerminal a owl:NamedIndividual , transit:Terminal ; rdfs:label "Inverness rail freight terminal"@en ;
+    transit:hasTransportMode transit:RailMode , transit:RoadMode .
+:a9 a owl:NamedIndividual , road:Road ; rdfs:label "A9 Inverness to Thurso"@en .
+:serviceStation a owl:NamedIndividual , road:ServiceStation , transit:FuelStation ; rdfs:label "Golspie services (diesel refuelling)"@en .
+:scrabster a owl:NamedIndividual , maritime:Seaport ; rdfs:label "Scrabster harbour"@en ;
+    transit:hasTransportMode transit:MaritimeMode , transit:RoadMode .
+:scrabsterBerth a owl:NamedIndividual , maritime:Berth ; rdfs:label "Scrabster ro-ro berth"@en ; obo:BFO_0000176 :scrabster .
+:pentlandFirth a owl:NamedIndividual , maritime:Waterway ; rdfs:label "Pentland Firth crossing"@en .
+:stromness a owl:NamedIndividual , maritime:Seaport ; rdfs:label "Stromness harbour"@en ;
+    transit:hasTransportMode transit:MaritimeMode , transit:RoadMode .
+:a965 a owl:NamedIndividual , road:Road ; rdfs:label "A965 Stromness to Kirkwall"@en .
+:kirkwallAirport a owl:NamedIndividual , air:Airport ; rdfs:label "Kirkwall Airport"@en ;
+    transit:hasTransportMode transit:AirMode , transit:RoadMode .
+:kirkwallCargoShed a owl:NamedIndividual , freight:LoadingBay ; rdfs:label "Kirkwall Airport cargo shed"@en ; obo:BFO_0000176 :kirkwallAirport .
+:kirkwallColdStore a owl:NamedIndividual , freight:Warehouse ; rdfs:label "Kirkwall Airport cold store"@en ; obo:BFO_0000176 :kirkwallAirport .
+:kirkwallAirway a owl:NamedIndividual , air:Airway ; rdfs:label "Kirkwall to North Ronaldsay inter-island route"@en .
+:northRonaldsayAirfield a owl:NamedIndividual , air:Airport ; rdfs:label "North Ronaldsay airfield"@en ;
+    transit:hasTransportMode transit:AirMode , transit:RoadMode .
+:islandRoad a owl:NamedIndividual , road:Road ; rdfs:label "North Ronaldsay single-track road"@en .
+:surgeryBuilding a owl:NamedIndividual , transit:Location ; rdfs:label "North Ronaldsay surgery"@en .
+
+#################################################################
+#    Charging and electrification near the airport
+#################################################################
+:kirkwallChargingStation a owl:NamedIndividual , transit:ChargingStation ; rdfs:label "Kirkwall Airport charging hub (airside and landside)"@en ;
+    obo:BFO_0000176 :kirkwallAirport ;
+    iof:hasComponentPartAtSomeTime :chargerDC150 , :chargerAC22 , :aircraftCharger .
+:chargingPointLandside a owl:NamedIndividual , transit:ChargingPoint ; rdfs:label "landside charging point (trucks and vans)"@en ;
+    iof:hasComponentPartAtSomeTime :chargerDC150 , :chargerAC22 .
+:chargingPointApron a owl:NamedIndividual , transit:ChargingPoint ; rdfs:label "apron charging point (aircraft)"@en ;
+    iof:hasComponentPartAtSomeTime :aircraftCharger .
+:chargerDC150 a owl:NamedIndividual , transit:ElectricVehicleCharger ; rdfs:label "150 kW DC charger"@en ; iof:prescribedBy :specDC150 .
+:specDC150 a owl:NamedIndividual , transit:ChargerPowerSpecification ; rdfs:label "150 kW"@en ; transit:hasNumericalValue "150.0"^^xsd:double .
+:chargerAC22 a owl:NamedIndividual , transit:ElectricVehicleCharger ; rdfs:label "22 kW AC charger"@en ; iof:prescribedBy :specAC22 .
+:specAC22 a owl:NamedIndividual , transit:ChargerPowerSpecification ; rdfs:label "22 kW"@en ; transit:hasNumericalValue "22.0"^^xsd:double .
+:aircraftCharger a owl:NamedIndividual , air:AircraftCharger ; rdfs:label "100 kW aircraft charger"@en ;
+    iof:prescribedBy :specAircraft100 , :specAircraftConnector .
+:specAircraft100 a owl:NamedIndividual , transit:ChargerPowerSpecification ; rdfs:label "100 kW"@en ; transit:hasNumericalValue "100.0"^^xsd:double .
+:specAircraftConnector a owl:NamedIndividual , transit:ChargerConnectorSpecification ; rdfs:label "CCS2 aviation variant"@en .
+:nrChargingStation a owl:NamedIndividual , transit:ChargingStation ; rdfs:label "North Ronaldsay airfield charging point (community wind)"@en ;
+    obo:BFO_0000176 :northRonaldsayAirfield ; iof:hasComponentPartAtSomeTime :chargerNR .
+:chargerNR a owl:NamedIndividual , transit:ElectricVehicleCharger ; rdfs:label "22 kW AC charger, North Ronaldsay"@en .
+
+# electricity supplies and charging sessions (processes)
+:tractionElectricity a owl:NamedIndividual , transit:ElectricitySupply ; rdfs:label "catenary traction supply, DIRFT to Mossend"@en ;
+    transit:suppliesElectricityTo :train ; transit:hasEnergyAmount :eTrain ; transit:hasEmissionFactor :ukGridFactor ;
+    transit:startsAtTimeInstance "2025-11-10T18:34:00Z"^^xsd:dateTimeStamp ; transit:endsAtTimeInstance "2025-11-11T00:50:00Z"^^xsd:dateTimeStamp .
+:chargingAircraft a owl:NamedIndividual , transit:ElectricitySupply ; rdfs:label "overnight aircraft charge at Kirkwall"@en ;
+    transit:suppliedBy :aircraftCharger ; transit:suppliesElectricityTo :aircraft ; transit:hasEnergyAmount :eAircraftCharge ;
+    transit:hasEmissionFactor :orkneyWindFactor ;
+    transit:startsAtTimeInstance "2025-11-11T19:30:00Z"^^xsd:dateTimeStamp ; transit:endsAtTimeInstance "2025-11-11T21:05:00Z"^^xsd:dateTimeStamp .
+:chargingVan a owl:NamedIndividual , transit:ElectricitySupply ; rdfs:label "van top-up at North Ronaldsay airfield"@en ;
+    transit:suppliedBy :chargerNR ; transit:suppliesElectricityTo :van ; transit:hasEnergyAmount :eVanCharge ;
+    transit:hasEmissionFactor :orkneyWindFactor ;
+    transit:startsAtTimeInstance "2025-11-12T09:20:00Z"^^xsd:dateTimeStamp ; transit:endsAtTimeInstance "2025-11-12T10:05:00Z"^^xsd:dateTimeStamp .
+
+#################################################################
+#    Energy carriers, amounts and emission factors
+#################################################################
+:dieselTrain a owl:NamedIndividual , transit:Fuel ; rdfs:label "diesel burnt, Mossend to Inverness"@en ; transit:hasEnergyAmount :eDieselTrain ; transit:hasEmissionFactor :dieselFactor .
+:dieselTruck1 a owl:NamedIndividual , transit:Fuel ; rdfs:label "diesel burnt, Inverness to Scrabster"@en ; transit:hasEnergyAmount :eDieselTruck1 ; transit:hasEmissionFactor :dieselFactor .
+:dieselTruck2 a owl:NamedIndividual , transit:Fuel ; rdfs:label "diesel burnt, Stromness to Kirkwall Airport"@en ; transit:hasEnergyAmount :eDieselTruck2 ; transit:hasEmissionFactor :dieselFactor .
+:mgoFerry a owl:NamedIndividual , transit:Fuel ; rdfs:label "marine gas oil burnt, Scrabster to Stromness"@en ; transit:hasEnergyAmount :eMgoFerry ; transit:hasEmissionFactor :mgoFactor .
+
+:eTrain a owl:NamedIndividual , transit:EnergyAmount ; transit:hasNumericalValue "2380.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloW-HR .
+:eDieselTrain a owl:NamedIndividual , transit:EnergyAmount ; transit:hasNumericalValue "915.0"^^xsd:double ; transit:hasMeasurementUnit unit:L .
+:eDieselTruck1 a owl:NamedIndividual , transit:EnergyAmount ; transit:hasNumericalValue "47.0"^^xsd:double ; transit:hasMeasurementUnit unit:L .
+:eMgoFerry a owl:NamedIndividual , transit:EnergyAmount ; transit:hasNumericalValue "1180.0"^^xsd:double ; transit:hasMeasurementUnit unit:L .
+:eDieselTruck2 a owl:NamedIndividual , transit:EnergyAmount ; transit:hasNumericalValue "10.5"^^xsd:double ; transit:hasMeasurementUnit unit:L .
+:eAircraftCharge a owl:NamedIndividual , transit:EnergyAmount ; transit:hasNumericalValue "64.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloW-HR .
+:eVanCharge a owl:NamedIndividual , transit:EnergyAmount ; transit:hasNumericalValue "3.2"^^xsd:double ; transit:hasMeasurementUnit unit:KiloW-HR .
+
+:dieselFactor a owl:NamedIndividual , transit:EmissionFactor ; rdfs:label "diesel, 2.68 kg CO2e per litre"@en ;
+    transit:hasNumericalValue "2.68"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM-PER-L ; transit:hasEmissionFactorBasis transit:LocationBased .
+:mgoFactor a owl:NamedIndividual , transit:EmissionFactor ; rdfs:label "marine gas oil, 3.21 kg CO2e per litre"@en ;
+    transit:hasNumericalValue "3.21"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM-PER-L ; transit:hasEmissionFactorBasis transit:LocationBased .
+:ukGridFactor a owl:NamedIndividual , transit:EmissionFactor ; rdfs:label "UK grid, 0.207 kg CO2e per kWh (location-based)"@en ;
+    transit:hasNumericalValue "0.207"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM-PER-KiloW-HR ; transit:hasEmissionFactorBasis transit:LocationBased .
+:orkneyWindFactor a owl:NamedIndividual , transit:EmissionFactor ; rdfs:label "Orkney wind PPA, 0.0 kg CO2e per kWh (market-based)"@en ;
+    transit:hasNumericalValue "0.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM-PER-KiloW-HR ; transit:hasEmissionFactorBasis transit:MarketBased .
+
+#################################################################
+#    Vehicles
+#################################################################
+:train a owl:NamedIndividual , rail:Train , transit:HumanDrivenVehicle ; rdfs:label "intermodal train 4M16, bi-mode locomotive"@en ;
+    transit:appliesEnergy :tractionElectricity , :dieselTrain ; iof:hasRole :trainGhgRole .
+:truckA a owl:NamedIndividual , road:Truck , transit:HumanDrivenVehicle ; rdfs:label "diesel truck SK70 HLH"@en ;
+    transit:appliesEnergy :dieselTruck1 , :dieselTruck2 ; iof:hasRole :truckGhgRole , :truckPayloadRole .
+:truckPayloadRole a owl:NamedIndividual , transit:PayloadRole ; rdfs:label "the truck is payload of the ferry"@en .
+:ferry a owl:NamedIndividual , maritime:Ferry , transit:HumanDrivenVehicle ; rdfs:label "MV Hamnavoe"@en ;
+    transit:appliesEnergy :mgoFerry ; iof:hasRole :ferryGhgRole .
+:aircraft a owl:NamedIndividual , air:ElectricAircraft , transit:HumanDrivenVehicle ; rdfs:label "nine-seat electric aircraft G-ELEC (trial fleet)"@en ;
+    transit:appliesEnergy :chargingAircraft ; iof:hasRole :aircraftGhgRole .
+:van a owl:NamedIndividual , road:Van , transit:HumanDrivenVehicle ; rdfs:label "electric van, island courier"@en ;
+    transit:appliesEnergy :chargingVan ; iof:hasRole :vanGhgRole .
+:trainGhgRole a owl:NamedIndividual , transit:GHGSourceRole .  :truckGhgRole a owl:NamedIndividual , transit:GHGSourceRole .
+:ferryGhgRole a owl:NamedIndividual , transit:GHGSourceRole .  :aircraftGhgRole a owl:NamedIndividual , transit:GHGSourceRole .
+:vanGhgRole a owl:NamedIndividual , transit:GHGSourceRole .
+
+#################################################################
+#    Services and schedules
+#################################################################
+:drsService a owl:NamedIndividual , transit:TransportService ; rdfs:label "DRS daily intermodal, DIRFT to Inverness"@en ; transit:offeredBy :drs ; transit:hasTariff :drsRate .
+:ferryService a owl:NamedIndividual , transit:TransportService ; rdfs:label "NorthLink Scrabster to Stromness"@en ; transit:offeredBy :northlink .
+:flightService a owl:NamedIndividual , transit:TransportService ; rdfs:label "Loganair inter-island, Kirkwall to North Ronaldsay"@en ; transit:offeredBy :loganair .
+
+:scheduleTrain a owl:NamedIndividual , transit:Schedule ; iof:prescribes :trainRun ;
+    transit:plannedStartTime "2025-11-10T18:30:00Z"^^xsd:dateTimeStamp ; transit:plannedEndTime "2025-11-11T06:05:00Z"^^xsd:dateTimeStamp .
+:scheduleTruck1 a owl:NamedIndividual , transit:Schedule ; iof:prescribes :truckRun1 ;
+    transit:plannedStartTime "2025-11-11T07:30:00Z"^^xsd:dateTimeStamp ; transit:plannedEndTime "2025-11-11T10:45:00Z"^^xsd:dateTimeStamp .
+:scheduleFerry a owl:NamedIndividual , transit:Schedule ; iof:prescribes :ferryRun ;
+    transit:plannedStartTime "2025-11-11T13:15:00Z"^^xsd:dateTimeStamp ; transit:plannedEndTime "2025-11-11T14:45:00Z"^^xsd:dateTimeStamp .
+:scheduleTruck2 a owl:NamedIndividual , transit:Schedule ; iof:prescribes :truckRun2 ;
+    transit:plannedStartTime "2025-11-11T15:20:00Z"^^xsd:dateTimeStamp ; transit:plannedEndTime "2025-11-11T16:05:00Z"^^xsd:dateTimeStamp .
+:scheduleFlight a owl:NamedIndividual , transit:Schedule ; iof:prescribes :flightRun ;
+    transit:plannedStartTime "2025-11-12T09:40:00Z"^^xsd:dateTimeStamp ; transit:plannedEndTime "2025-11-12T09:58:00Z"^^xsd:dateTimeStamp .
+:scheduleVan a owl:NamedIndividual , transit:Schedule ; iof:prescribes :vanRun ;
+    transit:plannedStartTime "2025-11-12T10:10:00Z"^^xsd:dateTimeStamp ; transit:plannedEndTime "2025-11-12T10:25:00Z"^^xsd:dateTimeStamp .
+:dockAppointment a owl:NamedIndividual , freight:DockAppointment ; rdfs:label "DIRFT dock door 14, Monday 16:00 to 17:00"@en ;
+    transit:plannedStartTime "2025-11-10T16:00:00Z"^^xsd:dateTimeStamp ; transit:plannedEndTime "2025-11-10T17:00:00Z"^^xsd:dateTimeStamp .
+:berthSlot a owl:NamedIndividual , transit:TimeSlot ; rdfs:label "Scrabster ro-ro berth window"@en ;
+    transit:plannedStartTime "2025-11-11T12:30:00Z"^^xsd:dateTimeStamp ; transit:plannedEndTime "2025-11-11T13:15:00Z"^^xsd:dateTimeStamp .
+
+#################################################################
+#    Vehicle runs (each carries the consignment leg and other payload)
+#################################################################
+:trainRun a owl:NamedIndividual , transit:VehicleRun ; rdfs:label "train run 4M16, DIRFT to Inverness"@en ;
+    transit:operatedByVehicle :train ; transit:realisesService :drsService ;
+    transit:departsAtOrigin :dirft ; transit:callsAt :mossend ; transit:endsAtDestination :invernessTerminal ;
+    transit:startsAtTimeInstance "2025-11-10T18:34:00Z"^^xsd:dateTimeStamp ; transit:endsAtTimeInstance "2025-11-11T06:12:00Z"^^xsd:dateTimeStamp ;
+    transit:isOnTime true ;
+    transit:hasPayload :consignment , :otherRailPayload ; transit:carries :leg1 ;
+    transit:hasEnergyAmount :eTrain , :eDieselTrain ; transit:hasDistanceAmount :dTrain ; transit:hasOccupancy :lfTrain .
+:otherRailPayload a owl:NamedIndividual , transit:Payload ; rdfs:label "other retail containers on the train"@en ; transit:hasMass :mOtherRail ; iof:hasRole :otherRailRole .
+:otherRailRole a owl:NamedIndividual , transit:PayloadRole .
+:mOtherRail a owl:NamedIndividual , transit:MassAmount ; transit:hasNumericalValue "412000.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM .
+:dTrain a owl:NamedIndividual , transit:DistanceAmount ; transit:hasNumericalValue "868.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloM .
+:lfTrain a owl:NamedIndividual , transit:LoadFactor ; transit:hasNumericalValue "0.81"^^xsd:double .
+
+:truckRun1 a owl:NamedIndividual , transit:VehicleRun ; rdfs:label "truck run, Inverness to Scrabster via the A9"@en ;
+    transit:operatedByVehicle :truckA ;
+    transit:departsAtOrigin :invernessTerminal ; transit:passesBy :a9 , :serviceStation ; transit:endsAtDestination :scrabster ;
+    transit:startsAtTimeInstance "2025-11-11T07:40:00Z"^^xsd:dateTimeStamp ; transit:endsAtTimeInstance "2025-11-11T10:55:00Z"^^xsd:dateTimeStamp ;
+    transit:isOnTime true ;
+    transit:hasPayload :consignment , :otherTruckPayload ; transit:carries :leg2 ;
+    transit:hasEnergyAmount :eDieselTruck1 ; transit:hasDistanceAmount :dTruck1 ; transit:hasOccupancy :lfTruck .
+:otherTruckPayload a owl:NamedIndividual , transit:Payload ; rdfs:label "pharmacy stock for Kirkwall"@en ; transit:hasMass :mOtherTruck ; iof:hasRole :otherTruckRole .
+:otherTruckRole a owl:NamedIndividual , transit:PayloadRole .
+:mOtherTruck a owl:NamedIndividual , transit:MassAmount ; transit:hasNumericalValue "1320.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM .
+:dTruck1 a owl:NamedIndividual , transit:DistanceAmount ; transit:hasNumericalValue "181.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloM .
+:lfTruck a owl:NamedIndividual , transit:LoadFactor ; transit:hasNumericalValue "0.45"^^xsd:double .
+
+:ferryRun a owl:NamedIndividual , transit:VehicleRun ; rdfs:label "MV Hamnavoe 13:15 sailing, Scrabster to Stromness"@en ;
+    transit:operatedByVehicle :ferry ; transit:realisesService :ferryService ;
+    transit:departsAtOrigin :scrabster ; transit:passesBy :pentlandFirth ; transit:endsAtDestination :stromness ;
+    transit:startsAtTimeInstance "2025-11-11T13:40:00Z"^^xsd:dateTimeStamp ; transit:endsAtTimeInstance "2025-11-11T15:10:00Z"^^xsd:dateTimeStamp ;
+    transit:isOnTime false ;
+    transit:hasPayload :consignment , :otherTruckPayload , :truckA , :otherFerryPayload ; transit:carries :leg3 , :truckLegOnFerry ;
+    transit:hasEnergyAmount :eMgoFerry ; transit:hasDistanceAmount :dFerry ; transit:hasOccupancy :lfFerry .
+:truckMass a owl:NamedIndividual , transit:MassAmount ; transit:hasNumericalValue "7400.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM .
+:otherFerryPayload a owl:NamedIndividual , transit:Payload ; rdfs:label "other vehicles and freight aboard"@en ; transit:hasMass :mOtherFerry ; iof:hasRole :otherFerryRole .
+:otherFerryRole a owl:NamedIndividual , transit:PayloadRole .
+:mOtherFerry a owl:NamedIndividual , transit:MassAmount ; transit:hasNumericalValue "61800.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM .
+:dFerry a owl:NamedIndividual , transit:DistanceAmount ; transit:hasNumericalValue "47.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloM .
+:lfFerry a owl:NamedIndividual , transit:LoadFactor ; transit:hasNumericalValue "0.58"^^xsd:double .
+:ferryDelay a owl:NamedIndividual , transit:Delay ; rdfs:label "25 minutes late, weather in the Pentland Firth"@en ; transit:disrupts :ferryRun .
+
+:truckRun2 a owl:NamedIndividual , transit:VehicleRun ; rdfs:label "truck run, Stromness to Kirkwall Airport"@en ;
+    transit:operatedByVehicle :truckA ;
+    transit:departsAtOrigin :stromness ; transit:passesBy :a965 ; transit:endsAtDestination :kirkwallAirport ;
+    transit:startsAtTimeInstance "2025-11-11T15:40:00Z"^^xsd:dateTimeStamp ; transit:endsAtTimeInstance "2025-11-11T16:25:00Z"^^xsd:dateTimeStamp ;
+    transit:isOnTime false ;
+    transit:hasPayload :consignment , :otherTruckPayload ; transit:carries :leg4 ;
+    transit:hasEnergyAmount :eDieselTruck2 ; transit:hasDistanceAmount :dTruck2 ; transit:hasOccupancy :lfTruck .
+:dTruck2 a owl:NamedIndividual , transit:DistanceAmount ; transit:hasNumericalValue "26.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloM .
+
+:flightRun a owl:NamedIndividual , transit:VehicleRun ; rdfs:label "flight LM411, Kirkwall to North Ronaldsay"@en ;
+    transit:operatedByVehicle :aircraft ; transit:realisesService :flightService ;
+    transit:departsAtOrigin :kirkwallAirport ; transit:passesBy :kirkwallAirway ; transit:endsAtDestination :northRonaldsayAirfield ;
+    transit:startsAtTimeInstance "2025-11-12T09:42:00Z"^^xsd:dateTimeStamp ; transit:endsAtTimeInstance "2025-11-12T09:59:00Z"^^xsd:dateTimeStamp ;
+    transit:isOnTime true ;
+    transit:hasPayload :consignment , :otherAirPayload ; transit:carries :leg5 ;
+    transit:hasEnergyAmount :eAircraftCharge ; transit:hasDistanceAmount :dFlight ; transit:hasOccupancy :lfFlight .
+:otherAirPayload a owl:NamedIndividual , transit:Payload ; rdfs:label "mail and passengers' luggage"@en ; transit:hasMass :mOtherAir ; iof:hasRole :otherAirRole .
+:otherAirRole a owl:NamedIndividual , transit:PayloadRole .
+:mOtherAir a owl:NamedIndividual , transit:MassAmount ; transit:hasNumericalValue "135.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM .
+:dFlight a owl:NamedIndividual , transit:DistanceAmount ; transit:hasNumericalValue "56.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloM .
+:lfFlight a owl:NamedIndividual , transit:LoadFactor ; transit:hasNumericalValue "0.7"^^xsd:double .
+
+:vanRun a owl:NamedIndividual , transit:VehicleRun ; rdfs:label "van run, airfield to surgery"@en ;
+    transit:operatedByVehicle :van ;
+    transit:departsAtOrigin :northRonaldsayAirfield ; transit:passesBy :islandRoad ; transit:endsAtDestination :surgeryBuilding ;
+    transit:startsAtTimeInstance "2025-11-12T10:10:00Z"^^xsd:dateTimeStamp ; transit:endsAtTimeInstance "2025-11-12T10:24:00Z"^^xsd:dateTimeStamp ;
+    transit:isOnTime true ;
+    transit:hasPayload :consignment ; transit:carries :leg6 ;
+    transit:hasEnergyAmount :eVanCharge ; transit:hasDistanceAmount :dVan ; transit:hasOccupancy :lfVan .
+:dVan a owl:NamedIndividual , transit:DistanceAmount ; transit:hasNumericalValue "6.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloM .
+:lfVan a owl:NamedIndividual , transit:LoadFactor ; transit:hasNumericalValue "0.3"^^xsd:double .
+
+# the truck's own mass, used when it is payload of the ferry
+:truckA transit:hasMass :truckMass .
+
+#################################################################
+#    The consignment's journey: six legs carried by the six runs
+#################################################################
+:leg1 a owl:NamedIndividual , freight:ConsignmentLeg ; rdfs:label "rail leg"@en ; transit:hasPayload :consignment ; transit:carriedBy :trainRun ; transit:operatedByVehicle :train ; transit:departsAtOrigin :dirft ; transit:endsAtDestination :invernessTerminal .
+:leg2 a owl:NamedIndividual , freight:ConsignmentLeg ; rdfs:label "road leg to Scrabster"@en ; transit:hasPayload :consignment ; transit:carriedBy :truckRun1 ; transit:operatedByVehicle :truckA ; transit:departsAtOrigin :invernessTerminal ; transit:endsAtDestination :scrabster .
+:leg3 a owl:NamedIndividual , freight:ConsignmentLeg ; rdfs:label "ferry leg"@en ; transit:hasPayload :consignment ; transit:carriedBy :ferryRun ; transit:operatedByVehicle :ferry ; transit:departsAtOrigin :scrabster ; transit:endsAtDestination :stromness .
+:truckLegOnFerry a owl:NamedIndividual , transit:TravelLeg ; rdfs:label "the truck's own leg aboard the ferry"@en ; transit:hasParticipantsInMovement :truckA ; transit:carriedBy :ferryRun ; transit:departsAtOrigin :scrabster ; transit:endsAtDestination :stromness .
+:leg4 a owl:NamedIndividual , freight:ConsignmentLeg ; rdfs:label "road leg to Kirkwall Airport"@en ; transit:hasPayload :consignment ; transit:carriedBy :truckRun2 ; transit:operatedByVehicle :truckA ; transit:departsAtOrigin :stromness ; transit:endsAtDestination :kirkwallAirport .
+:leg5 a owl:NamedIndividual , freight:ConsignmentLeg ; rdfs:label "air leg"@en ; transit:hasPayload :consignment ; transit:carriedBy :flightRun ; transit:operatedByVehicle :aircraft ; transit:departsAtOrigin :kirkwallAirport ; transit:endsAtDestination :northRonaldsayAirfield .
+:leg6 a owl:NamedIndividual , freight:ConsignmentLeg ; rdfs:label "last mile"@en ; transit:hasPayload :consignment ; transit:carriedBy :vanRun ; transit:operatedByVehicle :van ; transit:departsAtOrigin :northRonaldsayAirfield ; transit:endsAtDestination :surgeryBuilding .
+
+:journey a owl:NamedIndividual , freight:FreightJourney ; rdfs:label "vaccines, DIRFT to North Ronaldsay surgery"@en ;
+    transit:hasPayload :consignment ; transit:hasTravelLeg :leg1 , :leg2 , :leg3 , :leg4 , :leg5 , :leg6 ;
+    transit:departsAtOrigin :dirft ; transit:endsAtDestination :surgeryBuilding .
+
+# transshipments and handling between the legs
+:pickup a owl:NamedIndividual , freight:Pickup ; freight:handlesPayload :consignment ; obo:BFO_0000066 :dirftDock .
+:loadingTrain a owl:NamedIndividual , freight:Loading ; freight:handlesPayload :consignment ; freight:loadsOnto :train ; obo:BFO_0000066 :dirft .
+:liftInverness a owl:NamedIndividual , transit:Transshipment ; rdfs:label "container lift, wagon to truck"@en ; obo:BFO_0000066 :invernessTerminal ; transit:transfersPayload :consignment ; transit:followsTravelLeg :leg1 ; transit:precedesTravelLeg :leg2 .
+:roroScrabster a owl:NamedIndividual , transit:Transshipment ; rdfs:label "truck drives aboard at Scrabster"@en ; obo:BFO_0000066 :scrabster ; transit:transfersPayload :consignment ; transit:followsTravelLeg :leg2 ; transit:precedesTravelLeg :leg3 .
+:roroStromness a owl:NamedIndividual , transit:Transshipment ; rdfs:label "truck drives off at Stromness"@en ; obo:BFO_0000066 :stromness ; transit:transfersPayload :consignment ; transit:followsTravelLeg :leg3 ; transit:precedesTravelLeg :leg4 .
+:unloadingKirkwall a owl:NamedIndividual , freight:Unloading ; freight:handlesPayload :consignment ; freight:unloadsFrom :truckA ; obo:BFO_0000066 :kirkwallCargoShed .
+:screening a owl:NamedIndividual , freight:Inspection ; rdfs:label "security screening"@en ; freight:handlesPayload :consignment ; obo:BFO_0000066 :kirkwallCargoShed .
+:coldStorage a owl:NamedIndividual , freight:Storage ; rdfs:label "overnight in the cold store"@en ; freight:handlesPayload :consignment ; obo:BFO_0000066 :kirkwallColdStore ;
+    transit:startsAtTimeInstance "2025-11-11T16:40:00Z"^^xsd:dateTimeStamp ; transit:endsAtTimeInstance "2025-11-12T09:05:00Z"^^xsd:dateTimeStamp .
+:transferKirkwall a owl:NamedIndividual , transit:Transshipment ; rdfs:label "truck to aircraft at Kirkwall"@en ; obo:BFO_0000066 :kirkwallAirport ; transit:transfersPayload :consignment ; transit:followsTravelLeg :leg4 ; transit:precedesTravelLeg :leg5 .
+:transferNorthRonaldsay a owl:NamedIndividual , transit:Transshipment ; rdfs:label "aircraft to van at North Ronaldsay"@en ; obo:BFO_0000066 :northRonaldsayAirfield ; transit:transfersPayload :consignment ; transit:followsTravelLeg :leg5 ; transit:precedesTravelLeg :leg6 .
+:delivery a owl:NamedIndividual , freight:Delivery ; freight:handlesPayload :consignment ; obo:BFO_0000066 :surgeryBuilding .
+
+#################################################################
+#    Emissions: one emission process per run, two scope assignments each
+#################################################################
+:co2 a owl:NamedIndividual , transit:CarbonDioxide ; rdfs:label "carbon dioxide"@en .
+
+:epTrain a owl:NamedIndividual , transit:EmissionProcess ; rdfs:label "emissions of the train run"@en ; obo:BFO_0000132 :trainRun ;
+    transit:hasEmitter :train ; transit:hasEmission :emTrain .
+:emTrain a owl:NamedIndividual , transit:GreenhouseGasEmission ; transit:hasSubstance :co2 ; transit:hasMass :mEmTrain .
+:mEmTrain a owl:NamedIndividual , transit:MassAmount ; rdfs:label "2380 kWh x 0.207 + 915 L x 2.68"@en ; transit:hasNumericalValue "2944.9"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM .
+:scopeTrainDrs a owl:NamedIndividual , transit:EmissionScopeAssignment ; iof:isAbout :epTrain ; transit:hasGHGProtocolScope transit:Scope1 ; transit:hasReportingOrganization :drs .
+:scopeTrainNhs a owl:NamedIndividual , transit:EmissionScopeAssignment ; iof:isAbout :epTrain ; transit:hasGHGProtocolScope transit:Scope3 ; transit:hasReportingOrganization :nhs .
+
+:epTruck1 a owl:NamedIndividual , transit:EmissionProcess ; rdfs:label "emissions of the truck run to Scrabster"@en ; obo:BFO_0000132 :truckRun1 ;
+    transit:hasEmitter :truckA ; transit:hasEmission :emTruck1 .
+:emTruck1 a owl:NamedIndividual , transit:GreenhouseGasEmission ; transit:hasSubstance :co2 ; transit:hasMass :mEmTruck1 .
+:mEmTruck1 a owl:NamedIndividual , transit:MassAmount ; transit:hasNumericalValue "126.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM .
+:scopeTruck1Haulier a owl:NamedIndividual , transit:EmissionScopeAssignment ; iof:isAbout :epTruck1 ; transit:hasGHGProtocolScope transit:Scope1 ; transit:hasReportingOrganization :haulier .
+:scopeTruck1Nhs a owl:NamedIndividual , transit:EmissionScopeAssignment ; iof:isAbout :epTruck1 ; transit:hasGHGProtocolScope transit:Scope3 ; transit:hasReportingOrganization :nhs .
+
+:epFerry a owl:NamedIndividual , transit:EmissionProcess ; rdfs:label "emissions of the sailing"@en ; obo:BFO_0000132 :ferryRun ;
+    transit:hasEmitter :ferry ; transit:hasEmission :emFerry .
+:emFerry a owl:NamedIndividual , transit:GreenhouseGasEmission ; transit:hasSubstance :co2 ; transit:hasMass :mEmFerry .
+:mEmFerry a owl:NamedIndividual , transit:MassAmount ; transit:hasNumericalValue "3787.8"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM .
+:scopeFerryNorthlink a owl:NamedIndividual , transit:EmissionScopeAssignment ; iof:isAbout :epFerry ; transit:hasGHGProtocolScope transit:Scope1 ; transit:hasReportingOrganization :northlink .
+:scopeFerryNhs a owl:NamedIndividual , transit:EmissionScopeAssignment ; iof:isAbout :epFerry ; transit:hasGHGProtocolScope transit:Scope3 ; transit:hasReportingOrganization :nhs .
+
+:epTruck2 a owl:NamedIndividual , transit:EmissionProcess ; rdfs:label "emissions of the truck run to the airport"@en ; obo:BFO_0000132 :truckRun2 ;
+    transit:hasEmitter :truckA ; transit:hasEmission :emTruck2 .
+:emTruck2 a owl:NamedIndividual , transit:GreenhouseGasEmission ; transit:hasSubstance :co2 ; transit:hasMass :mEmTruck2 .
+:mEmTruck2 a owl:NamedIndividual , transit:MassAmount ; transit:hasNumericalValue "28.1"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM .
+:scopeTruck2Haulier a owl:NamedIndividual , transit:EmissionScopeAssignment ; iof:isAbout :epTruck2 ; transit:hasGHGProtocolScope transit:Scope1 ; transit:hasReportingOrganization :haulier .
+:scopeTruck2Nhs a owl:NamedIndividual , transit:EmissionScopeAssignment ; iof:isAbout :epTruck2 ; transit:hasGHGProtocolScope transit:Scope3 ; transit:hasReportingOrganization :nhs .
+
+# electric legs: no tailpipe emission; the charged electricity is scope 2 for the
+# operator. Location-based (UK grid) and market-based (Orkney wind) masses both given.
+:epFlight a owl:NamedIndividual , transit:EmissionProcess ; rdfs:label "upstream emissions of the electricity charged for the flight"@en ; obo:BFO_0000132 :flightRun ;
+    transit:hasEmitter :aircraft ; transit:hasEmission :emFlight .
+:emFlight a owl:NamedIndividual , transit:GreenhouseGasEmission ; transit:hasSubstance :co2 ; transit:hasMass :mEmFlightLocation , :mEmFlightMarket .
+:mEmFlightLocation a owl:NamedIndividual , transit:MassAmount ; rdfs:label "64 kWh x 0.207, location-based"@en ; transit:hasNumericalValue "13.2"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM ; transit:hasEmissionFactorBasis transit:LocationBased .
+:mEmFlightMarket a owl:NamedIndividual , transit:MassAmount ; rdfs:label "64 kWh x 0.0, market-based (wind PPA)"@en ; transit:hasNumericalValue "0.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM ; transit:hasEmissionFactorBasis transit:MarketBased .
+:scopeFlightLoganair a owl:NamedIndividual , transit:EmissionScopeAssignment ; iof:isAbout :epFlight ; transit:hasGHGProtocolScope transit:Scope2 ; transit:hasReportingOrganization :loganair .
+:scopeFlightNhs a owl:NamedIndividual , transit:EmissionScopeAssignment ; iof:isAbout :epFlight ; transit:hasGHGProtocolScope transit:Scope3 ; transit:hasReportingOrganization :nhs .
+
+:epVan a owl:NamedIndividual , transit:EmissionProcess ; rdfs:label "upstream emissions of the electricity charged for the van"@en ; obo:BFO_0000132 :vanRun ;
+    transit:hasEmitter :van ; transit:hasEmission :emVan .
+:emVan a owl:NamedIndividual , transit:GreenhouseGasEmission ; transit:hasSubstance :co2 ; transit:hasMass :mEmVanLocation , :mEmVanMarket .
+:mEmVanLocation a owl:NamedIndividual , transit:MassAmount ; transit:hasNumericalValue "0.66"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM ; transit:hasEmissionFactorBasis transit:LocationBased .
+:mEmVanMarket a owl:NamedIndividual , transit:MassAmount ; transit:hasNumericalValue "0.0"^^xsd:double ; transit:hasMeasurementUnit unit:KiloGM ; transit:hasEmissionFactorBasis transit:MarketBased .
+:scopeVanCourier a owl:NamedIndividual , transit:EmissionScopeAssignment ; iof:isAbout :epVan ; transit:hasGHGProtocolScope transit:Scope2 ; transit:hasReportingOrganization :courier .
+:scopeVanNhs a owl:NamedIndividual , transit:EmissionScopeAssignment ; iof:isAbout :epVan ; transit:hasGHGProtocolScope transit:Scope3 ; transit:hasReportingOrganization :nhs .

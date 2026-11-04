@@ -11,7 +11,7 @@
 
 <https://www.cranfield.ac.uk/transit/maritime> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/maritime/2025-11> ;
-    owl:versionInfo "0.6.0" ;
+    owl:versionInfo "0.7.0" ;
     owl:imports <https://www.cranfield.ac.uk/transit/core> ;
     rdfs:label "TransiT Maritime Module"@en ;
     dcterms:license <https://opensource.org/licenses/MIT> ;
@@ -69,6 +69,12 @@
     rdfs:label "Seaport"@en ;
     iof-av:synonym "harbour port"@en ;
     iof-av:naturalLanguageDefinition "A terminal on a body of water at which ships berth and at which passengers and payload are transferred to and from ships. Replaces the earlier class HarborPort."@en .
+
+:Berth a owl:Class ;
+    rdfs:subClassOf transit:Stop ,
+        [ a owl:Restriction ; owl:onProperty obo:BFO_0000176 ; owl:someValuesFrom :Seaport ] ;
+    rdfs:label "Berth"@en ;
+    iof-av:naturalLanguageDefinition "A stop that is part of a seaport at which one ship moors to load and unload."@en .
 
 #################################################################
 #    Movements

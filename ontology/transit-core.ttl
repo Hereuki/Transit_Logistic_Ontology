@@ -21,7 +21,7 @@
     rdfs:comment "Classes annotated with iof-av:adaptedFrom an IES4 IRI are TransiT's own terms placed under BFO and IOF Core; IES4 is a 4D ontology and is not imported. Extension points for mode modules: Vehicle, TravelLeg, Infrastructure, TransportWay, TransferNode, Terminal, the TransportMode individuals and the hasTransportMode property."@en ;
     owl:imports <https://spec.industrialontologies.org/ontology/202401/core/Core/> ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/core/2025-11> ;
-    owl:versionInfo "0.6.0" .
+    owl:versionInfo "0.7.0" .
 
 :Byproduct a owl:Class ;
     rdfs:label "Byproduct"@en ;
@@ -101,7 +101,7 @@
 
 :ChargingPoint a owl:Class ;
     rdfs:label "Charging Point"@en ;
-    rdfs:comment """A charging station can have one or multilpe charging point, and a charging point have 1+charger.\r\r\r
+    rdfs:comment """A charging station can have one or multilpe charging point, and a charging point have 1+charger.\r\r\r\r
 Each charging point belongs to a specific energy provider, e.g. tesla, total""" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:onProperty iof:hasComponentPartAtSomeTime ;
@@ -109,6 +109,15 @@ Each charging point belongs to a specific energy provider, e.g. tesla, total""" 
         iof:MaterialArtifact ;
     iof-av:naturalLanguageDefinition "A material artifact, installed at a charging station or elsewhere, that holds one or more energy chargers at a designated spot where a vehicle or device can be charged."@en,
         "A site that serves as a designated location where one or more chargers are installed to provide energy to electric or fuel-powered vehicles or devices."@en .
+
+:ChargingSession a owl:Class ;
+    rdfs:label "Charging Session"@en ;
+    rdfs:subClassOf :ElectricitySupply ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( :ElectricitySupply [ a owl:Restriction ;
+                        owl:onProperty :suppliedBy ;
+                        owl:someValuesFrom :EnergyCharger ] ) ] ;
+    iof-av:naturalLanguageDefinition "An electricity supply delivered through an energy charger to a vehicle or device, from plug-in to unplug, with its energy amount."@en .
 
 :ChargingStation a owl:Class ;
     rdfs:label "Charging Station"@en ;
@@ -140,6 +149,14 @@ Each charging point belongs to a specific energy provider, e.g. tesla, total""" 
     rdfs:subClassOf :InherentProcess ;
     iof-av:naturalLanguageDefinition "A spontaneous degradation process in which a material, typically a metal, deteriorates due to chemical or electrochemical reactions with its environment. This process occurs unintentionally during the operation or lifespan of equipment or components"@en .
 
+:CrewMember a owl:Class ;
+    rdfs:label "Crew Member"@en ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( iof:Person [ a owl:Restriction ;
+                        owl:onProperty iof:hasRole ;
+                        owl:someValuesFrom :CrewRole ] ) ] ;
+    iof-av:naturalLanguageDefinition "A person who bears a crew role."@en .
+
 :Delay a owl:Class ;
     rdfs:label "Delay"@en ;
     rdfs:subClassOf :Disruption ;
@@ -157,6 +174,15 @@ Each charging point belongs to a specific energy provider, e.g. tesla, total""" 
                         owl:onProperty iof:hasRole ;
                         owl:someValuesFrom :DriverRole ] ) ] ;
     iof-av:naturalLanguageDefinition "A person who bears a driver role, i.e. controls and operates a vehicle."@en .
+
+:ElectricVehicle a owl:Class ;
+    rdfs:label "Electric Vehicle"@en ;
+    rdfs:subClassOf :Vehicle ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( :Vehicle [ a owl:Restriction ;
+                        owl:onProperty :appliesEnergy ;
+                        owl:someValuesFrom :ElectricitySupply ] ) ] ;
+    iof-av:naturalLanguageDefinition "A vehicle that applies an electricity supply, i.e. is powered at least in part by electricity delivered through a charger or a catenary. A bi-mode vehicle is both an electric vehicle and a fuel-burning one."@en .
 
 :ElectricVehicleCharger a owl:Class ;
     rdfs:label "Electric vehicle charger"@en ;
@@ -176,7 +202,7 @@ Each charging point belongs to a specific energy provider, e.g. tesla, total""" 
     owl:disjointWith :EnergyChargerRole ;
     skos:example "A battery being charged in a power system,  a vehicle whose tank is being fueled in a gaz station, a capacitor in an electronic circuit"@en ;
     iof-av:naturalLanguageDefinition "A role assumed by an entity that receives energy."@en ;
-    iof-av:synonym """Powered Device Role\r\r\r
+    iof-av:synonym """Powered Device Role\r\r\r\r
 Receiving device role""" .
 
 :EnergyGenerationProcess a owl:Class ;
@@ -372,6 +398,13 @@ Receiving device role""" .
     rdfs:subPropertyOf :appliesEnergy ;
     iof-av:naturalLanguageDefinition "Relates an energy charger to the energy it delivers to another device or vehicle."@en .
 
+:crews a owl:ObjectProperty ;
+    rdfs:label "crews"@en ;
+    rdfs:domain iof:Person ;
+    rdfs:range :VehicleRun ;
+    rdfs:subPropertyOf :participatesInMovement ;
+    iof-av:naturalLanguageDefinition "Relates a crew member or driver to a vehicle run they operate or serve on."@en .
+
 :documents a owl:ObjectProperty ;
     rdfs:label "documents"@en ;
     rdfs:domain :TransportDocument ;
@@ -393,6 +426,21 @@ Receiving device role""" .
     rdfs:range iof:Agent ;
     rdfs:subPropertyOf obo:BFO_0000057 ;
     iof-av:naturalLanguageDefinition "Relates a process to the agent that consumes its output."@en .
+
+:hasDistanceAmount a owl:ObjectProperty ;
+    rdfs:label "has distance amount"@en ;
+    rdfs:domain :Movement ;
+    rdfs:range :DistanceAmount ;
+    rdfs:subPropertyOf :hasMeasuredDimensionValueAtSomeTime ;
+    iof-av:naturalLanguageDefinition "Relates a movement to a value expression of the distance it covers."@en .
+
+:hasEmissionFactor a owl:ObjectProperty ;
+    rdfs:label "has emission factor"@en ;
+    rdfs:domain [ a owl:Class ;
+            owl:unionOf ( :Fuel :ElectricitySupply :Movement ) ] ;
+    rdfs:range :EmissionFactor ;
+    rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ;
+    iof-av:naturalLanguageDefinition "Relates a fuel portion, an electricity supply or a movement to the emission factor used to compute its emissions."@en .
 
 :hasMass a owl:ObjectProperty ;
     rdfs:label "has mass"@en ;
@@ -538,13 +586,6 @@ Receiving device role""" .
     rdfs:range :TransportService ;
     iof-av:naturalLanguageDefinition "Relates a vehicle run to the transport service it is an instance of, e.g. a bus run to its line."@en .
 
-:suppliedBy a owl:ObjectProperty ;
-    rdfs:label "supplied by"@en ;
-    rdfs:domain :ElectricitySupply ;
-    rdfs:range :EnergyCharger ;
-    rdfs:subPropertyOf obo:BFO_0000057 ;
-    iof-av:naturalLanguageDefinition "Relates an electricity supply process to the charger through which the charge is delivered."@en .
-
 :suppliesElectricityTo a owl:ObjectProperty ;
     rdfs:label "supplies electricity to"@en ;
     rdfs:domain :ElectricitySupply ;
@@ -586,6 +627,14 @@ Receiving device role""" .
     rdfs:subClassOf iof:AgentRole ;
     iof-av:naturalLanguageDefinition "An agent role held by the party to whom payload is to be delivered."@en .
 
+:CrewRole a owl:Class ;
+    rdfs:label "Crew Role"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty iof:roleOf ;
+            owl:someValuesFrom iof:Person ],
+        :TransportRole ;
+    iof-av:naturalLanguageDefinition "A transport role held by a person who operates or serves aboard a vehicle as part of its crew: a train driver, a ship's master or deckhand, a pilot, a conductor. The driver role is the road-vehicle special case."@en .
+
 :DesignedChargerFunction a owl:Class ;
     rdfs:label "Designed Charger Function"@en ;
     rdfs:subClassOf iof:DesignedFunction ;
@@ -594,6 +643,14 @@ Receiving device role""" .
                         owl:onProperty iof:functionOf ;
                         owl:someValuesFrom :EnergyCharger ] ) ] ;
     iof-av:naturalLanguageDefinition "A function specifically designed to manage the charging process of an energy charger system.."@en .
+
+:DistanceAmount a owl:Class ;
+    rdfs:label "Distance Amount"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :hasMeasurementUnit ;
+            owl:someValuesFrom qudt:Unit ],
+        iof:ValueExpression ;
+    iof-av:naturalLanguageDefinition "A value expression of a distance, with a numerical value and a unit such as kilometre."@en .
 
 :DriverRole a owl:Class ;
     rdfs:label "Driver Role"@en ;
@@ -610,6 +667,18 @@ Receiving device role""" .
     rdfs:subClassOf :EnergyCharger ;
     owl:disjointWith :FuelDispenser ;
     iof-av:naturalLanguageDefinition "An energy charger through which electricity supply processes deliver charge to a receiving device or storage unit."@en .
+
+:EmissionFactor a owl:Class ;
+    rdfs:label "Emission Factor"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :hasMeasurementUnit ;
+            owl:someValuesFrom qudt:Unit ],
+        [ a owl:Restriction ;
+            owl:onClass :EmissionFactorBasis ;
+            owl:onProperty :hasEmissionFactorBasis ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ],
+        iof:ValueExpression ;
+    iof-av:naturalLanguageDefinition "A value expression of the mass of greenhouse gas (in CO2 equivalent) released per unit of energy carrier used or per unit of transport work performed, e.g. kilograms per litre of diesel, per kilowatt-hour of electricity, or per tonne-kilometre. For electricity the basis states whether the factor is the location-based grid average or the market-based factor of the contracted supply."@en .
 
 :EmissionUnitProcess a owl:Class ;
     rdfs:label "EmissionLeg"@en ;
@@ -683,9 +752,17 @@ Receiving device role""" .
     rdfs:subClassOf iof:MeasuredValueExpression ;
     iof-av:naturalLanguageDefinition "A measured value expression of the ratio between the occupancy of a vehicle run and its capacity, between 0 and 1."@en .
 
+:LocationBased a owl:NamedIndividual,
+        :EmissionFactorBasis ;
+    rdfs:label "location-based"@en .
+
 :MaritimeMode a owl:NamedIndividual,
         :TransportMode ;
     rdfs:label "maritime mode"@en .
+
+:MarketBased a owl:NamedIndividual,
+        :EmissionFactorBasis ;
+    rdfs:label "market-based"@en .
 
 :MassAmount a owl:Class ;
     rdfs:label "Mass Amount"@en ;
@@ -732,22 +809,22 @@ Receiving device role""" .
 :Scope1 a owl:NamedIndividual,
         :GHGProtocolScope ;
     rdfs:label "scope 1"@en ;
-    iof-av:naturalLanguageDefinition """Scope 1 includes all direct emissions that are generated from sources that are directly owned or controlled by an organisation. These include the use of natural gas at local or international sites, using liquid fuels to run a fleet of owned vehicles, or gases leaking from air-conditioning and refrigeration units.  \r\r\r
-\r\r\r
+    iof-av:naturalLanguageDefinition """Scope 1 includes all direct emissions that are generated from sources that are directly owned or controlled by an organisation. These include the use of natural gas at local or international sites, using liquid fuels to run a fleet of owned vehicles, or gases leaking from air-conditioning and refrigeration units.  \r\r\r\r
+\r\r\r\r
 Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/"""@en .
 
 :Scope2 a owl:NamedIndividual,
         :GHGProtocolScope ;
     rdfs:label "scope 2"@en ;
-    iof-av:naturalLanguageDefinition """Scope 2 includes all indirect emissions from the generation of the electricity purchased and used by an organisation at local or international sites. These emissions can be measured as location-based or market-based. \r\r\r
-\r\r\r
+    iof-av:naturalLanguageDefinition """Scope 2 includes all indirect emissions from the generation of the electricity purchased and used by an organisation at local or international sites. These emissions can be measured as location-based or market-based. \r\r\r\r
+\r\r\r\r
 Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/"""@en .
 
 :Scope3 a owl:NamedIndividual,
         :GHGProtocolScope ;
     rdfs:label "scope 3"@en ;
-    iof-av:naturalLanguageDefinition """Scope 3 includes all indirect emissions that occur in an organisation’s value chain – so activities that they do not own or control. These are usually the greatest share of an organisation’s carbon footprint, covering emissions associated with the following 15 categories. There are also additional categories you can measure, such as home working emissions.  \r\r\r
-\r\r\r
+    iof-av:naturalLanguageDefinition """Scope 3 includes all indirect emissions that occur in an organisation’s value chain – so activities that they do not own or control. These are usually the greatest share of an organisation’s carbon footprint, covering emissions associated with the following 15 categories. There are also additional categories you can measure, such as home working emissions.  \r\r\r\r
+\r\r\r\r
 Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/"""@en .
 
 :ShipperRole a owl:Class ;
@@ -862,6 +939,13 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     rdfs:subPropertyOf :hasMeasurementUnit ;
     iof-av:naturalLanguageDefinition "Relates a monetary amount to its currency, a QUDT currency unit."@en .
 
+:hasEmissionFactorBasis a owl:ObjectProperty ;
+    rdfs:label "has emission factor basis"@en ;
+    rdfs:domain iof:ValueExpression ;
+    rdfs:range :EmissionFactorBasis ;
+    rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ;
+    iof-av:naturalLanguageDefinition "Relates an emission factor, or a value derived with one such as an emission mass, to its basis: location-based or market-based."@en .
+
 :hasEnergyAmount a owl:ObjectProperty ;
     rdfs:label "has energy amount"@en ;
     rdfs:domain [ a owl:Class ;
@@ -941,6 +1025,13 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     rdfs:range xsd:dateTimeStamp ;
     iof-av:naturalLanguageDefinition "The time stamp at which a process starts."@en .
 
+:suppliedBy a owl:ObjectProperty ;
+    rdfs:label "supplied by"@en ;
+    rdfs:domain :ElectricitySupply ;
+    rdfs:range :EnergyCharger ;
+    rdfs:subPropertyOf obo:BFO_0000057 ;
+    iof-av:naturalLanguageDefinition "Relates an electricity supply process to the charger through which the charge is delivered."@en .
+
 :transfersPayload a owl:ObjectProperty ;
     rdfs:label "transfers payload"@en ;
     rdfs:domain :Transshipment ;
@@ -1004,11 +1095,6 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     rdfs:label "Energy Role"@en ;
     rdfs:subClassOf obo:BFO_0000023 ;
     iof-av:naturalLanguageDefinition "A role associated with the transfer, storage or conversion of energy within a system or between systems."@en .
-
-:Fuel a owl:Class ;
-    rdfs:label "Fuel"@en ;
-    rdfs:subClassOf iof:MaterialResource ;
-    iof-av:naturalLanguageDefinition "An energy carrier that is a material resource releasing energy through combustion or another chemical reaction, e.g. diesel, kerosene, hydrogen."@en .
 
 :FuelDispenser a owl:Class ;
     rdfs:label "Fuel Adder"@en ;
@@ -1089,11 +1175,6 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     rdfs:subPropertyOf :hasParticipantInEmission ;
     iof-av:naturalLanguageDefinition "Relates an emission process to the material entity that releases the emission, e.g. a vehicle or a power plant."@en .
 
-:hasMeasuredDimensionValueAtSomeTime a owl:ObjectProperty ;
-    rdfs:label "has Measured Dimension Value At Some Time"@en ;
-    rdfs:subPropertyOf iof:hasMeasuredValueAtSomeTime ;
-    iof-av:naturalLanguageDefinition "Relates an entity to a value expression of a measured dimension, e.g. length or weight."@en .
-
 :hasParticipantInEmission a owl:ObjectProperty ;
     rdfs:label "has Participant In Emission"@en ;
     rdfs:domain :EmissionProcess ;
@@ -1109,25 +1190,15 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     rdfs:subPropertyOf iof:hasValueExpressionAtSomeTime ;
     iof-av:naturalLanguageDefinition "Relates a vehicle, travel leg or infrastructure to the transport mode it belongs to. A travel leg has exactly one mode; a transfer node may have several."@en .
 
-:participatesInMovement a owl:ObjectProperty ;
-    rdfs:label "participates In Movement"@en ;
-    rdfs:range :Movement ;
-    rdfs:subPropertyOf obo:BFO_0000056 ;
-    iof-av:naturalLanguageDefinition "Relates a material entity to a movement it participates in. Inverse of has participants in movement."@en .
-
-:ElectricitySupply a owl:Class ;
-    rdfs:label "Electricity"@en,
-        "Electricity Supply"@en ;
-    rdfs:subClassOf [ a owl:Restriction ;
-            owl:onProperty :hasEnergyAmount ;
-            owl:someValuesFrom :EnergyAmount ],
-        obo:BFO_0000015 ;
-    iof-av:naturalLanguageDefinition "A process in which electric charge flows through a conductor from a source, usually via an energy charger, to a device or vehicle, delivering an amount of energy. Replaces the earlier class Electricity, which modelled electricity as a material resource; a supply episode (e.g. the 30 kWh delivered at one charging session) is a process, not a portion of matter."@en .
-
 :EnergyChargerRole a owl:Class ;
     rdfs:label "Energy Charger Role"@en ;
     rdfs:subClassOf :EnergyTransferRole ;
     iof-av:naturalLanguageDefinition "A role assigned to an entity responsible for supplying energy to another entity."@en .
+
+:Fuel a owl:Class ;
+    rdfs:label "Fuel"@en ;
+    rdfs:subClassOf iof:MaterialResource ;
+    iof-av:naturalLanguageDefinition "An energy carrier that is a material resource releasing energy through combustion or another chemical reaction, e.g. diesel, kerosene, hydrogen."@en .
 
 :GreenhouseGas a owl:Class ;
     rdfs:label "GHG"@en ;
@@ -1167,12 +1238,6 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
         iof:PlanSpecification ;
     iof-av:naturalLanguageDefinition "A plan specification that prescribes the planned start and end times of one or more movements or stop calls. A timetable and a time slot are schedules."@en .
 
-:TransportRole a owl:Class ;
-    rdfs:label "Transport Role"@en ;
-    rdfs:comment "This is created to annotate person and goods in transit"@en ;
-    rdfs:subClassOf obo:BFO_0000023 ;
-    iof-av:naturalLanguageDefinition "A role associated with entities participating in the movement of goods, people, or other materials."@en .
-
 :Transshipment a owl:Class ;
     rdfs:label "Transshipment"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
@@ -1191,12 +1256,6 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     owl:disjointWith :Movement ;
     iof-av:naturalLanguageDefinition "A planned process at a transfer node in which payload or passengers are transferred from the vehicle of one travel leg to the vehicle of the next. When the two legs have different transport modes it is an intermodal transshipment."@en .
 
-:appliesEnergy a owl:ObjectProperty ;
-    rdfs:label "applies Energy"@en ;
-    rdfs:domain :Device ;
-    rdfs:range :EnergyCarrier ;
-    iof-av:naturalLanguageDefinition "Relates a device to the energy carrier it consumes (uses energy) or delivers (charges energy): a fuel it burns or holds, or an electricity supply it participates in."@en .
-
 :departsAtOrigin a owl:ObjectProperty ;
     rdfs:label "departs At Origin"@en ;
     rdfs:domain [ a owl:Class ;
@@ -1212,6 +1271,11 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     rdfs:range [ a owl:Class ;
             owl:unionOf ( :Location :Infrastructure ) ] ;
     iof-av:naturalLanguageDefinition "Relates a movement or a route to the location or infrastructure at which it ends."@en .
+
+:hasMeasuredDimensionValueAtSomeTime a owl:ObjectProperty ;
+    rdfs:label "has Measured Dimension Value At Some Time"@en ;
+    rdfs:subPropertyOf iof:hasMeasuredValueAtSomeTime ;
+    iof-av:naturalLanguageDefinition "Relates an entity to a value expression of a measured dimension, e.g. length or weight."@en .
 
 :hasParticipantsInMovement a owl:ObjectProperty ;
     rdfs:label "has Participants In Movement"@en ;
@@ -1235,6 +1299,12 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     owl:inverseOf :isVehicleInMovement ;
     iof-av:naturalLanguageDefinition "Relates a movement to the vehicle that performs it. A travel leg is operated by exactly one vehicle."@en .
 
+:participatesInMovement a owl:ObjectProperty ;
+    rdfs:label "participates In Movement"@en ;
+    rdfs:range :Movement ;
+    rdfs:subPropertyOf obo:BFO_0000056 ;
+    iof-av:naturalLanguageDefinition "Relates a material entity to a movement it participates in. Inverse of has participants in movement."@en .
+
 :Disruption a owl:Class ;
     rdfs:label "Disruption"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
@@ -1250,6 +1320,11 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
             owl:someValuesFrom iof:ValueExpression ],
         :MaterialResidual ;
     iof-av:naturalLanguageDefinition "A material residual, gaseous or particulate, released into the environment by an emission process."@en .
+
+:EmissionFactorBasis a owl:Class ;
+    rdfs:label "Emission Factor Basis"@en ;
+    rdfs:subClassOf iof:ValueExpression ;
+    iof-av:naturalLanguageDefinition "A value expression stating how an emission factor was derived: location-based (average of the grid the energy was drawn from) or market-based (the contracted supply, e.g. a wind power purchase agreement)."@en .
 
 :EnergyCarrier a owl:Class ;
     rdfs:label "Energy Carrier"@en ;
@@ -1293,6 +1368,18 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
     rdfs:subClassOf :Infrastructure ;
     iof-av:naturalLanguageDefinition "A Correspondence is a object that functions as a break point or pause location in a journey. Example: bus stop, highway rest zone, charging station"@en,
         "Infrastructure at which travel legs begin, end or connect and where payload or passengers can be transferred between vehicles, e.g. a bus stop, a station, a port. Replaces the earlier class Correspondence."@en .
+
+:TransportRole a owl:Class ;
+    rdfs:label "Transport Role"@en ;
+    rdfs:comment "This is created to annotate person and goods in transit"@en ;
+    rdfs:subClassOf obo:BFO_0000023 ;
+    iof-av:naturalLanguageDefinition "A role associated with entities participating in the movement of goods, people, or other materials."@en .
+
+:appliesEnergy a owl:ObjectProperty ;
+    rdfs:label "applies Energy"@en ;
+    rdfs:domain :Device ;
+    rdfs:range :EnergyCarrier ;
+    iof-av:naturalLanguageDefinition "Relates a device to the energy carrier it consumes (uses energy) or delivers (charges energy): a fuel it burns or holds, or an electricity supply it participates in."@en .
 
 :EmissionProcess a owl:Class ;
     rdfs:label "Emission Process"@en ;
@@ -1341,13 +1428,6 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
         iof:CommercialServiceSpecification ;
     iof-av:naturalLanguageDefinition "A commercial service specification that describes a transport offering of an operator: a bus line with its stops and timetable, a freight service between two terminals, a ride-hailing offer. Vehicle runs are the realisations of a transport service."@en .
 
-:hasMeasurementUnit a owl:ObjectProperty ;
-    rdfs:label "has measurement unit"@en ;
-    rdfs:domain iof:ValueExpression ;
-    rdfs:range qudt:Unit ;
-    rdfs:seeAlso qudt:unit ;
-    iof-av:naturalLanguageDefinition "Relates a value expression to the QUDT unit in which its numerical value is expressed. Replaces the string property hasUnit."@en .
-
 :Device a owl:Class ;
     rdfs:label "Device"@en ;
     rdfs:seeAlso <http://ies.data.gov.uk/ontology/ies4#Device> ;
@@ -1363,10 +1443,34 @@ Source: https://www.compareyourfootprint.com/difference-scope-1-2-3-emissions/""
         iof:DesignSpecification ;
     iof-av:naturalLanguageDefinition "A TransportDesignSpecification is a design specification that prescribes transport systems or vehicles."@en .
 
-qudt:Unit a owl:Class ;
-    rdfs:label "Unit (QUDT)"@en ;
-    rdfs:comment "Declared here so that QUDT unit individuals (http://qudt.org/vocab/unit/, e.g. unit:KiloW-HR, unit:KiloGM, unit:KiloM) can be used without importing the full QUDT ontology."@en ;
-    rdfs:isDefinedBy qudt: .
+:ElectricitySupply a owl:Class ;
+    rdfs:label "Electricity"@en,
+        "Electricity Supply"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :hasEnergyAmount ;
+            owl:someValuesFrom :EnergyAmount ],
+        obo:BFO_0000015 ;
+    iof-av:naturalLanguageDefinition "A process in which electric charge flows through a conductor from a source, usually via an energy charger, to a device or vehicle, delivering an amount of energy. Replaces the earlier class Electricity, which modelled electricity as a material resource; a supply episode (e.g. the 30 kWh delivered at one charging session) is a process, not a portion of matter."@en .
+
+:TransportMode a owl:Class ;
+    rdfs:label "Transport Mode"@en ;
+    rdfs:subClassOf iof:ValueExpression ;
+    iof-av:naturalLanguageDefinition "A value expression that classifies a vehicle, travel leg or piece of infrastructure by the medium it moves on or serves: road, rail, air, water (maritime), or walking for legs on foot."@en .
+
+:hasMeasurementUnit a owl:ObjectProperty ;
+    rdfs:label "has measurement unit"@en ;
+    rdfs:domain iof:ValueExpression ;
+    rdfs:range qudt:Unit ;
+    rdfs:seeAlso qudt:unit ;
+    iof-av:naturalLanguageDefinition "Relates a value expression to the QUDT unit in which its numerical value is expressed. Replaces the string property hasUnit."@en .
+
+:ChargerDesignSpecification a owl:Class ;
+    rdfs:label "Charger Design Specification"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty iof:hasValueExpressionAtSomeTime ;
+            owl:someValuesFrom iof:ValueExpression ],
+        iof:DesignSpecification ;
+    iof-av:naturalLanguageDefinition "A design specification that prescribes an electrical or mechanical characteristic of an energy charger. Replaces the earlier Designed* function classes, whose definitions described specification values rather than functions."@en .
 
 :EnergyCharger a owl:Class ;
     rdfs:label "Energy Charger"@en ;
@@ -1381,18 +1485,10 @@ qudt:Unit a owl:Class ;
                         owl:someValuesFrom :DesignedChargerFunction ] ) ] ;
     iof-av:naturalLanguageDefinition "A device designed to transfer energy from a source to an energy storage system or consuming device, prescribed by charger design specifications (current, voltage, power, connector, protocol)."@en .
 
-:TransportMode a owl:Class ;
-    rdfs:label "Transport Mode"@en ;
-    rdfs:subClassOf iof:ValueExpression ;
-    iof-av:naturalLanguageDefinition "A value expression that classifies a vehicle, travel leg or piece of infrastructure by the medium it moves on or serves: road, rail, air, water (maritime), or walking for legs on foot."@en .
-
-:ChargerDesignSpecification a owl:Class ;
-    rdfs:label "Charger Design Specification"@en ;
-    rdfs:subClassOf [ a owl:Restriction ;
-            owl:onProperty iof:hasValueExpressionAtSomeTime ;
-            owl:someValuesFrom iof:ValueExpression ],
-        iof:DesignSpecification ;
-    iof-av:naturalLanguageDefinition "A design specification that prescribes an electrical or mechanical characteristic of an energy charger. Replaces the earlier Designed* function classes, whose definitions described specification values rather than functions."@en .
+qudt:Unit a owl:Class ;
+    rdfs:label "Unit (QUDT)"@en ;
+    rdfs:comment "Declared here so that QUDT unit individuals (http://qudt.org/vocab/unit/, e.g. unit:KiloW-HR, unit:KiloGM, unit:KiloM) can be used without importing the full QUDT ontology."@en ;
+    rdfs:isDefinedBy qudt: .
 
 :VehicleRun a owl:Class ;
     rdfs:label "Vehicle Run"@en ;
@@ -1409,22 +1505,12 @@ qudt:Unit a owl:Class ;
     iof-av:adaptedFrom "http://ies.data.gov.uk/ontology/ies4#Location" ;
     iof-av:naturalLanguageDefinition "A site that is a geographic place specifying a point or an area on the Earth's surface or elsewhere."@en .
 
-:Vehicle a owl:Class ;
-    rdfs:label "Vehicle"@en ;
-    rdfs:seeAlso <http://ies.data.gov.uk/ontology/ies4#Vehicle> ;
-    rdfs:subClassOf [ a owl:Restriction ;
-            owl:onProperty :appliesEnergy ;
-            owl:someValuesFrom :EnergyCarrier ],
-        :Device ;
-    iof-av:adaptedFrom "http://ies.data.gov.uk/ontology/ies4#Vehicle" ;
-    iof-av:naturalLanguageDefinition "A device that is a means of transportation and applies some energy carrier to move. Mode modules add road vehicles, rail vehicles, aircraft and ships."@en .
-
 :TravelLeg a owl:Class ;
     rdfs:label "Travel Leg"@en ;
-    rdfs:comment """A Journey/Transit can consist of multiple travel legs. \r\r\r
-E.g., you go from home to departure airport by car, then take the plane, then from arrival airport to the hotel by taxi. It is one journey with three legs of travel.\r\r\r
-\r\r\r
-TravelLeg is also considered the minimum travel "unit" that is not dividable. Inside a optimal  travelLeg it is a point-to-point relation, there is no pause or switch or change of payload or passenger.\r\r\r
+    rdfs:comment """A Journey/Transit can consist of multiple travel legs. \r\r\r\r
+E.g., you go from home to departure airport by car, then take the plane, then from arrival airport to the hotel by taxi. It is one journey with three legs of travel.\r\r\r\r
+\r\r\r\r
+TravelLeg is also considered the minimum travel "unit" that is not dividable. Inside a optimal  travelLeg it is a point-to-point relation, there is no pause or switch or change of payload or passenger.\r\r\r\r
 This one originates from IES4 TravelLeg"""@en ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
@@ -1462,6 +1548,16 @@ This one originates from IES4 TravelLeg"""@en ;
         obo:BFO_0000040 ;
     iof-av:naturalLanguageDefinition "A man-made material entity, located at some location, that provides the ways, nodes or facilities on which movements take place: roads, railways, waterways, air routes, terminals, stations."@en .
 
+:Vehicle a owl:Class ;
+    rdfs:label "Vehicle"@en ;
+    rdfs:seeAlso <http://ies.data.gov.uk/ontology/ies4#Vehicle> ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :appliesEnergy ;
+            owl:someValuesFrom :EnergyCarrier ],
+        :Device ;
+    iof-av:adaptedFrom "http://ies.data.gov.uk/ontology/ies4#Vehicle" ;
+    iof-av:naturalLanguageDefinition "A device that is a means of transportation and applies some energy carrier to move. Mode modules add road vehicles, rail vehicles, aircraft and ships."@en .
+
 :Movement a owl:Class ;
     rdfs:label "Movement"@en ;
     rdfs:seeAlso <http://ies.data.gov.uk/ontology/ies4#Movement> ;
@@ -1494,4 +1590,7 @@ This one originates from IES4 TravelLeg"""@en ;
 
 [] a owl:AllDifferent ;
     owl:distinctMembers ( :RoadMode :RailMode :AirMode :MaritimeMode :WalkingMode ) .
+
+[] a owl:AllDifferent ;
+    owl:distinctMembers ( :LocationBased :MarketBased ) .
 

@@ -12,7 +12,7 @@
 
 <https://www.cranfield.ac.uk/transit/air-domain> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/air-domain/2025-11> ;
-    owl:versionInfo "0.6.0" ;
+    owl:versionInfo "0.7.0" ;
     owl:imports <https://www.cranfield.ac.uk/transit/air> ,
                 <https://www.cranfield.ac.uk/transit/road> ,
                 <https://www.cranfield.ac.uk/transit/freight> ,

@@ -19,10 +19,10 @@ Standard 4 (IES4)**; they are TransiT's own terms and IES4 is not imported (see
 
 | | |
 |---|---|
-| Version | 0.6.0 (2025-11) |
+| Version | 0.7.0 (2025-11) |
 | Core IRI | `https://www.cranfield.ac.uk/transit/core` (prefix `transit:` = `.../core#`) |
 | Format | Turtle, one file per module under [ontology/](ontology/) |
-| Size | 281 TransiT classes across all modules, 129 of them in the core, plus the 255-class Air Domain Ontology |
+| Size | 291 TransiT classes across all modules, 136 of them in the core, plus the 255-class Air Domain Ontology |
 | Licence | MIT (see [LICENSE](LICENSE)) |
 
 ## Modules
@@ -130,9 +130,11 @@ assessment of the Air Domain Ontology and the open issues are in
 │   ├── rail-road-journey.ttl            A container moved by train, transshipped, delivered by truck
 │   ├── freight-consignments.ttl         Two consignments on one truck run, documents, handling, an empty return
 │   ├── passenger-commute.ttl            A commute by bus and train with an interchange, line, fare and ticket
+│   ├── uk-orkney-vaccines.ttl           Demo: vaccines from Daventry to North Ronaldsay by rail, road, sea and air
 │   └── air-domain-flight.ttl            A flight described in Air Domain Ontology terms only
 ├── tools/
-│   └── validate.py                      Structural checks and HermiT reasoning over all modules
+│   ├── validate.py                      Structural checks and HermiT reasoning over all modules
+│   └── footprint.py                     Carbon footprint of a consignment, allocated from the runs that carried it
 ├── docs/
 │   ├── design-decisions.md              Why the modules look the way they do; renames; open issues
 │   └── figures/                         SVG diagrams for the current version; v0.2/ keeps the original PNGs
@@ -303,7 +305,9 @@ python tools/validate.py --reason             # + consistency and satisfiability
 python tools/validate.py --reason --example examples/rail-road-journey.ttl
 python tools/validate.py --reason --example examples/freight-consignments.ttl
 python tools/validate.py --reason --example examples/passenger-commute.ttl
+python tools/validate.py --reason --example examples/uk-orkney-vaccines.ttl
 python tools/validate.py --reason --example examples/air-domain-flight.ttl
+python tools/footprint.py examples/uk-orkney-vaccines.ttl      # emission allocation, no reasoner needed
 ```
 
 The example forms also classify the individuals of the example. Reasoning needs Python
@@ -333,6 +337,43 @@ SELECT ?cls ?label WHERE { ?cls rdfs:subClassOf* transit:Infrastructure ; rdfs:l
 for row in g.query(q):
     print(row.cls, row.label)
 ```
+
+## Demo: one consignment, four modes, UK
+
+[examples/uk-orkney-vaccines.ttl](examples/uk-orkney-vaccines.ttl) is a complete
+end-to-end scenario with made-up figures. Two roll cages of temperature-controlled
+vaccines (480 kg) go from the NHS distribution centre at Daventry (DIRFT) to the island
+surgery on North Ronaldsay, Orkney:
+
+| # | Leg | Mode | Vehicle and energy | Scheduled | Actual |
+|---|---|---|---|---|---|
+| 1 | DIRFT to Inverness rail terminal | rail | intermodal train, bi-mode locomotive: catenary electricity to Mossend, diesel beyond | 18:30 to 06:05 | 18:34 to 06:12 |
+| 2 | Inverness to Scrabster harbour via the A9, refuelling at a service station | road | diesel truck, driver A | 07:30 to 10:45 | 07:40 to 10:55 |
+| 3 | Scrabster to Stromness | maritime | ro-ro ferry; the truck drives aboard and is itself payload of the sailing | 13:15 to 14:45 | 13:40 to 15:10, delay for weather |
+| 4 | Stromness to Kirkwall Airport | road | same diesel truck | 15:20 to 16:05 | 15:40 to 16:25 |
+| 5 | Kirkwall to North Ronaldsay | air | electric aircraft charged overnight at the airport's apron charger | 09:40 to 09:58 | 09:42 to 09:59 |
+| 6 | Airfield to the surgery | road | electric van topped up at the airfield's community-wind charging point | 10:10 to 10:25 | on time |
+
+Between the legs: pickup at a dock appointment, loading, a container lift at Inverness,
+two ro-ro transshipments, unloading, security screening and an overnight cold store at
+Kirkwall, two airside transfers and the delivery with proof of delivery. Kirkwall Airport
+has a charging station with a 150 kW DC charger, a 22 kW AC charger and a 100 kW aircraft
+charger, each with its design specification; the charging sessions are electricity supply
+processes with start, end and energy amount.
+
+Every run has an emission process with the vehicle as emitter, carbon dioxide as substance
+and a mass derived from the energy amount and an emission factor. The electric legs carry
+two masses, location-based (UK grid) and market-based (Orkney wind), and two scope
+assignments: scope 1 or 2 for the operator of the run, scope 3 for the NHS as shipper.
+
+From the asserted facts the reasoner infers the mode of every run and leg, the intermodal
+terminals (Inverness rail-road, Scrabster and Stromness road-maritime, the two airfields
+air-road) and transshipments, that the journey is a rail-road, road-maritime and air-road
+journey, that the truck is payload of the ferry, that the train, aircraft and van are
+electric vehicles, that every vehicle is a GHG source, and the parties and crew from their
+roles. `tools/footprint.py` then allocates each run's emission to the consignment by its
+share of the run's payload mass and reports the total in kilograms and in grams per
+tonne-kilometre, with both electricity bases. The ferry dominates.
 
 ## Air Domain Ontology
 

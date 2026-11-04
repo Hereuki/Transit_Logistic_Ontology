@@ -13,7 +13,7 @@
 
 <https://www.cranfield.ac.uk/transit/air-rail> a owl:Ontology ;
     owl:versionIRI <https://www.cranfield.ac.uk/transit/air-rail/2025-11> ;
-    owl:versionInfo "0.6.0" ;
+    owl:versionInfo "0.7.0" ;
     owl:imports <https://www.cranfield.ac.uk/transit/air> , <https://www.cranfield.ac.uk/transit/rail> ;
     rdfs:label "TransiT Air-Rail Intersection Module"@en ;
     dcterms:license <https://opensource.org/licenses/MIT> ;

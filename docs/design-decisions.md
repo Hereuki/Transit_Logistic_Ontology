@@ -176,7 +176,21 @@ With the freight module in place the bridge also maps `ad:Consignment`, `ad:Dang
 `usesAirline`, `handledByFreightForwarder` and `usesAirwayBill`. `ad:Flight` is now also a
 `VehicleRun`.
 
-## 10. Known open issues
+## 10. Version 0.7: additions for the end-to-end demo
+
+| Addition | Where | Why |
+|---|---|---|
+| `CrewRole`, `CrewMember`, `crews` | core | train drivers, masters and pilots are not road drivers; `DriverRole` ranges over human-driven road vehicles |
+| `ElectricVehicle` (defined: applies some electricity supply), `ChargingSession` (defined: electricity supply through a charger) | core | lets the reasoner find electric and bi-mode vehicles and charging sessions from the energy data |
+| `EmissionFactor` with `EmissionFactorBasis` (`LocationBased`, `MarketBased`) and `hasEmissionFactor` | core | the figure an emission mass is derived from, and whether electricity is counted at grid average or contracted supply |
+| `DistanceAmount`, `hasDistanceAmount` | core | needed for transport work and per tonne-kilometre figures |
+| `ElectricAircraft`, `AircraftCharger` | air | electrification near the airport |
+| `Berth` | maritime | the stop at which a ship moors |
+| `tools/footprint.py` | tools | allocates each run's emission to a consignment by payload-mass share; works on asserted data without a reasoner |
+
+The demo `examples/uk-orkney-vaccines.ttl` uses all of these. Its figures are invented.
+
+## 11. Known open issues
 
 - The SVG figures are generated with fixed coordinates; they should be checked visually
   after any change to the script.
