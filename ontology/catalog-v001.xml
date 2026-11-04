@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Protégé / OWL API import catalog.
+  Keep this file next to transit.ttl so that the imported ontologies resolve
+  to the local copies in this repository instead of being fetched online.
+-->
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <group id="TransiT local imports" prefer="public" xml:base="">
+
+        <!-- IOF Core (mid-level ontology) -->
+        <uri name="https://spec.industrialontologies.org/ontology/core/Core/" uri="../imports/iof-core.rdf"/>
+        <uri name="https://spec.industrialontologies.org/ontology/202401/core/Core/" uri="../imports/iof-core.rdf"/>
+
+        <!-- IOF Annotation Vocabulary (imported by IOF Core) -->
+        <uri name="https://spec.industrialontologies.org/ontology/core/meta/AnnotationVocabulary/" uri="../imports/iof-annotation-vocabulary.rdf"/>
+        <uri name="https://spec.industrialontologies.org/ontology/202401/core/meta/AnnotationVocabulary/" uri="../imports/iof-annotation-vocabulary.rdf"/>
+
+        <!-- BFO 2020 (top-level ontology, imported by IOF Core) -->
+        <uri name="http://purl.obolibrary.org/obo/bfo.owl" uri="../imports/bfo.owl"/>
+        <uri name="http://purl.obolibrary.org/obo/bfo/2020/bfo.owl" uri="../imports/bfo.owl"/>
+        <uri name="http://purl.obolibrary.org/obo/bfo-temporalized-relations.owl/" uri="../imports/bfo.owl"/>
+    </group>
+</catalog>
