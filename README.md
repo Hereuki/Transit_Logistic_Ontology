@@ -143,6 +143,90 @@ assessment of the Air Domain Ontology and the open issues are in
 The files under `imports/` are unmodified copies of third-party ontologies, kept so the
 ontology loads offline and everyone works against the same versions.
 
+## How the pieces fit together
+
+The diagram shows the core concepts and the properties that connect them. Boxes are
+classes, arrows are object properties (BFO relations are named in words), dotted arrows
+are subclass links. The freight and passenger modules specialise the "what is moved" and
+"movement" groups; the mode modules specialise vehicles, ways and nodes.
+
+```mermaid
+graph LR
+    subgraph moved [What is moved]
+        Payload
+        Consignment -.->|is a| Payload
+        Passenger
+        CargoUnit
+    end
+    subgraph movement [Movement]
+        Journey -->|hasTravelLeg| TravelLeg
+        TravelLeg -->|carriedBy| VehicleRun
+        VehicleRun -.->|is a| TravelLeg
+        Transshipment -->|followsTravelLeg,<br/>precedesTravelLeg| TravelLeg
+        VehicleRun -->|has part| StopCall
+    end
+    subgraph vehicles [Vehicles, operators, services]
+        VehicleRun -->|operatedByVehicle| Vehicle
+        VehicleRun -->|realisesService| TransportService
+        TransportService -->|offeredBy| TransportOperator
+        Vehicle -->|hasTransportMode| TransportMode
+    end
+    subgraph places [Places]
+        Infrastructure -->|located in| Location
+        TransferNode -.->|is a| Infrastructure
+        TransportWay -.->|is a| Infrastructure
+        Stop -.->|is a| TransferNode
+        Terminal -.->|is a| TransferNode
+    end
+    subgraph energy [Energy and emissions]
+        Vehicle -->|appliesEnergy| EnergyCarrier
+        VehicleRun -->|hasEnergyAmount| EnergyAmount
+        EmissionProcess -->|part of| VehicleRun
+        EmissionProcess -->|hasEmitter| Vehicle
+        EmissionProcess -->|hasEmission| Emission
+        Emission -->|hasSubstance| GreenhouseGas
+        EmissionScopeAssignment -->|isAbout| EmissionProcess
+    end
+    subgraph info [Plans, contracts, records]
+        Route -->|prescribes| Journey
+        Schedule -->|prescribes| VehicleRun
+        Booking -->|books| TransportService
+        TransportDocument -->|documents| Journey
+        TransportService -->|hasTariff| Tariff
+        Payload -->|hasTransportStatus| TransportStatus
+        Disruption -->|disrupts| VehicleRun
+    end
+    Journey -->|hasPayload| Payload
+    Journey -->|hasParticipantsInMovement| Passenger
+    Payload -->|part of| CargoUnit
+    TravelLeg -->|departsAtOrigin,<br/>endsAtDestination| TransferNode
+    VehicleRun -->|callsAt| Stop
+    StopCall -->|occurs in| Stop
+    Transshipment -->|occurs in| TransferNode
+    Transshipment -->|transfersPayload| Payload
+```
+
+**Reading the diagram.**
+
+1. A **journey** is what a consignment or passenger experiences: a sequence of **travel
+   legs** from origin to destination, with **transshipments** (or interchanges) between
+   legs at **transfer nodes**.
+2. Each leg is **carried by a vehicle run**, the vehicle's own movement. One run carries
+   many legs, which is where groupage, occupancy and the allocation of a run's energy and
+   emissions to what it carried come from. A vehicle run is itself a travel leg, so it has
+   one vehicle, one mode, one origin and one destination.
+3. A run is **operated by a vehicle** and **realises a transport service** (a line, a
+   freight service) **offered by a transport operator**. The vehicle, the ways it moves on
+   and the nodes it calls at each carry a **transport mode**; that is the hook the mode
+   modules and the intersection modules use.
+4. The vehicle **applies an energy carrier** (fuel, or an electricity supply process), the
+   run has an **energy amount**, and an **emission process** accompanies the run, with the
+   vehicle as **emitter** and the released substance as **emission**. GHG Protocol scope is
+   assigned per reporting organisation, not built into the process.
+5. **Plans** (route, schedule, time slot) prescribe journeys and runs; **contracts**
+   (booking, order, tariff) and **records** (documents, status) are information about
+   them, never parts of them.
+
 ## What the core covers
 
 - **Movement.** `Movement` is an IOF planned process from one origin to one destination.
