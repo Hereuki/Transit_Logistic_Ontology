@@ -1,7 +1,7 @@
-# TransiT Ontology
+# Transit logistic CLD3 Ontology
 
-A modular OWL ontology for multimodal transport and logistics, developed at Cranfield
-University with the Université de Technologie Tarbes Occitanie Pyrénées (UTTOP).
+A modular OWL ontology for multimodal transport and logistics modelling as part of CLD3 work (https://transit.ac.uk/) , developed at Cranfield
+University with the support of Université de Technologie Tarbes Occitanie Pyrénées (UTTOP).
 
 TransiT gives a shared vocabulary for the things that take part in a transport scenario:
 journeys and travel legs, vehicle runs and what they carry, consignments and passengers,
